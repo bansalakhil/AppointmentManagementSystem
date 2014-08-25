@@ -1,0 +1,48 @@
+<%= form_for @availability do |f| %>
+  <% if @availability.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@availability.errors.count, "error") %> prohibited
+      this availability from being saved:</h2>
+    <ul>
+    <% @availability.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :service_id, 'Service :' %><br />
+    <%= f.collection_select(:service_id, @services, :id, :name) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :staff_id, 'Staff :' %><br />
+    <%= f.collection_select(:staff_id, @staffs, :id, :name) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :start_time, 'Time(From) :' %><br />
+    <%= time_field(:availability, :start_time) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :end_time, 'Time(To) :' %><br />
+    <%= time_field(:availability, :end_time) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :start_time, 'Date(From) :' %><br />
+    <%= date_field(:availability, :start_date) %>
+  </div>
+
+  <div class="field">
+    <%= f.label :start_time, 'Date(To) :' %><br />
+    <%= date_field(:availability, :end_date) %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+
+<% end %>

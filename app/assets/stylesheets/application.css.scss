@@ -1,0 +1,99 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ *= require fullcalendar_engine/application
+*/
+
+body{
+  margin: auto;
+  background: url("5.png");
+  width: 80%;
+}
+
+#banner {
+  background: #022133;
+  padding: 10px;
+  height: 15%;
+  border-bottom: 2px solid;
+  font: small-caps 40px/40px "Times New Roman", serif;
+  color: #CC7A00;
+  text-align: center;
+  img {
+    float: left;
+    length: 50px;
+    width: 50px;
+  }
+}
+#notice {
+  color: #000 !important;
+  border: 2px solid red;
+  padding: 1em;
+  margin-bottom: 2em;
+  background-color: #f0f0f0;
+  font: bold smaller sans-serif;
+}
+#columns {
+  background: #C57E74;
+  overflow: hidden;
+  height: 600px;
+  #main {
+    margin-left: 17em;
+    padding: 1em;
+    background: white;
+    height: 600px;
+    table {
+      border: 2px double black;
+      tr{
+        border: 1px dashed #fff;
+        td{
+          padding: 0px 10px 0px 10px;
+          border: 1px solid black;
+        }
+      }
+    }
+  }
+  #side {
+    float: left;
+    padding: 1em 2em;
+    width: 13em;
+    //background: #C57E74;
+    form, div {
+      display: inline;
+    }
+    input {
+      font-size: small;
+    }
+    #cart {
+      font-size: smaller;
+      color: white;
+      table {
+        border-top: 1px dotted #595;
+        border-bottom: 1px dotted #595;
+        margin-bottom: 10px;
+        background: white;
+      }
+    }
+
+    ul {
+      padding: 0;
+      li {
+        list-style: none;
+        a {
+          color: #bfb;
+          font-size: small;
+        }
+      }
+    }
+  }
+}

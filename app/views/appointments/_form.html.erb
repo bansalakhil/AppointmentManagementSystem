@@ -1,0 +1,28 @@
+<%= form_for @appointment, html: {onsubmit: 'set_appointment_datetime();'} do |f| %>
+  <% if @appointment.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@appointment.errors.count, "error") %> prohibited
+      this appointment from being saved:</h2>
+    <ul>
+    <% @appointment.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+  <% end %>
+
+  <div id='full-calendar-demo'></div>
+  <p><a href="javascript:void()" id="new_event">Create Event</a></p>
+  <div>
+    <div class="calendar"></div>
+  </div>
+  <div id = "create_event_dialog" class="dialog" style ="display:none;"></div>
+  <div id = "event_desc_dialog" class="dialog" style ="display:none;"></div>
+
+  <!-- Removed script tag from here -->
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+
+<% end %>

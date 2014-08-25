@@ -1,0 +1,55 @@
+<h2>Availabilities</h2>
+
+<%= link_to 'New Availability', new_availability_path, class: 'new-availability-link', remote: true %><br /><br />
+
+<table>
+  <tr>
+    <th>Service</th>
+    <th>Staff</th>
+    <th>Time(from)</th>
+    <th>Time(to)</th>
+    <th>Date(from)</th>
+    <th>Date(to)</th>
+    <th>Edit</th>
+    <th>Delete</th>
+  </tr>
+
+  <% @availabilities.each do |availability| %>
+    
+    <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
+      <td class="list_description">
+        <%= availability.service.name %>
+      </td>
+      <td class="list_description">
+        <%= availability.staff.name %>
+      </td>
+      <td class="list_description">
+        <%= availability.start_time.strftime("%I:%M %p") %>
+      </td>
+      <td class="list_description">
+        <%= availability.end_time.strftime("%I:%M %p") %>
+      </td>
+      <td class="list_description">
+        <%= availability.start_date %>
+      </td>
+      <td class="list_description">
+        <%= availability.end_date %>
+      </td>
+      <td class="list_actions">
+        <%= link_to 'Edit', edit_availability_path(availability), remote: true %>
+      </td>
+      <td>
+        <%= link_to 'Delete', availability, method: :delete, data: { confirm: 'Are you sure?' } %>
+      </td>
+    </tr>
+  <% end %>
+
+</table>
+<br/>
+
+<div class = 'new-availability-container'>
+  <div id="form_render">
+  </div>
+</div>
+
+<%= link_to 'Home' , root_path %>

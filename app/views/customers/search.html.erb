@@ -1,0 +1,22 @@
+<%= form_tag(search_customers_path, method: "get") do %>
+  <fieldset>
+    <legend>Search Customer</legend>
+    <%= label_tag :search_phone, 'Search customer by phone number :' %>
+    <%= search_field(:customer, :phone_number) %>
+    <%= submit_tag 'Search' %>
+    <% if(@found_customer) %>
+      <fieldset>
+        <legend>Found Customer</legend>
+        <%= label_tag :found_name, 'Name : ' + @found_customer.name.to_s %><br />
+        <%= label_tag :found_phone_number, 'Phone Number : ' + @found_customer.phone_number.to_s %><br />
+        <%= label_tag :found_address, 'Address : ' + @found_customer.address.to_s %><br />
+        <%= label_tag :found_email, 'Email : ' + @found_customer.email.to_s %><br />
+        <%= link_to 'Create New Appointment', new_appointment_path(found_customer_id: @found_customer), method: :get %>
+        <% @found_customer = nil %>
+    <% else %>
+      <%= link_to 'Register Customer', new_customer_path, method: :get %>
+    <% end %>
+      </fieldset>
+    <br />
+  </fieldset>
+<% end %>

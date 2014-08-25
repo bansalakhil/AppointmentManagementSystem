@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AppointmentManagementSystem</title>
+    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
+    <%= stylesheet_link_tag "application-print", :media => "print" %>
+    <%= csrf_meta_tags %>
+    <script type="text/javascript">
+      $(document).ready(function() {
+        $('.calendar').fullCalendar({
+            header:
+              {
+                left:   'today prev next',
+                center: 'title',
+                right:  'month, agendaWeek, agendaDay'
+              }
+        })
+
+        $('#new_event').click(function(event) {
+
+          event.preventDefault();
+          FullcalendarEngine.Form.display();
+        })
+        // alert('aaaooo');
+
+      });
+    </script>
+  </head>
+  <body class = '<%= controller.controller_name %>' style = 'background: url("<%= current_layout.background %>")'>
+    <div id="banner">
+      <%= image_tag (current_layout.logo) %>
+      Appointment Management System
+    </div>
+    <div id="columns">
+      <div id="side">
+        <ul>
+          <li><a href="http://www...."><%= t('.home') %></a></li>
+          <li><a href="http://www..../faq"><%= t('.questions') %></a></li>
+          <li><a href="http://www..../news"><%= t('.news') %></a></li>
+          <li><a href="http://www..../contact"><%= t('.contact') %></a></li>
+        </ul>
+      </div>
+      <div id="main" >
+        <%= yield %>
+      </div>
+    </div>
+  </body>
+</html>

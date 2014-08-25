@@ -1,0 +1,28 @@
+<%= form_for @service do |f| %>
+  <% if @service.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@service.errors.count, "error") %> prohibited
+      this service from being saved:</h2>
+    <ul>
+    <% @service.errors.full_messages.each do |msg| %>
+      <li><%= msg %></li>
+    <% end %>
+    </ul>
+  </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name, 'Name :' %><br />
+    <%= f.text_field :name, value: @service.name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :slot_window, 'Slot Duration :' %><br />
+    <%= f.select(:slot_window, [['15 mins', 15], ['20 mins', 20], ['25 mins', 25], ['30 mins', 30]]) %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+
+<% end %>

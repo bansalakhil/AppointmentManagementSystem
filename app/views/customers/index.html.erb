@@ -1,0 +1,48 @@
+<h2>Customers</h2>
+
+<%= link_to 'New Customer', new_customer_path, class: 'new-customer-link', remote: true %><br /><br />
+
+<table border = '2' width = '700'>
+  <tr>
+    <th>Name</th>
+    <th>Address</th>
+    <th>Phone Number</th>
+    <th>Email</th>
+    <!--<th>Appointments</th>-->
+    <th>Edit</th>
+    <th>Delete</th>
+  </tr>
+
+  <% @customers.each do |customer| %>
+    
+    <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
+      <td class="list_description">
+        <%= customer.name %>
+      </td>
+      
+      <td class="list_description">
+        <%= customer.address %>
+      </td>
+      <td class="list_description">
+        <%= customer.phone_number %>
+      </td>
+      <td class="list_description">
+        <%= customer.email %>
+      </td>
+      
+      <td class="list_actions">
+        <%= link_to 'Edit', edit_customer_path(customer), remote: true %>
+      </td>
+      <td>
+        <%= link_to 'Delete', customer, method: :delete, data: { confirm: 'Are you sure?' } %>
+      </td>
+    </tr>
+  <% end %>
+
+</table>
+<br/>
+
+<div id = 'form_render'>
+</div> 
+
+<%= link_to 'Home' , root_path %>

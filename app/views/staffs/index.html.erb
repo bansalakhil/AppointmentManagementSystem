@@ -1,0 +1,53 @@
+<h2>STAFF</h2>
+
+<%= link_to 'New Staff', new_staff_path, class: 'new-staff-link', remote: true %><br /><br />
+
+<table border = '2' width = '700'>
+  <tr>
+    <th>Name</th>
+    <th>Designation</th>
+    <th>Address</th>
+    <th>Phone Number</th>
+    <th>Email</th>
+    <th>Services</th>
+    <th>Edit</th>
+    <th>Delete</th>
+  </tr>
+
+  <% @staffs.each do |staff| %>
+    
+    <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
+      <td class="list_description">
+        <%= staff.name %>
+      </td>
+      <td class="list_description">
+        <%= staff.designation %>
+      </td>
+      <td class="list_description">
+        <%= staff.address %>
+      </td>
+      <td class="list_description">
+        <%= staff.phone_number %>
+      </td>
+      <td class="list_description">
+        <%= staff.email %>
+      </td>
+      <td class='list_actions'>
+        <%= ((staff.services).map{|service| service.name}).join(',') %>
+      </td>
+      <td class="list_actions">
+        <%= link_to 'Edit', edit_staff_path(staff), remote: true %>
+      </td>
+      <td>
+        <%= link_to 'Delete', staff, method: :delete, data: { confirm: 'Are you sure?' } %>
+      </td>
+    </tr>
+  <% end %>
+
+</table>
+<br/>
+
+<div id = 'form_render'>
+</div>
+
+<%= link_to 'Home' , root_path %>
