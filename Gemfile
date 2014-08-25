@@ -28,7 +28,6 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 # Use debugger
 gem 'byebug', group: [:development, :test]
 
-
 #Full-calender-engine gem
 gem 'fullcalendar_engine', '~> 1.0.6'
 
