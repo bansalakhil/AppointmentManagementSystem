@@ -20,7 +20,7 @@ class ServicesController < ApplicationController
 
   def destroy
 
-    @service.update_column(active, false) #soft delete
+    @service.update_column('active', false) #soft delete
     redirect_to services_path
   end
 
