@@ -13,29 +13,23 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-//= require_tree .
 
 
+// function set_appointment_datetime(){
+//   var date = [],
+//       time = [];
+//   date.push ($('#appointment_day').val());
+//   date.push ($('#appointment_month').val());
+//   date.push ($('#appointment_year').val());
+//   date = date.join('/');
 
+//   time.push ($('#appointment_hour').val());
+//   time.push ($('#appointment_day').val());
+//   time = time.join(':');
+//   datetime = date + " " + time;
+//   $('#appointment_appointment_datetime').val(datetime);
 
-
-
-
-function set_appointment_datetime(){
-  var date = [],
-      time = [];
-  date.push ($('#appointment_day').val());
-  date.push ($('#appointment_month').val());
-  date.push ($('#appointment_year').val());
-  date = date.join('/');
-
-  time.push ($('#appointment_hour').val());
-  time.push ($('#appointment_day').val());
-  time = time.join(':');
-  datetime = date + " " + time;
-  $('#appointment_appointment_datetime').val(datetime);
-
-}
+// }
 
 
 //= require fullcalendar_engine/application

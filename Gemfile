@@ -37,7 +37,10 @@ gem 'rspec-rails'
 gem 'rspec-expectations'
 
 #paper clip
-gem "paperclip", :git => "git://github.com/thoughtbot/paperclip.git"
+gem "paperclip"
 
 #required app
-gem 'rmagick', '2.13.2'
+# gem 'rmagick', '2.13.2'
+
+#gem devise for login/logout feature
+gem 'devise'

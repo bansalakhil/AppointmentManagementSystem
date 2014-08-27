@@ -6,25 +6,6 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
     <%= stylesheet_link_tag "application-print", :media => "print" %>
     <%= csrf_meta_tags %>
-    <script type="text/javascript">
-      $(document).ready(function() {
-        $('.calendar').fullCalendar({
-          header:
-            {
-              left:   'today prev next',
-              center: 'title',
-              right:  'month, agendaWeek, agendaDay'
-            }
-        })
-
-        $('#new_event').click(function(event) {
-
-          event.preventDefault();
-          FullcalendarEngine.Form.display();
-        })
-
-      });
-    </script>
   </head>
   <body class = '<%= controller.controller_name %>' style = 'background: url("<%= current_layout.background %>")'>
     <div id="banner">
@@ -41,7 +22,16 @@
         </ul>
       </div>
       <div id="main" >
-        <%= yield %>
+        <% if user_signed_in? %>
+          Logged in as <strong><%= current_user.email %></strong>.
+          <%= link_to 'Sign Out', destroy_user_session_path, :method => 'delete' %>
+        <% else %>
+          <%= link_to "Sign up", new_user_registration_path %> |
+          <%= link_to 'Sign In', new_user_session_path %>
+        <% end %>
+        <div>
+          <%= yield %>
+        </div>
       </div>
     </div>
   </body>

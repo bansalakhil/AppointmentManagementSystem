@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140824182228) do
+ActiveRecord::Schema.define(version: 20140826093843) do
 
   create_table "appointments", force: true do |t|
     t.integer  "doctor_id"
@@ -64,15 +64,10 @@ ActiveRecord::Schema.define(version: 20140824182228) do
 
   create_table "services", force: true do |t|
     t.string   "name"
-    t.integer  "slot_window"
+    t.integer  "slot_window", default: 15
     t.boolean  "active",      default: true
     t.datetime "created_at"
     t.datetime "updated_at"
-  end
-
-  create_table "services_users", force: true do |t|
-    t.integer "service_id"
-    t.integer "user_id"
   end
 
   create_table "site_layouts", force: true do |t|
@@ -95,12 +90,19 @@ ActiveRecord::Schema.define(version: 20140824182228) do
   end
 
   create_table "users", force: true do |t|
-    t.string  "name"
-    t.string  "address"
-    t.integer "phone_number", limit: 8
-    t.string  "email"
-    t.string  "designation"
-    t.string  "type"
+    t.string   "name"
+    t.string   "address"
+    t.integer  "phone_number",         limit: 8
+    t.string   "email"
+    t.string   "designation"
+    t.string   "type"
+    t.string   "encrypted_password",             default: "", null: false
+    t.string   "confirmation_token"
+    t.datetime "confirmed_at"
+    t.datetime "confirmation_sent_at"
   end
+
+  add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
 
 end

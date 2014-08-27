@@ -8,6 +8,7 @@ class AvailabilitiesController < ApplicationController
   end
 
   def new
+    debugger
     @availability = Availability.new
   end
 

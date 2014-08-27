@@ -1,5 +1,12 @@
 class User < ActiveRecord::Base
   
+  # Include default devise modules. Others available are:
+  # :confirmable, :lockable, :timeoutable and :omniauthable,
+  # :recoverable, :rememberable, :validatable,
+  devise :database_authenticatable, :registerable,
+         :confirmable
+  
+  # attr_accessible :email, :password, :password_confirmation
   # has_one :speciality, ->{ where type:'Doctor' }, through: :doctors_information
   # has_many :appointments
   validates :name, :address, :email, presence: true

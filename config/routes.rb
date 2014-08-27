@@ -1,11 +1,11 @@
 Rails.application.routes.draw do
+  devise_for :users, :controllers => {:registrations => "registrations"}
   mount FullcalendarEngine::Engine => "/fullcalendar_engine"
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'welcome#index'
   resources :staffs
   resources :appointments
   resources :customers do
@@ -22,4 +22,12 @@ Rails.application.routes.draw do
 
   resources :site_layouts
 
+  devise_scope :user do
+    root 'devise/sessions#new'
+  end
+
+  get 'welcome', to: 'welcome#index'
+  
+  get 'new_sign_up', to:'welcome#new_sign_up'
+  
 end

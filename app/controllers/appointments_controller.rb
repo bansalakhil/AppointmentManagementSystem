@@ -6,7 +6,6 @@ class AppointmentsController < ApplicationController
 
   def new
     @appointment = Appointment.new
-    # debugger
     # @found_customer = Customer.find(params[:found_customer_id])
   end
 
