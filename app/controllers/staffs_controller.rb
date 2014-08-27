@@ -13,6 +13,7 @@ class StaffsController < ApplicationController
   end
 
   def edit
+    @services = Service.all
   end
 
   def create
@@ -38,7 +39,7 @@ class StaffsController < ApplicationController
   private
 
   def find_staff_member
-    @staff = Staff.find(params[:id])
+    @staff = Staff.where(params[:id]).first
   end
 
   def staff_params

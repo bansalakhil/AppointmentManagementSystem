@@ -13,7 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require turbolinks
-
+//= require_tree .
 
 // function set_appointment_datetime(){
 //   var date = [],
