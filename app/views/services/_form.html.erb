@@ -1,12 +1,12 @@
 <%= form_for @service do |f| %>
-  <% if @service.errors.any? %>
-  <div id="error_explanation">
-    <h2><%= pluralize(@service.errors.count, "error") %> prohibited
-      this service from being saved:</h2>
+<% if @service.errors.any? %>
+<div id="error_explanation">
+  <h2><%= pluralize(@service.errors.count, "error") %> prohibited
+    this service from being saved:</h2>
     <ul>
-    <% @service.errors.full_messages.each do |msg| %>
+      <% @service.errors.full_messages.each do |msg| %>
       <li><%= msg %></li>
-    <% end %>
+      <% end %>
     </ul>
   </div>
   <% end %>
@@ -18,11 +18,11 @@
 
   <div class="field">
     <%= f.label :slot_window, 'Slot Duration :' %><br />
-    <%= f.select(:slot_window, [['15 mins', 15], ['20 mins', 20], ['25 mins', 25], ['30 mins', 30]]) %>
+    <%= f.select(:slot_window, [['15 mins', 15], ['30 mins', 30], ['45 mins', 45], ['60 mins', 60]]) %>
   </div>
 
   <div class="actions">
     <%= f.submit %>
   </div>
 
-<% end %>
+  <% end %>

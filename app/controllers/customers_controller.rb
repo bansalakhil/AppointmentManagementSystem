@@ -1,14 +1,12 @@
 class CustomersController < ApplicationController
   before_action :find_customer, only: [ :edit, :update, :destroy ]
+  before_action :get_all_customers, only: [:index]
 
   def index
-
-    @customers = Customer.all
   end
 
   def new
-
-    @customer = Customer.new
+    new_customer
   end
 
   def edit
@@ -16,21 +14,34 @@ class CustomersController < ApplicationController
 
   def create
 
-    @customer = Customer.new(customer_params)
-    @customer.save
-    redirect_to customers_path
+    new_customer(customer_params)
+
+    if @customer.save
+      flash[:notice] = 'Customer successfully saved'
+    else
+      flash[:notice] = 'Customer could not be saved'
+    end
+    redirect_to_path(customers_path)
   end
 
   def destroy
 
-    @customer.delete
-    redirect_to customers_path
+    if @customer.destroy
+      flash[:notice] = 'Customer sucessfully deleted'
+    else
+      flash[:notice] = 'Customer could not be deleted'
+    end
+    redirect_to_path(customers_path)
   end
 
   def update
 
-    @customer.update(customer_params)
-    redirect_to customers_path
+    if @customer.update(customer_params)
+      flash[:notice] = 'Customer sucessfully updated'
+    else
+      flash[:notice] = 'Customer could not be updated'
+    end
+    redirect_to_path(customers_path)
   end
 
   def search
@@ -49,8 +60,15 @@ class CustomersController < ApplicationController
   end
 
   def customer_params
-    
     params.require(:customer)
       .permit(:name, :address, :phone_number, :email)
+  end
+
+  def get_all_customers
+    @customers = Customer.where(true)
+  end
+
+  def new_customer(params = nil)
+    @customer = Customer.new(params)
   end
 end

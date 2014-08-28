@@ -7,8 +7,13 @@ class SiteLayoutsController < ApplicationController
   def update
 
     @site_layout = current_layout
-    @site_layout.update(site_layout_params)
-    redirect_to edit_site_layout_path
+
+    if @site_layout.update(site_layout_params)
+      flash[:notice] = 'Upload successful'
+    else
+      flash[:notice] = 'Upload failed'
+    end
+    redirect_to_path(edit_site_layout_path)
   end
 
   private

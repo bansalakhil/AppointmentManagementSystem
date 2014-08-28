@@ -1,36 +1,47 @@
 class ServicesController < ApplicationController
   before_action :find_service, only: [ :edit, :update, :destroy ]
+  before_action :get_all_services, only: [:index]
 
   def index
-
-    @services = Service.all
   end
 
   def new
+    new_service
+  end
 
-    @service = Service.new
+  def edit
   end
 
   def create
 
-    @service = Service.new(service_params)
-    @service.save
-    redirect_to services_path
+    new_service(service_params)
+
+    if @service.save
+      flash[:notice] = 'Service successfully saved'
+    else
+      flash[:notice] = 'Service could not be saved'
+    end
+    redirect_to_path(services_path)
   end
 
   def destroy
 
-    @service.update_column('active', false) #soft delete
-    redirect_to services_path
+    if @service.update_column('active', false) #soft delete
+      flash[:notice] = 'Service sucessfully deleted'
+    else
+      flash[:notice] = 'Service could not be deleted'
+    end
+    redirect_to_path(services_path)
   end
 
   def update
 
-    @service.update(service_params)
-    redirect_to services_path
-  end
-
-  def edit
+    if @service.update(service_params)
+      flash[:notice] = 'Service sucessfully updated'
+    else
+      flash[:notice] = 'Service could not be updated'
+    end
+    redirect_to_path(services_path)
   end
 
   private
@@ -41,5 +52,13 @@ class ServicesController < ApplicationController
 
   def service_params
     params.require(:service).permit(:name, :slot_window)
+  end
+
+  def get_all_services
+    @services = Service.where(true)
+  end
+
+  def new_service(params = nil)
+    @service = Service.new(params)
   end
 end

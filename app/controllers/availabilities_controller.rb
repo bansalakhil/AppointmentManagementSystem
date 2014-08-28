@@ -1,49 +1,49 @@
 class AvailabilitiesController < ApplicationController
   before_action :find_availability, only: [:edit, :update, :destroy]
+  before_action :get_services_staffs, only: [:index, :new, :edit]
+  before_action :get_all_availabilities, only: [:index]
 
   def index
-    @availabilities = Availability.all
-    @services = Service.all
-    @staffs = Staff.all
   end
 
   def new
-    @availability = Availability.new
-    @services = Service.all
-    @staffs = Staff.all
+    new_availability
   end
 
   def edit
-    # debugger
-    @services = Service.all
-    @staffs = Staff.all
   end
 
   def create
-    @availability = Availability.new(availability_params)
+
+    new_availability(availability_params)
 
     if @availability.save
-      redirect_to availabilities_path
+      flash[:notice] = 'Availability successfully saved'
     else
       flash[:notice] = 'Availability could not be saved'
-      redirect_to availabilities_path
     end
+    redirect_to_path(availabilities_path)
     
   end
 
   def destroy
-    @availability.destroy
-    redirect_to availabilities_path
+
+    if @availability.destroy
+      flash[:notice] = 'Availability sucessfully deleted'
+    else
+      flash[:notice] = 'Availability could not be deleted'
+    end
+    redirect_to_path(availabilities_path)
   end
 
   def update
+
     if @availability.update(availability_params)
-      redirect_to availabilities_path
+      flash[:notice] = 'Availability sucessfully updated'
     else
       flash[:notice] = 'Availability could not be updated'
-      redirect_to availabilities_path
     end
-    
+    redirect_to_path(availabilities_path)
   end
 
   private
@@ -55,5 +55,18 @@ class AvailabilitiesController < ApplicationController
   def availability_params
     params.require(:availability)
       .permit(:service_id, :staff_id, :start_time, :end_time, :start_date, :end_date)
+  end
+
+  def new_availability(params = nil)
+    @availability = Availability.new(params)
+  end
+
+  def get_services_staffs
+    @services = Service.all
+    @staffs = Staff.all
+  end
+
+  def get_all_availabilities
+    @availabilities = Availability.where(true)
   end
 end

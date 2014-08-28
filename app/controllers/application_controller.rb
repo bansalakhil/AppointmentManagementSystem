@@ -22,4 +22,8 @@ class ApplicationController < ActionController::Base
     welcome_path
   end
 
+  def redirect_to_path(path)
+    redirect_to path
+  end
+
 end
