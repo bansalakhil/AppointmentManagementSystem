@@ -81,16 +81,16 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  # Default url set for devise authentication
-  config.action_mailer.default_url_options = {host: 'vinsol.com'}
-
   config.action_mailer.smtp_settings = {
-  :address        => 'smtp.sendgrid.net',
-  :port           => '587',
-  :authentication => :plain,
-  :user_name      => ENV['SENDGRID_USERNAME'],
-  :password       => ENV['SENDGRID_PASSWORD'],
-  :domain         => 'heroku.com',
-  :enable_starttls_auto => true
-}
+    :address        => 'smtp.sendgrid.net',
+    :port           => '587',
+    :authentication => :plain,
+    :user_name      => ENV['SENDGRID_USERNAME'],
+    :password       => ENV['SENDGRID_PASSWORD'],
+    :domain         => 'sendgrid.com',
+    :enable_starttls_auto => true
+  }
+
+  # Default url set for devise authentication
+  config.action_mailer.default_url_options = {host: 'vinsol-ams.herokuapp.com', only_path: false}
 end
