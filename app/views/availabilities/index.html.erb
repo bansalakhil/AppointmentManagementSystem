@@ -39,7 +39,7 @@
         <%= link_to 'Edit', edit_availability_path(availability), remote: true %>
       </td>
       <td>
-        <%= link_to 'Delete', availability, method: :delete, data: { confirm: 'Are you sure?' } %>
+        <%= link_to 'Delete', availability_path(availability), method: :delete, data: { confirm: 'Are you sure?' } %>
       </td>
     </tr>
   <% end %>

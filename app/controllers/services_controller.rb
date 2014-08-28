@@ -16,12 +16,13 @@ class ServicesController < ApplicationController
 
     new_service(service_params)
 
-    if @service.save
-      flash[:notice] = 'Service successfully saved'
-    else
-      flash[:notice] = 'Service could not be saved'
+    respond_to do |format|
+      if @service.save
+        format.js { render action: 'update' }
+      else
+        format.js { render action: 'edit' }
+      end
     end
-    redirect_to_path(services_path)
   end
 
   def destroy
@@ -36,12 +37,13 @@ class ServicesController < ApplicationController
 
   def update
 
-    if @service.update(service_params)
-      flash[:notice] = 'Service sucessfully updated'
-    else
-      flash[:notice] = 'Service could not be updated'
+    respond_to do |format|
+      if @service.update(service_params)
+        format.js { render action: 'update' }
+      else
+        format.js { render action: 'edit' }
+      end
     end
-    redirect_to_path(services_path)
   end
 
   private

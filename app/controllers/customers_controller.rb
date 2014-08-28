@@ -16,12 +16,13 @@ class CustomersController < ApplicationController
 
     new_customer(customer_params)
 
-    if @customer.save
-      flash[:notice] = 'Customer successfully saved'
-    else
-      flash[:notice] = 'Customer could not be saved'
+    respond_to do |format|
+      if @customer.save
+        format.js { render :action => "update" }
+      else
+        format.js { render :action => "edit" }
+      end
     end
-    redirect_to_path(customers_path)
   end
 
   def destroy
@@ -36,12 +37,13 @@ class CustomersController < ApplicationController
 
   def update
 
-    if @customer.update(customer_params)
-      flash[:notice] = 'Customer sucessfully updated'
-    else
-      flash[:notice] = 'Customer could not be updated'
+    respond_to do |format|
+      if @customer.update(customer_params)
+        format.js { render :action => "update" }
+      else
+        format.js { render :action => "edit" }
+      end
     end
-    redirect_to_path(customers_path)
   end
 
   def search
@@ -56,7 +58,7 @@ class CustomersController < ApplicationController
   private
 
   def find_customer
-    @customer = Customer.find(params[:id])
+    @customer = Customer.where(id: params[:id]).first
   end
 
   def customer_params

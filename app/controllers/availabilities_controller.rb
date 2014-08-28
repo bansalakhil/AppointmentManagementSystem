@@ -17,13 +17,16 @@ class AvailabilitiesController < ApplicationController
 
     new_availability(availability_params)
 
-    if @availability.save
-      flash[:notice] = 'Availability successfully saved'
-    else
-      flash[:notice] = 'Availability could not be saved'
+    respond_to do |format|
+      if @availability.save
+        format.js { render action: 'update' }
+      else
+        format.js do
+          get_services_staffs
+          render action: 'edit'
+        end
+      end
     end
-    redirect_to_path(availabilities_path)
-    
   end
 
   def destroy
@@ -38,18 +41,22 @@ class AvailabilitiesController < ApplicationController
 
   def update
 
-    if @availability.update(availability_params)
-      flash[:notice] = 'Availability sucessfully updated'
-    else
-      flash[:notice] = 'Availability could not be updated'
+    respond_to do |format|
+      if @availability.update(availability_params)
+        format.js { render action: 'update' }
+      else
+        format.js do
+          get_services_staffs
+          render :action => "edit"
+        end
+      end
     end
-    redirect_to_path(availabilities_path)
   end
 
   private
 
   def find_availability
-    @availability = Availability.where(params[:id]).first
+    @availability = Availability.where(id: params[:id]).first
   end
 
   def availability_params

@@ -34,7 +34,7 @@
         <%= link_to 'Edit', edit_customer_path(customer), remote: true %>
       </td>
       <td>
-        <%= link_to 'Delete', customer, method: :delete, data: { confirm: 'Are you sure?' } %>
+        <%= link_to 'Delete', customer_path(customer), method: :delete, data: { confirm: 'Are you sure?' } %>
       </td>
     </tr>
   <% end %>

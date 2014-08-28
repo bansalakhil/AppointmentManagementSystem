@@ -1,12 +1,14 @@
 class StaffsController < ApplicationController
   before_action :find_staff_member, only: [ :edit, :update, :destroy ]
   before_action :get_all_staffs, only: [ :index ]
+  before_action :get_all_services, only: [:create, :new, :update, :edit]
 
   def index
   end
 
   def new
     new_staff
+    get_all_services
   end
 
   def edit
@@ -16,22 +18,30 @@ class StaffsController < ApplicationController
 
     new_staff(staff_params)
 
-    if @staff.save
-      flash[:notice] = 'Staff successfully saved'
-    else
-      flash[:notice] = 'Staff could not be saved'
+    respond_to do |format|
+      if @staff.save
+        format.js { render action: 'update' }
+      else
+        format.js do
+          get_all_services
+          render action: 'edit'
+        end
+      end
     end
-    redirect_to_path(staffs_path)
   end
 
   def update
 
-    if @staff.update(staff_params)
-      flash[:notice] = 'Staff sucessfully updated'
-    else
-      flash[:notice] = 'Staff could not be updated'
+    respond_to do |format|
+      if @staff.update(staff_params)
+        format.js { render action: 'update' }
+      else
+        format.js do
+          get_all_services
+          render action: 'edit'
+        end
+      end
     end
-    redirect_to_path(staffs_path)
   end
 
   def destroy
@@ -47,7 +57,7 @@ class StaffsController < ApplicationController
   private
 
   def find_staff_member
-    @staff = Staff.where(params[:id]).first
+    @staff = Staff.where(id: params[:id]).first
   end
 
   def staff_params
@@ -62,6 +72,10 @@ class StaffsController < ApplicationController
 
   def new_staff(params = nil)
     @staff = Staff.new(params)
+  end
+
+  def get_all_services
+    @services = Service.where(true)
   end
 
 end
