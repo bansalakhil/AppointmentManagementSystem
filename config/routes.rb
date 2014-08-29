@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  devise_for :users, :controllers => {:registrations => "registrations"}
+  devise_for :users, :controllers => {:registrations => 'registrations', :sessions => 'sessions'}
   mount FullcalendarEngine::Engine => "/fullcalendar_engine"
 
   # The priority is based upon order of creation: first created -> highest priority.
@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   resources :site_layouts
 
   devise_scope :user do
-    root 'devise/sessions#new'
+    root 'sessions#new'
   end
 
   get 'welcome', to: 'welcome#index'

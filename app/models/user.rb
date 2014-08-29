@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   # :recoverable, :rememberable, :validatable,
   devise :database_authenticatable, :registerable,
          :confirmable
-         
+
   #Query Interface.......................................................
   # attr_accessible :email, :password, :password_confirmation
   # has_one :speciality, ->{ where type:'Doctor' }, through: :doctors_information

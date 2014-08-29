@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
+  before_action :authorize
   before_action :configure_permitted_parameters, if: :devise_controller?
+
 
   def current_layout
     @site_layout ||= SiteLayout.first
@@ -24,6 +26,12 @@ class ApplicationController < ActionController::Base
 
   def redirect_to_path(path)
     redirect_to path
+  end
+
+  private
+
+  def authorize
+    redirect_to "/" if !user_signed_in?
   end
 
 end
