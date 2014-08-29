@@ -44,3 +44,6 @@ gem "paperclip"
 
 #gem devise for login/logout feature
 gem 'devise'
+
+#an add-o to devise
+gem 'devise_invitable'

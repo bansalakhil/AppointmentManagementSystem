@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
-  before_action :authorize
+  before_action :authorize, unless: :devise_controller?
   before_action :configure_permitted_parameters, if: :devise_controller?
 
 
@@ -13,7 +13,7 @@ class ApplicationController < ActionController::Base
   private
 
   def configure_permitted_parameters
-    devise_parameter_sanitizer.for(:sign_up) << [:name, :email, :phone_number]
+    devise_parameter_sanitizer.for(:sign_up) << [:name, :email, :phone_number, :invitation_token]
   end
 
   def after_sign_out_path_for(resource)
