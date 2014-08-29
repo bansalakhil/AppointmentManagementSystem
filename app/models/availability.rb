@@ -7,4 +7,7 @@ class Availability < ActiveRecord::Base
   # validates :start_time, uniqueness: { scope: :staff_id }, presence: true
   validates :start_time, :end_time, :start_date, :end_date, presence: true
 
+  #Query Interface...............................................
+  default_scope { order(:start_time) }
+
 end

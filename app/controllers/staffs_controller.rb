@@ -1,5 +1,5 @@
 class StaffsController < ApplicationController
-  before_action :find_staff_member, only: [ :edit, :update, :destroy ]
+  before_action :find_staff_member, only: [ :edit, :update, :destroy, :disable ]
   before_action :get_all_staffs, only: [ :index ]
   before_action :get_all_services, only: [:create, :new, :update, :edit]
 
@@ -45,12 +45,17 @@ class StaffsController < ApplicationController
   end
 
   def destroy
-
     if @staff.destroy
+      # @staff.availability
       flash[:notice] = 'Staff sucessfully deleted'
     else
       flash[:notice] = 'Staff could not be deleted'
     end
+    redirect_to_path(staffs_path)
+  end
+
+  def deactivate
+    @staff.update_attribute('active', false)
     redirect_to_path(staffs_path)
   end
 

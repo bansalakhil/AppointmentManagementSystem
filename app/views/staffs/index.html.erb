@@ -6,8 +6,6 @@
   <tr>
     <th>Name</th>
     <th>Designation</th>
-    <th>Address</th>
-    <th>Phone Number</th>
     <th>Email</th>
     <th>Services</th>
     <th>Edit</th>
@@ -19,12 +17,6 @@
     <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
       <td class="list_description">
         <%= staff.name %>
-      </td>
-      <td class="list_description">
-        <%= staff.designation %>
-      </td>
-      <td class="list_description">
-        <%= staff.address %>
       </td>
       <td class="list_description">
         <%= staff.phone_number %>
@@ -39,7 +31,7 @@
         <%= link_to 'Edit', edit_staff_path(staff), remote: true %>
       </td>
       <td>
-        <%= link_to 'Delete', staff, method: :delete, data: { confirm: 'Are you sure?' } %>
+        <%= link_to 'Delete', deactivate_staff_path(staff), method: :put, data: { confirm: 'Are you sure?' } %>
       </td>
     </tr>
   <% end %>

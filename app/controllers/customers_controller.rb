@@ -23,6 +23,8 @@ class CustomersController < ApplicationController
         format.js { render :action => "edit" }
       end
     end
+
+    # @customer.send_reset_password
   end
 
   def destroy

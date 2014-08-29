@@ -6,7 +6,11 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  resources :staffs
+  resources :staffs do
+    member do
+      put 'deactivate'
+    end
+  end
   resources :appointments
   resources :customers do
     collection do
