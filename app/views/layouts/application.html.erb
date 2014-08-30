@@ -29,6 +29,9 @@
           <%= link_to "Sign up", new_user_registration_path %> |
           <%= link_to 'Sign In', new_user_session_path %>
         <% end %>
+        <% flash.each do |key, value| %>
+          <%= content_tag :div, value %>
+        <% end %>
         <div>
           <%= yield %>
         </div>

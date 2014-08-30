@@ -13,7 +13,6 @@ class CustomersController < ApplicationController
   end
 
   def create
-
     new_customer(customer_params)
 
     respond_to do |format|
@@ -23,7 +22,7 @@ class CustomersController < ApplicationController
         format.js { render :action => "edit" }
       end
     end
-
+    @customer.invite!
     # @customer.send_reset_password
   end
 

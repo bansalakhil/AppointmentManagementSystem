@@ -24,6 +24,10 @@ class ApplicationController < ActionController::Base
     welcome_path
   end
 
+  def after_accept_path_for(resource)
+    accept_user_invitation_path
+  end
+
   def redirect_to_path(path)
     redirect_to path
   end
