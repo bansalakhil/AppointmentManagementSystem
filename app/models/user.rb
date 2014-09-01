@@ -19,4 +19,8 @@ class User < ActiveRecord::Base
                               message: 'is Invalid'},
                               uniqueness: true
   validates :phone_number, length: { minimum: 9 }
+
+  #Callbacks..............................................................
+  # after_invitation_accepted :redirect_to_path()
+
 end

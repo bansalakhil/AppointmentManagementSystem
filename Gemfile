@@ -36,6 +36,10 @@ gem 'rspec-rails'
 
 gem 'rspec-expectations'
 
+group :test do
+  gem 'shoulda-matchers', require: false
+end
+
 #paper clip
 gem "paperclip"
 
