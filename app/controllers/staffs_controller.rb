@@ -1,5 +1,5 @@
 class StaffsController < ApplicationController
-  before_action :find_staff_member, only: [ :edit, :update, :destroy, :disable ]
+  before_action :find_staff_member, only: [ :edit, :update, :destroy, :deactivate ]
   before_action :get_all_staffs, only: [ :index ]
   before_action :get_all_services, only: [:create, :new, :update, :edit]
 
