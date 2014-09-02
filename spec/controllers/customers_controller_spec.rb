@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe ServicesController, :type => :controller do
+RSpec.describe CustomersController, :type => :controller do
 
 
   it "blocks unauthenticated access" do
@@ -11,12 +11,12 @@ RSpec.describe ServicesController, :type => :controller do
     response.should redirect_to(root_path)
   end
 
-  it do
-    sign_in
+  # it do
+  #   sign_in
 
-    # post :create
-    should permit(:name, :slot_window).for(:create), format: :js
-  end
+  #   post :create
+  #   should permit(:name, :slot_window)
+  # end
 
   it 'GET #index' do
     sign_in
@@ -35,21 +35,22 @@ RSpec.describe ServicesController, :type => :controller do
   it 'POST #create' do
     sign_in
 
-    xhr :post, :create, {service: {name: 'service_one', slot_window: 30}}
+    xhr :post, :create, { customer: { name: 'customer_one', phone_number: '54365436345', email: 'a@a.com' } }
     should render_template('update')
   end
 
   # it 'PUT #update' do
   #   sign_in
 
-  #   xhr :put, :update, {service: {name: 'service_one', slot_window: 30}}
+  #   xhr :patch, :update, {staff: {name: 'service_two', phone_number: '54365436345', email: 'a@a.com'}}
   #   should render_template('update')
   # end
 
-  # it 'POST #create' do
+  # it 'DELETE #destroy' do
   #   sign_in
 
-  #   xhr :post, :create, {service: {name: 'service_one', slot_window: 30}}
-  #   should render_template('update')
+  #   delete :destroy
+  #   should respond_with(200)
   # end
+
 end

@@ -1,4 +1,3 @@
-require 'invitation_callbacks'
 
 class Customer < User
   # has_one :appointment, foreign_key: 'customer_id'
@@ -7,6 +6,4 @@ class Customer < User
   #Query Interface....................................................
   default_scope { order(:name) }
 
-  #Callbacks..........................................................
-  # after_save InvitationCallbacks
 end

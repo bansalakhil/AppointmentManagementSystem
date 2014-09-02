@@ -23,7 +23,6 @@ class CustomersController < ApplicationController
       end
     end
     @customer.invite!
-    # @customer.send_reset_password
   end
 
   def destroy

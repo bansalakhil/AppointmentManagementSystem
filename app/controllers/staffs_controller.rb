@@ -8,7 +8,6 @@ class StaffsController < ApplicationController
 
   def new
     new_staff
-    get_all_services
   end
 
   def edit
@@ -28,6 +27,7 @@ class StaffsController < ApplicationController
         end
       end
     end
+    @staff.invite!
   end
 
   def update
@@ -46,7 +46,6 @@ class StaffsController < ApplicationController
 
   def destroy
     if @staff.destroy
-      # @staff.availability
       flash[:notice] = 'Staff sucessfully deleted'
     else
       flash[:notice] = 'Staff could not be deleted'
@@ -68,7 +67,7 @@ class StaffsController < ApplicationController
   def staff_params
 
     params.require(:staff)
-      .permit(:name, :email, :address, :phone_number, :designation, service_ids: [])
+      .permit(:name, :email, :phone_number, service_ids: [])
   end
 
   def get_all_staffs

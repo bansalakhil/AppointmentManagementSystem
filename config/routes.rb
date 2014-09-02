@@ -32,6 +32,6 @@ Rails.application.routes.draw do
 
   get 'welcome', to: 'welcome#index'
   
-  get 'new_sign_up', to:'welcome#new_sign_up'
+  get 'new_signee', to:'welcome#new_signee'
   
 end

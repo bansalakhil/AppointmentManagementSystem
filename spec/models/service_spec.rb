@@ -8,14 +8,12 @@ RSpec.describe Service, :type => :model do
     let!(:service_two) { Service.create({ name: 'service_name2',
                                 slot_window: 30, active: false}) }
 
-  context 'validates services' do
-    context 'check presence of service attributes' do
-      it "name should not be empty " do
-        service_one.name = nil
-        service_one.should_not be_valid
-        service_two.should be_valid
-        # service_one.should validate_presence_of(:name)
-      end
+  context 'check presence of service attributes' do
+    it "name should not be empty " do
+      service_one.name = nil
+      service_one.should_not be_valid
+      service_two.should be_valid
+      # service_one.should validate_presence_of(:name)
     end
   end
 
