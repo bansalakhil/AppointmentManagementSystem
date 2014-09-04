@@ -11,9 +11,10 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery_ui_min
 //= require jquery_ujs
-//= require turbolinks
-//= require_tree .
+//= require moment.min
+//= require select2.js
 
 // function set_appointment_datetime(){
 //   var date = [],
@@ -32,4 +33,3 @@
 // }
 
 
-//= require fullcalendar_engine/application

@@ -1,4 +1,6 @@
 class StaffsController < ApplicationController
+
+  PERMITTED_ATTRS = [:name, :email, :phone_number, {service_ids: []}] 
   before_action :find_staff_member, only: [ :edit, :update, :destroy, :deactivate ]
   before_action :get_all_staffs, only: [ :index ]
   before_action :get_all_services, only: [:create, :new, :update, :edit]
@@ -19,23 +21,28 @@ class StaffsController < ApplicationController
 
     respond_to do |format|
       if @staff.save
-        format.js { render action: 'update' }
+        @staff.invite!
+        flash[:notice] = 'Staff sucessfully created'
+        format.js { render action: 'refresh' }
       else
+        debugger
+        flash[:notice] = 'Staff could not be created'
         format.js do
           get_all_services
           render action: 'edit'
         end
       end
     end
-    @staff.invite!
   end
 
   def update
 
     respond_to do |format|
-      if @staff.update(staff_params)
-        format.js { render action: 'update' }
+      if @staff.update_attributes(staff_params)
+        flash[:notice] = 'Staff sucessfully updated'
+        format.js { render action: 'refresh' }
       else
+        flash[:notice] = 'Staff could not be updated'
         format.js do
           get_all_services
           render action: 'edit'
@@ -55,6 +62,7 @@ class StaffsController < ApplicationController
 
   def deactivate
     @staff.update_attribute('active', false)
+    flash[:notice] = 'Staff sucessfully deleted'
     redirect_to_path(staffs_path)
   end
 
@@ -67,7 +75,7 @@ class StaffsController < ApplicationController
   def staff_params
 
     params.require(:staff)
-      .permit(:name, :email, :phone_number, service_ids: [])
+      .permit(*PERMITTED_ATTRS)
   end
 
   def get_all_staffs

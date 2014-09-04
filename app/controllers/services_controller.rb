@@ -18,7 +18,7 @@ class ServicesController < ApplicationController
 
     respond_to do |format|
       if @service.save
-        format.js { render action: 'update' }
+        format.js { render action: 'refresh' }
       else
         format.js { render action: 'edit' }
       end
@@ -39,7 +39,7 @@ class ServicesController < ApplicationController
 
     respond_to do |format|
       if @service.update(service_params)
-        format.js { render action: 'update' }
+        format.js { render action: 'refresh' }
       else
         format.js { render action: 'edit' }
       end

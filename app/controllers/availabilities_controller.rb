@@ -19,7 +19,7 @@ class AvailabilitiesController < ApplicationController
 
     respond_to do |format|
       if @availability.save
-        format.js { render action: 'update' }
+        format.js { render action: 'refresh' }
       else
         format.js do
           get_services_staffs
@@ -43,7 +43,7 @@ class AvailabilitiesController < ApplicationController
 
     respond_to do |format|
       if @availability.update(availability_params)
-        format.js { render action: 'update' }
+        format.js { render action: 'refresh' }
       else
         format.js do
           get_services_staffs

@@ -36,14 +36,14 @@ RSpec.describe CustomersController, :type => :controller do
     sign_in
 
     xhr :post, :create, { customer: { name: 'customer_one', phone_number: '54365436345', email: 'a@a.com' } }
-    should render_template('update')
+    should render_template('refresh')
   end
 
   # it 'PUT #update' do
   #   sign_in
 
   #   xhr :patch, :update, {staff: {name: 'service_two', phone_number: '54365436345', email: 'a@a.com'}}
-  #   should render_template('update')
+  #   should render_template('refresh')
   # end
 
   # it 'DELETE #destroy' do

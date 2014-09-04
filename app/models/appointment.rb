@@ -1,10 +1,10 @@
 class Appointment < ActiveRecord::Base
   belongs_to :customer, class_name: 'User', foreign_key: 'customer_id'
   belongs_to :staff, class_name: 'User', foreign_key: 'staff_id'
-  belongs_to :status
-  has_one :cancellation
-  validates :disease, presence: true
-  validate :appointment_datetime, on: :create, if: :time_slot_available?
+  has_one :status
+  validates :description, presence: true
+  # validate :appointment_datetime, on: :create, if: :time_slot_available?
+  # validate :starttime, on: :create, if: :time_slot_available?
 
   def time_slot_available?
     appointments = Appointment.where("appointment_datetime > ?", DateTime.now.to_date)

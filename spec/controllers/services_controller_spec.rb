@@ -36,14 +36,14 @@ RSpec.describe ServicesController, :type => :controller do
     sign_in
 
     xhr :post, :create, {service: {name: 'service_one', slot_window: 30}}
-    should render_template('update')
+    should render_template('refresh')
   end
 
   # it 'PUT #update' do
   #   sign_in
 
   #   xhr :put, :update, {service: {name: 'service_one', slot_window: 30}}
-  #   should render_template('update')
+  #   should render_template('refresh')
   # end
 
   # it 'POST #create' do

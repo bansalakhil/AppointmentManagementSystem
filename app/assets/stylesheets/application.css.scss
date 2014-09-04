@@ -10,9 +10,7 @@
  * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
  * file per style scope.
  *
- *= require_tree .
  *= require_self
- *= require fullcalendar_engine/application
 */
 
 body{
@@ -45,46 +43,27 @@ body{
 }
 #columns {
   background: #C57E74;
-  overflow: hidden;
-  height: 600px;
+  height: auto;
+  min-height: 600px;
   #main {
     margin-left: 17em;
     padding: 1em;
     background: white;
-    height: 600px;
-    table {
-      border: 2px double black;
-      tr{
-        border: 1px dashed #fff;
-        td{
-          padding: 0px 10px 0px 10px;
-          border: 1px solid black;
-        }
-      }
-    }
+    height: 100%;
+    overflow: auto;
+    min-height: 600px;
   }
   #side {
     float: left;
     padding: 1em 2em;
     width: 13em;
-    //background: #C57E74;
+    min-height: 600px;
     form, div {
       display: inline;
     }
     input {
       font-size: small;
     }
-    #cart {
-      font-size: smaller;
-      color: white;
-      table {
-        border-top: 1px dotted #595;
-        border-bottom: 1px dotted #595;
-        margin-bottom: 10px;
-        background: white;
-      }
-    }
-
     ul {
       padding: 0;
       li {

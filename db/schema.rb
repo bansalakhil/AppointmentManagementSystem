@@ -14,12 +14,12 @@
 ActiveRecord::Schema.define(version: 20140829125723) do
 
   create_table "appointments", force: true do |t|
-    t.integer  "doctor_id"
-    t.integer  "patient_id"
-    t.datetime "appointment_datetime"
-    t.integer  "slots",                default: 1
-    t.integer  "status_id"
-    t.string   "disease"
+    t.integer  "staff_id"
+    t.integer  "customer_id"
+    t.datetime "starttime"
+    t.datetime "endtime"
+    t.integer  "status_id",   default: 0
+    t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -89,9 +89,7 @@ ActiveRecord::Schema.define(version: 20140829125723) do
   end
 
   create_table "statuses", force: true do |t|
-    t.string   "name"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.string "name"
   end
 
   create_table "users", force: true do |t|

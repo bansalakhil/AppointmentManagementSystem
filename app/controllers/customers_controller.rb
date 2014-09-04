@@ -17,12 +17,12 @@ class CustomersController < ApplicationController
 
     respond_to do |format|
       if @customer.save
-        format.js { render :action => "update" }
+        @customer.invite!
+        format.js { render :action => "refresh" }
       else
         format.js { render :action => "edit" }
       end
     end
-    @customer.invite!
   end
 
   def destroy
@@ -39,7 +39,7 @@ class CustomersController < ApplicationController
 
     respond_to do |format|
       if @customer.update(customer_params)
-        format.js { render :action => "update" }
+        format.js { render :action => "refresh" }
       else
         format.js { render :action => "edit" }
       end
@@ -63,7 +63,7 @@ class CustomersController < ApplicationController
 
   def customer_params
     params.require(:customer)
-      .permit(:name, :address, :phone_number, :email)
+      .permit(:name, :phone_number, :email)
   end
 
   def get_all_customers

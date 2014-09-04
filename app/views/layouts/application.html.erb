@@ -2,12 +2,12 @@
 <html>
   <head>
     <title>AppointmentManagementSystem</title>
-    <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track' => true %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
-    <%= stylesheet_link_tag "application-print", :media => "print" %>
+    <%= stylesheet_link_tag 'application', media: 'all'%>
+    <%= yield :moment_calendar_js %>
+    <%= javascript_include_tag 'application' %>
     <%= csrf_meta_tags %>
   </head>
-  <body class = '<%= controller.controller_name %>' style = 'background: url("<%= current_layout.background %>")'>
+  <body class = '<%= controller.controller_name %>' style = 'background: url("<%= current_layout.background(:full) %>")'>
     <div id="banner">
       <%= image_tag (current_layout.logo) %>
       Appointment Management System
@@ -25,9 +25,6 @@
         <% if user_signed_in? %>
           Logged in as <strong><%= current_user.email %></strong>.
           <%= link_to 'Sign Out', destroy_user_session_path, :method => 'delete' %>
-        <% else %>
-          <%= link_to "Sign up", new_user_registration_path %> |
-          <%= link_to 'Sign In', new_user_session_path %>
         <% end %>
         <% flash.each do |key, value| %>
           <%= content_tag :div, value %>

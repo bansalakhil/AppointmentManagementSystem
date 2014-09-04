@@ -19,7 +19,7 @@ gem 'therubyracer',  platforms: :ruby
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-gem 'turbolinks'
+# gem 'turbolinks'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
@@ -29,7 +29,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'byebug', group: [:development, :test]
 
 #Full-calender-engine gem
-gem 'fullcalendar_engine', '~> 1.0.6'
+# gem 'fullcalendar_engine', '~> 1.0.6'
 
 #Rspec
 gem 'rspec-rails'
@@ -42,9 +42,6 @@ end
 
 #paper clip
 gem "paperclip"
-
-#required app
-# gem 'rmagick', '2.13.2'
 
 #gem devise for login/logout feature
 gem 'devise'
