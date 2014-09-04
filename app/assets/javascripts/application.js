@@ -14,7 +14,7 @@
 //= require jquery_ui_min
 //= require jquery_ujs
 //= require moment.min
-//= require select2.js
+//= require select2
 
 // function set_appointment_datetime(){
 //   var date = [],

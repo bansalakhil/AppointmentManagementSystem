@@ -25,7 +25,6 @@ class StaffsController < ApplicationController
         flash[:notice] = 'Staff sucessfully created'
         format.js { render action: 'refresh' }
       else
-        debugger
         flash[:notice] = 'Staff could not be created'
         format.js do
           get_all_services
