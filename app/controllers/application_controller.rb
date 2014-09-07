@@ -2,7 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :authorize, unless: :devise_controller?
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :validate_access
+  before_action :validate_access, unless: :skip_validation?
 
   def current_layout
     @site_layout ||= SiteLayout.first
@@ -33,6 +33,14 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+  def welcome_controller?
+    params[:controller] == 'welcome' ? true : false
+  end
+
+  def skip_validation?
+    devise_controller? || welcome_controller?
+  end
 
   def validate_access
     namespace = ((params[:controller]).scan(/^(\w+)\//i).flatten).first
