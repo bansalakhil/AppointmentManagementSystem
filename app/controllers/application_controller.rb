@@ -3,7 +3,6 @@ class ApplicationController < ActionController::Base
   before_action :authorize, unless: :devise_controller?
   before_action :configure_permitted_parameters, if: :devise_controller?
 
-
   def current_layout
     @site_layout ||= SiteLayout.first
   end
@@ -35,6 +34,7 @@ class ApplicationController < ActionController::Base
   private
 
   def authorize
+    debugger
     redirect_to "/" if !user_signed_in?
   end
 

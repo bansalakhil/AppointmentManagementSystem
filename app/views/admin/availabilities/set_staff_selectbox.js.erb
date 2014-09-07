@@ -1,0 +1,12 @@
+
+
+var selectbox = $('#availability_staff_id').empty();
+var a = <%= @people.first.name %>
+console.log(a);
+<%= @people.each do |staff| %>
+debugger
+  $("<option>").attr({
+    text: "<%= staff.name %>", 
+    value : "<%= staff.id %>" 
+  }).appendTo(selectbox);
+<% end %>

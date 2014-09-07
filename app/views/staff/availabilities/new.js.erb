@@ -1,0 +1,15 @@
+$('#form_render').html("<%==j render 'form' %>");
+
+$('#availability_service_id').on('change', function(){
+  alert('hello');
+  service_id = $('#availability_service_id').val()
+  $.ajax({
+    type: 'get',
+    data: '&service_id=' + service_id,
+    async: true,
+    url: "/staff/availabilities/serving_staff",
+    success: function(data){  },
+    error: function() {}
+  });
+
+});

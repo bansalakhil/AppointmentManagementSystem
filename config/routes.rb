@@ -1,33 +1,69 @@
 Rails.application.routes.draw do
+  #devise automatic setup on install
   devise_for :users, :controllers => { :registrations => 'registrations' }
-
-  # The priority is based upon order of creation: first created -> highest priority.
-  # See how all your routes lay out with "rake routes".
-
-  # You can have the root of your site routed with "root"
-  resources :staffs do
-    member do
-      put 'deactivate'
-    end
-  end
-  resources :appointments
-  resources :customers do
-    collection do
-      get 'search'
-    end
-  end
-
-  resources :services do
-    # get 'services/new', to: 'services#index'
-  end
-
-  resources :availabilities
-
-  resources :site_layouts
 
   devise_scope :user do
     root 'devise/sessions#new'
   end
+
+  namespace 'admin' do
+    resources :customers
+    resources :services
+    resources :site_layouts
+    resources :appointments do
+      collection do
+        get :get_events
+      end
+      member do
+        post :move
+        post :resize
+      end
+    end
+    resources :availabilities do
+      collection do
+        get :serving_staff
+      end
+    end
+
+    resources :staffs do
+      member do
+        put 'deactivate'
+      end
+    end
+  end
+
+  namespace 'staff' do
+    resources :appointments do
+      collection do
+        get :get_events
+      end
+      member do
+        post :move
+        post :resize
+      end
+    end
+
+    resources :availabilities do
+      collection do
+        get :serving_staff
+      end
+    end
+  end
+
+  namespace 'customer' do
+    resources :appointments do
+      collection do
+        get :get_events
+      end
+      member do
+        post :move
+        post :resize
+      end
+    end
+    resources :services
+  end
+
+
 
   get 'welcome', to: 'welcome#index'
   

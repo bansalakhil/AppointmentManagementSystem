@@ -1,0 +1,19 @@
+<%= stylesheet_link_tag :fullcalendar, :jquery_ui, :style %>
+<%= javascript_include_tag :fullcalendar, :events, :appointment %>
+
+<%= link_to 'Home' , welcome_path %>
+
+<p>
+  <%= link_to 'Create Event', 'javascript:void()', id: 'new_event' %>
+</p>
+
+<h2>Calendar</h2>
+  <div id='calendar'></div>
+
+<div>
+  <div class='calendar'></div>
+</div>
+<div id="event_desc_dialog" class="dialog" style="display:none;"></div>
+<div id="create_event_dialog" class="dialog" style ="display:none;">
+  <%= render 'form' %>
+</div>

@@ -29,7 +29,7 @@ FullcalendarEngine = {
         type: 'get',
         dataType: 'script',
         async: true,
-        url: "http://localhost:3000/appointments/new",
+        url: "/appointments/new",
         success: function(){ FullcalendarEngine.Form.render(options) }
       });
     },
@@ -40,21 +40,23 @@ FullcalendarEngine = {
   Events: {
     move: function(event, dayDelta, minuteDelta, allDay){
       $.ajax({
-        data: 'title=' + event.title + '&day_delta=' + dayDelta + '&minute_delta=' + minuteDelta + '&all_day=' + allDay + '&authenticity_token=' + FullcalendarEngine.Form.authenticity_token(),
+        data: '&start_time=' + event.start + '&all_day=' + allDay + '&authenticity_token=' + FullcalendarEngine.Form.authenticity_token(),
         dataType: 'script',
         type: 'post',
-        url: FullcalendarEngine.app_path() + "/events/" + event.id + "/move",
+        url: '/appointments/' + event.id + '/move',
         error: function(xhr){
+          debugger
           alert(JSON.parse(xhr.responseText)["message"])
         }
       });
     },
     resize: function(event, dayDelta, minuteDelta){
+      
       $.ajax({
-        data: 'title=' + event.title + '&day_delta=' + dayDelta + '&minute_delta=' + minuteDelta + '&authenticity_token=' + FullcalendarEngine.Form.authenticity_token(),
+        data: '&end_time=' + event.end + '&authenticity_token=' + FullcalendarEngine.Form.authenticity_token(),
         dataType: 'script',
         type: 'post',
-        url: FullcalendarEngine.app_path() + "/events/" + event.id + "/resize",
+        url: '/appointments/'+ event.id + '/resize',
         error: function(xhr){
           alert(JSON.parse(xhr.responseText)["message"])
         }
@@ -62,7 +64,7 @@ FullcalendarEngine = {
     },
     edit: function(event_id){
       $.ajax({
-        url: FullcalendarEngine.app_path() + "/events/" + event_id + "/edit",
+        url: '/appointments/' + event_id + '/edit',
         success: function(data) {
           $('#edit_event_description').html(data['form']);
         }
@@ -73,7 +75,7 @@ FullcalendarEngine = {
         data: 'authenticity_token=' + FullcalendarEngine.Form.authenticity_token() + '&delete_all=' + delete_all,
         dataType: 'script',
         type: 'delete',
-        url: FullcalendarEngine.app_path() + "/events/" + event_id,
+        url: '/appointments/' + event_id,
         success: FullcalendarEngine.Events.refetch_events_and_close_dialog
       });
     },
@@ -83,20 +85,13 @@ FullcalendarEngine = {
     },
     showEventDetails: function(event){
       $('#event_desc_dialog').html('')
-      $event_description  = $('<div />').html(event.description).attr("id", "edit_event_description")
-      $event_actions      = $('<div />').attr("id", "event_actions")
+      $event_description  = $('<div />').html(event.description).attr("id", "edit_event_description");
+      $event_actions      = $('<div />').attr("id", "event_actions");
+      debugger
       $edit_event         = $('<span />').attr("id", "edit_event").html("<a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.edit(" + event.id + ")'>Edit</a>");
       $delete_event       = $('<span />').attr("id", "delete_event")
-      if (event.recurring) {
-        title = event.title + "(Recurring)";
-        // Cannot be refactored as of now, the event bubbling of the eventClick of the fullCalendar is the culprit
-        $delete_event.html("&nbsp; <a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.delete(" + event.id + ", " + false + ")'>Delete Only This Occurrence</a>");
-        $delete_event.append("&nbsp;&nbsp; <a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.delete(" + event.id + ", " + true + ")'>Delete All In Series</a>")
-        $delete_event.append("&nbsp;&nbsp; <a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.delete(" + event.id + ", \"future\")'>Delete All Future Events</a>")
-      } else {
-        title = event.title;
-        $delete_event.html("<a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.delete(" + event.id + ", " + false + ")'>Delete</a>");
-      }
+      title = event.id;
+      $delete_event.html("<a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.delete(" + event.id + ", " + false + ")'>Delete</a>");
       $event_actions.append($edit_event).append(" | ").append($delete_event)
       $('#event_desc_dialog').append($event_description).append($event_actions)
       $('#event_desc_dialog').dialog({
