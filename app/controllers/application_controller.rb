@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
   before_action :authorize, unless: :devise_controller?
   before_action :configure_permitted_parameters, if: :devise_controller?
+  before_action :validate_access
 
   def current_layout
     @site_layout ||= SiteLayout.first
@@ -33,9 +34,13 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def validate_access
+    namespace = ((params[:controller]).scan(/^(\w+)\//i).flatten).first
+    redirect_to welcome_path unless (current_user.type).downcase == namespace
+  end
+
   def authorize
-    debugger
-    redirect_to "/" if !user_signed_in?
+    redirect_to "/" unless user_signed_in?
   end
 
 end

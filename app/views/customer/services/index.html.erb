@@ -1,7 +1,7 @@
 
 <h1>SERVICES</h1>
 
-<%= link_to 'Create New Service', new_service_path, class: 'new-service-link', remote: true %><br /><br />
+<%= link_to 'Create New Service',new_customer_service_path, class: 'new-service-link', remote: true %><br /><br />
 
 <table border = '2' width = '500'>
   <tr>
@@ -21,10 +21,10 @@
         <%= service.slot_window %>
       </td>
       <td class="list_actions">
-        <%= link_to 'Edit', edit_service_path(service), remote: true %>
+        <%= link_to 'Edit', edit_customer_service_path(service), remote: true %>
       </td>
       <td>
-        <%= link_to 'Delete', service, method: :delete, data: { confirm: 'Are you sure?' } %>
+        <%= link_to 'Delete', customer_service_path(service), method: :delete, data: { confirm: 'Are you sure?' } %>
       </td>
     </tr>
   <% end %>

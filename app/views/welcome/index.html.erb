@@ -1,9 +1,16 @@
 <h1>Welcome</h1>
 
-<!--<#%= link_to 'Customer Information', search_customers_path %><br /> -->
-<!--<#%= link_to 'Services', services_path %><br />-->
-<%= link_to 'Availabilities', availabilities_path %><br />
-<%= link_to 'Staff', staffs_path %><br />
-<!--<#%= link_to 'Customers', customers_path %><br />-->
-<%= link_to 'Upload Logo', edit_admin_site_layout_path(current_layout) %><br />
-<%= link_to 'Appointment', appointments_path %><br />
+<% case current_user.type %>
+  <% when 'Customer' %>
+    <%= link_to 'Services', customer_services_path %><br />
+    <%= link_to 'Appointment', customer_appointments_path %><br />
+  <% when 'Staff' %>
+    <%= link_to 'Appointment', staff_appointments_path %><br />
+    <%= link_to 'Availabilities', staff_availabilities_path %><br />
+  <% when 'Admin' %>
+    <%= link_to 'Services', admin_services_path %><br />
+    <%= link_to 'Availabilities', admin_availabilities_path %><br />
+    <%= link_to 'Staff', admin_staffs_path %><br />
+    <%= link_to 'Upload Logo', edit_admin_site_layout_path(current_layout) %><br />
+    <%= link_to 'Customers', admin_customers_path %><br />
+<% end %>
