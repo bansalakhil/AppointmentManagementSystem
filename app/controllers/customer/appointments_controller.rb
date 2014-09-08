@@ -3,11 +3,11 @@ class Customer::AppointmentsController < Customer::BaseController
   # layout FullcalendarEngine::Configuration['layout'] || 'application'
 
     before_filter :load_event, only: [:edit, :update, :destroy, :move, :resize]
-    # before_filter :determine_event_type, only: :create
 
     def index
       @staffs = Staff.all
       @customers = Customer.all
+      @services = Service.all
     end
 
     def create
@@ -21,6 +21,7 @@ class Customer::AppointmentsController < Customer::BaseController
 
     def new
       @staffs = Staff.all
+      @services = Service.all
       @customers = Customer.all
       @event = Appointment.new
       respond_to do |format|
@@ -76,6 +77,7 @@ class Customer::AppointmentsController < Customer::BaseController
     def update
       @staffs = Staff.all
       @customers = Customer.all
+      @services = Service.all
       @event = Appointment.new
       case params[:event][:commit_button]
       when 'Update All Occurrence'

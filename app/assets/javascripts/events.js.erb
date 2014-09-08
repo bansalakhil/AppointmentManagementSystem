@@ -44,7 +44,6 @@ FullcalendarEngine = {
         type: 'post',
         url: '/admin/appointments/' + event.id + '/move',
         error: function(xhr){
-          debugger
           alert(JSON.parse(xhr.responseText)["message"])
         }
       });
@@ -86,7 +85,6 @@ FullcalendarEngine = {
       $('#event_desc_dialog').html('')
       $event_description  = $('<div />').html(event.description).attr("id", "edit_event_description");
       $event_actions      = $('<div />').attr("id", "event_actions");
-      debugger
       $edit_event         = $('<span />').attr("id", "edit_event").html("<a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.edit(" + event.id + ")'>Edit</a>");
       $delete_event       = $('<span />').attr("id", "delete_event")
       title = event.id;
