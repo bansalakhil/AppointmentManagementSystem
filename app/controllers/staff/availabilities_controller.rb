@@ -56,7 +56,7 @@ class Staff::AvailabilitiesController < Staff::BaseController
     respond_to do |format|
       format.js do
         @people = Service.where(id: params[:service_id]).first.staffs
-        render :action => "set_staff_selectbox"
+        render json: @people
       end
     end
   end

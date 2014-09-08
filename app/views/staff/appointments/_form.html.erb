@@ -1,9 +1,14 @@
 
-<%= form_for [:staff, @appointment] ||= Appointment.new, :html => { id: 'event_form' } do |f| %>
+<%= form_for(@appointment ||= Appointment.new, url: staff_appointments_path(@appointment), html: { :'data-remote' => true, id: 'event_form' } ) do |f| %>
 
 <div class="field">
   <%= f.label :staff_id, 'Staff :' %><br />
   <%= f.collection_select(:staff_id, @staffs, :id, :name) %>
+</div>
+
+<div class="field">
+  <%= f.label :service_id, 'Services :' %><br />
+  <%= f.collection_select(:service_id, @services, :id, :name) %>
 </div>
 
 <div class="field">

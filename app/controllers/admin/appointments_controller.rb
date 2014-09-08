@@ -1,5 +1,6 @@
 class Admin::AppointmentsController < Admin::BaseController
     before_filter :load_event, only: [:edit, :update, :destroy, :move, :resize, :cancel]
+    before_action :get_controller
 
     def index
       @staffs = Staff.all
@@ -41,7 +42,8 @@ class Admin::AppointmentsController < Admin::BaseController
         events << { id: event.id,
                     description: event.description || '', 
                     start: event.starttime.iso8601,
-                    end: event.endtime.iso8601 }
+                    end: event.endtime.iso8601,
+                    allDay: false}
       end
       render json: events.to_json
     end
@@ -117,5 +119,9 @@ class Admin::AppointmentsController < Admin::BaseController
 
     def event_params
       params.require(:appointment).permit(:staff_id, :service_id, :customer_id, :starttime, :endtime, :status_id, :description )
+    end
+
+    def get_controller
+      @controller_name = params[:controller]
     end
 end

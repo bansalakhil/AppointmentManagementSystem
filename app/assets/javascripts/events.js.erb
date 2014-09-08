@@ -2,7 +2,6 @@
 // All this logic will automatically be available in application.js.
 
 if (typeof(FullcalendarEngine) === 'undefined') { FullcalendarEngine = {}; }
-
 FullcalendarEngine = {
   Form: {
     display: function(options) {
@@ -28,7 +27,7 @@ FullcalendarEngine = {
         type: 'get',
         dataType: 'script',
         async: true,
-        url: "/admin/appointments/new",
+        url: "/" + app_path + "/new",
         success: function(){ FullcalendarEngine.Form.render(options) }
       });
     },
@@ -42,7 +41,7 @@ FullcalendarEngine = {
         data: '&start_time=' + event.start + '&all_day=' + allDay + '&authenticity_token=' + FullcalendarEngine.Form.authenticity_token(),
         dataType: 'script',
         type: 'post',
-        url: '/admin/appointments/' + event.id + '/move',
+        url: '/' + app_path + '/' + event.id + '/move',
         error: function(xhr){
           alert(JSON.parse(xhr.responseText)["message"])
         }
@@ -54,7 +53,7 @@ FullcalendarEngine = {
         data: '&end_time=' + event.end + '&authenticity_token=' + FullcalendarEngine.Form.authenticity_token(),
         dataType: 'script',
         type: 'post',
-        url: '/admin/appointments/'+ event.id + '/resize',
+        url: '/' + app_path + '/'+ event.id + '/resize',
         error: function(xhr){
           alert(JSON.parse(xhr.responseText)["message"])
         }
@@ -62,7 +61,7 @@ FullcalendarEngine = {
     },
     edit: function(event_id){
       $.ajax({
-        url: '/admin/appointments/' + event_id + '/edit',
+        url: '/' + app_path + '/' + event_id + '/edit',
         success: function(data) {
           $('#edit_event_description').html(data['form']);
         }
@@ -73,7 +72,7 @@ FullcalendarEngine = {
         data: 'authenticity_token=' + FullcalendarEngine.Form.authenticity_token() + '&delete_all=' + delete_all,
         dataType: 'script',
         type: 'delete',
-        url: '/admin/appointments/' + event_id,
+        url: '/' + app_path + '/' + event_id,
         success: FullcalendarEngine.Events.refetch_events_and_close_dialog
       });
     },
@@ -128,9 +127,6 @@ FullcalendarEngine = {
     $day.prop('selectedIndex', time.getDate() - 1);
     $hour.prop('selectedIndex', time.getHours());
     $minute.prop('selectedIndex', time.getMinutes());
-  },
-  app_path: function(){
-    return (app_path || window.location.pathname.match(/\/(\w)+/)[0])
   }
 }
 
