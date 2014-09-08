@@ -32,7 +32,6 @@ class Customer::AppointmentsController < Customer::BaseController
     def get_events
       start_time = Time.at(params[:start].to_i).to_formatted_s(:db)
       end_time   = Time.at(params[:end].to_i).to_formatted_s(:db)
-
       @events = Appointment.where('
                   (starttime >= :start_time and endtime <= :end_time) or
                   (starttime >= :start_time and endtime > :end_time and starttime <= :end_time) or
@@ -95,16 +94,7 @@ class Customer::AppointmentsController < Customer::BaseController
     end
 
     def destroy
-      case params[:delete_all]
-      when 'true'
-        @event.event_series.destroy
-      when 'future'
-        @events = @event.event_series.events.where('starttime > :start_time',
-                                                   start_time: @event.starttime.to_formatted_s(:db)).to_a
-        @event.event_series.events.delete(@events)
-      else
-        @event.destroy
-      end
+      @event.destroy
       render nothing: true
     end
 
