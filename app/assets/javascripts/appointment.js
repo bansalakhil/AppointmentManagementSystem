@@ -17,7 +17,7 @@ custom_calendar = function() {
     selectable  : true,
     timeFormat  : "h:mm t{ - h:mm t}",
     handleWindowResize: true,
-    events      : '/appointments/get_events',
+    events      : '/admin/appointments/get_events',
     editable    : true,
     disableDragging: false,
     disableResizing: false,

@@ -1,13 +1,10 @@
 class Admin::AppointmentsController < Admin::BaseController
-
-  # layout FullcalendarEngine::Configuration['layout'] || 'application'
-
-    before_filter :load_event, only: [:edit, :update, :destroy, :move, :resize]
-    # before_filter :determine_event_type, only: :create
+    before_filter :load_event, only: [:edit, :update, :destroy, :move, :resize, :cancel]
 
     def index
       @staffs = Staff.all
       @customers = Customer.all
+      @services = Service.all
     end
 
     def create
@@ -21,6 +18,7 @@ class Admin::AppointmentsController < Admin::BaseController
 
     def new
       @staffs = Staff.all
+      @services = Service.all
       @customers = Customer.all
       @event = Appointment.new
       respond_to do |format|
@@ -77,6 +75,7 @@ class Admin::AppointmentsController < Admin::BaseController
       @staffs = Staff.all
       @customers = Customer.all
       @event = Appointment.new
+      @services = Service.all
       case params[:event][:commit_button]
       when 'Update All Occurrence'
         @events = @event.event_series.events
@@ -93,17 +92,18 @@ class Admin::AppointmentsController < Admin::BaseController
     end
 
     def destroy
-      case params[:delete_all]
-      when 'true'
-        @event.event_series.destroy
-      when 'future'
-        @events = @event.event_series.events.where('starttime > :start_time',
-                                                   start_time: @event.starttime.to_formatted_s(:db)).to_a
-        @event.event_series.events.delete(@events)
-      else
-        @event.destroy
-      end
+      @event.destroy
       render nothing: true
+    end
+
+    def appointment_history
+      @future_appointments = Appointment.where('starttime > :current_time', current_time: Time.now)
+      @past_appointments = Appointment.where('endtime < :current_time', current_time: Time.now)
+    end
+
+    def cancel
+      @event.destroy
+      redirect_to appointment_history_admin_appointments_path
     end
 
     private
@@ -116,6 +116,6 @@ class Admin::AppointmentsController < Admin::BaseController
     end
 
     def event_params
-      params.require(:appointment).permit(:staff_id, :customer_id, :starttime, :endtime, :status_id, :description )
+      params.require(:appointment).permit(:staff_id, :service_id, :customer_id, :starttime, :endtime, :status_id, :description )
     end
 end

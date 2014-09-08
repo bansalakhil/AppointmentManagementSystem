@@ -1,0 +1,93 @@
+<%= stylesheet_link_tag :appointment_history %>
+
+<h2>Appointment history</h2>
+<br>
+
+<h4>Past Appointments</h4>
+
+<table>
+  <tr>
+    <th>Date</th>
+    <th>Time</th>
+    <th>Service</th>
+    <th>Staff</th>
+    <th>Cancel</th>
+  </tr>
+
+  <% @past_appointments.each do |appointment| %>
+    
+    <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
+      <td class="list_description">
+        <%= appointment.starttime.strftime("%d/%m/%y %A") %>
+      </td>
+      <td class="list_description">
+        <%= appointment.starttime.strftime("%I:%M %p") %> - <%= appointment.endtime.strftime("%I:%M %p") %>
+      </td>
+      <td class="list_description">
+        <% if appointment.service %>
+          <%= appointment.service.name %>
+        <% else %>
+          no service
+        <% end %>
+      </td>
+      <td class="list_description">
+        <% if appointment.staff %> 
+         <%= appointment.staff.name %>
+        <% else %>
+          No staff
+        <% end %>
+      </td>
+      <td>
+        <%= link_to 'Cancel', cancel_admin_appointment_path(appointment), method: :delete, data: { confirm: 'Are you sure?' } %>
+      </td>
+    </tr>
+  <% end %>
+
+</table>
+<br/>
+<br />
+
+<h4>Upcoming Appointments</h4>
+
+<table>
+  <tr>
+    <th>Date</th>
+    <th>Time</th>
+    <th>Service</th>
+    <th>Staff</th>
+    <th>Cancel</th>
+  </tr>
+
+  <% @future_appointments.each do |appointment| %>
+    
+    <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
+      <td class="list_description">
+        <%= appointment.starttime.strftime("%d/%m/%y %A") %>
+      </td>
+      <td class="list_description">
+        <%= appointment.starttime.strftime("%I:%M %p") %> - <%= appointment.endtime.strftime("%I:%M %p") %>
+      </td>
+      <td class="list_description">
+        <% if appointment.service %>
+          <%= appointment.service.name %>
+        <% else %>
+          no service
+        <% end %>
+      </td>
+      <td class="list_description">
+        <% if appointment.staff %> 
+         <%= appointment.staff.name %>
+        <% else %>
+          No staff
+        <% end %>
+      </td>
+      <td>
+        <%= link_to 'Cancel', cancel_admin_appointment_path(appointment), method: :delete, data: { confirm: 'Are you sure?' } %>
+      </td>
+    </tr>
+  <% end %>
+
+</table>
+<br/>
+
+<%= link_to 'Home' , welcome_path %>

@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   #devise automatic setup on install
-  devise_for :users, :controllers => { :registrations => 'registrations' }
+  devise_for :users, :controllers => { registrations: 'registrations', confirmations: 'confirmations' }
 
   devise_scope :user do
     root 'devise/sessions#new'
@@ -13,8 +13,10 @@ Rails.application.routes.draw do
     resources :appointments do
       collection do
         get :get_events
+        get :appointment_history
       end
       member do
+        delete :cancel
         post :move
         post :resize
       end

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe StaffsController do
+describe Admin::StaffsController do
 
   let(:service1) { Service.create({ name: 'service_one', slot_window: 15 })}
   let(:initial_staff) { Staff.create({ name: 'initial_name', email: 'initial@initia.com', phone_number: 635635635635, service_ids: [service1.id] }) }
@@ -10,7 +10,7 @@ describe StaffsController do
   end
 
   describe 'constants' do
-    it { StaffsController::PERMITTED_ATTRS.should eq [:name, :email, :phone_number, {service_ids: []}] }
+    it { Admin::StaffsController::PERMITTED_ATTRS.should eq [:name, :email, :phone_number, {service_ids: []}] }
   end
 
   describe 'blocks unauthenticated access' do
@@ -25,10 +25,6 @@ describe StaffsController do
     before do
       get :index
     end
-
-    # it 'assigns instance variable @staffs' do
-    #   assigns()
-    # end
 
     it { expect(response).to have_http_status(200) }
     it { should render_template('index') }

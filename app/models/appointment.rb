@@ -1,6 +1,7 @@
 class Appointment < ActiveRecord::Base
   belongs_to :customer, class_name: 'User', foreign_key: 'customer_id'
   belongs_to :staff, class_name: 'User', foreign_key: 'staff_id'
+  belongs_to :service
   has_one :status
   validates :description, presence: true
   # validate :appointment_datetime, on: :create, if: :time_slot_available?
