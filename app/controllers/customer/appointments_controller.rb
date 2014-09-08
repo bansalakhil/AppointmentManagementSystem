@@ -12,7 +12,7 @@ class Customer::AppointmentsController < Customer::BaseController
   def create
     @event = Appointment.new(event_params)
     if @event.save
-      render nothing: true
+      render nothing: true, status: :created
     else
       render text: @event.errors.full_messages.to_sentence, status: 422
     end

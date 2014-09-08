@@ -17,11 +17,11 @@ custom_calendar = function() {
     selectable  : true,
     timeFormat  : "h:mm t{ - h:mm t}",
     handleWindowResize: true,
-    events      : '/admin/appointments/get_events',
+    events      : '/' + app_path + '/get_events',
     editable    : true,
     disableDragging: false,
     disableResizing: false,
-    allDay      : true,
+    allDay      : false,
     select      : function(start, end, jsEvent, view){
                     FullcalendarEngine.Form.display({ 
                       // starttime: new Date(startDate.getTime()), 

@@ -34,12 +34,17 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def appointment_path?
+    namespace = params[:controller].split('/').first
+    ['staff', 'customer'].include? namespace && params[:action] == 'get_events'
+  end
+
   def welcome_controller?
     params[:controller] == 'welcome' ? true : false
   end
 
   def skip_validation?
-    devise_controller? || welcome_controller?
+    devise_controller? || welcome_controller? || appointment_path?
   end
 
   def validate_access
