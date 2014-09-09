@@ -40,7 +40,6 @@ group :test do
   gem 'shoulda-matchers', require: false
 end
 
-#paper clip
 gem "paperclip"
 
 #gem devise for login/logout feature

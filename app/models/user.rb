@@ -8,6 +8,7 @@ class User < ActiveRecord::Base
          :confirmable, :invitable, :invite_for => 2.weeks
 
   #Associations..........................................................
+  # FIX- Does this work?
   has_many :appointments
 
   #Query Interface.......................................................
@@ -20,5 +21,4 @@ class User < ActiveRecord::Base
                               uniqueness: true, allow_blank: true
   validates :phone_number, length: { minimum: 9 }, allow_blank: true
 
-  #Callbacks..............................................................
 end

@@ -16,13 +16,13 @@ ActiveRecord::Schema.define(version: 20140907184524) do
   create_table "appointments", force: true do |t|
     t.integer  "staff_id"
     t.integer  "customer_id"
-    t.integer  "service_id"
     t.datetime "starttime"
     t.datetime "endtime"
-    t.integer  "status_id",   default: 1
+    t.integer  "status_id",   default: 0
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "service_id"
   end
 
   create_table "availabilities", force: true do |t|
@@ -39,29 +39,6 @@ ActiveRecord::Schema.define(version: 20140907184524) do
     t.integer  "cancelled_by"
     t.datetime "created_at"
   end
-
-  create_table "fullcalendar_engine_event_series", force: true do |t|
-    t.integer  "frequency",  default: 1
-    t.string   "period",     default: "monthly"
-    t.datetime "starttime"
-    t.datetime "endtime"
-    t.boolean  "all_day",    default: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  create_table "fullcalendar_engine_events", force: true do |t|
-    t.string   "title"
-    t.datetime "starttime"
-    t.datetime "endtime"
-    t.boolean  "all_day",         default: false
-    t.text     "description"
-    t.integer  "event_series_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "fullcalendar_engine_events", ["event_series_id"], name: "index_fullcalendar_engine_events_on_event_series_id", using: :btree
 
   create_table "services", force: true do |t|
     t.string   "name"
@@ -87,6 +64,10 @@ ActiveRecord::Schema.define(version: 20140907184524) do
     t.string   "background_content_type"
     t.integer  "background_file_size"
     t.datetime "background_updated_at"
+  end
+
+  create_table "statuses", force: true do |t|
+    t.string "name"
   end
 
   create_table "users", force: true do |t|

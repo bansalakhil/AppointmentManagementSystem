@@ -1,4 +1,6 @@
 class Admin::AppointmentsController < Admin::BaseController
+
+    # FIX- Why are we using #before_filter in first and #before_action in secnod place?
     before_filter :load_event, only: [:edit, :update, :destroy, :move, :resize, :cancel]
     before_action :get_controller
 
@@ -8,9 +10,11 @@ class Admin::AppointmentsController < Admin::BaseController
       @services = Service.all
     end
 
+    # FIX- Remove #create and #new actions as Admin cannot create appointments.
     def create
       @event = Appointment.new(event_params)
       if @event.save
+        # FIX- It should render json for the created object
         render nothing: true
       else
         render text: @event.errors.full_messages.to_sentence, status: 422
@@ -31,6 +35,7 @@ class Admin::AppointmentsController < Admin::BaseController
       start_time = Time.at(params[:start].to_i).to_formatted_s(:db)
       end_time   = Time.at(params[:end].to_i).to_formatted_s(:db)
 
+      # FIX- Move to model. Use scopes.
       @events = Appointment.where('
                   (starttime >= :start_time and endtime <= :end_time) or
                   (starttime >= :start_time and endtime > :end_time and starttime <= :end_time) or
@@ -38,6 +43,7 @@ class Admin::AppointmentsController < Admin::BaseController
                   (starttime <= :start_time and endtime > :end_time)',
                   start_time: start_time, end_time: end_time)
       events = []
+      # FIX- Why using instance variable here? And we can use #map! instead of #each
       @events.each do |event|
         events << { id: event.id,
                     description: event.description || '', 
@@ -110,9 +116,12 @@ class Admin::AppointmentsController < Admin::BaseController
 
     private
 
+    # FIX- This should be #load_appointment
     def load_event
+      # FIX- Fix variable name
       @event = Appointment.where(:id => params[:id]).first
       unless @event
+        # FIX- We can skip 'and return' part in a before_action.
         render json: { message: "Appointment Not Found.."}, status: 404 and return
       end
     end
@@ -121,6 +130,7 @@ class Admin::AppointmentsController < Admin::BaseController
       params.require(:appointment).permit(:staff_id, :service_id, :customer_id, :starttime, :endtime, :status_id, :description )
     end
 
+    # FIX- Move it to helper as it is related to view only.
     def get_controller
       @controller_name = params[:controller]
     end

@@ -5,6 +5,7 @@ class Availability < ActiveRecord::Base
 
   # Validations..................................................
   # validates :start_time, uniqueness: { scope: :staff_id }, presence: true
+  # FIX- Add validations for staff_id, service_id
   validates :start_time, :end_time, :start_date, :end_date, presence: true
 
   #Query Interface...............................................
