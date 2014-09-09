@@ -2,17 +2,23 @@
 
 <% case current_user.type %>
   <% when 'Customer' %>
-    <%= link_to 'Services', customer_services_path %><br />
-    <%= link_to 'Appointment', customer_appointments_path %><br />
+    <div class = 'welcome-links'>
+      <%= link_to 'Services', customer_services_path %>
+      <%= link_to 'Appointment', customer_appointments_path %>
+    </div>
   <% when 'Staff' %>
-    <%= link_to 'Appointment', staff_appointments_path %><br />
-    <%= link_to 'Availabilities', staff_availabilities_path %><br />
+    <div class = 'welcome-links'>
+      <%= link_to 'Appointment', staff_appointments_path %>
+      <%= link_to 'Availabilities', staff_availabilities_path %>
+    </div>
   <% when 'Admin' %>
-    <%= link_to 'Appointment', admin_appointments_path %><br />
-    <%= link_to 'Appointment History', appointment_history_admin_appointments_path %><br />
-    <%= link_to 'Services', admin_services_path %><br />
-    <%= link_to 'Availabilities', admin_availabilities_path %><br />
-    <%= link_to 'Staff', admin_staffs_path %><br />
-    <%= link_to 'Upload Logo', edit_admin_site_layout_path(current_layout) %><br />
-    <%= link_to 'Customers', admin_customers_path %><br />
+    <div class = 'welcome-links'>
+      <%= link_to 'Appointment', admin_appointments_path %>
+      <%= link_to 'Appointment History', appointment_history_admin_appointments_path %>
+      <%= link_to 'Services', admin_services_path %>
+      <%= link_to 'Availabilities', admin_availabilities_path %>
+      <%= link_to 'Staff', admin_staffs_path %>
+      <%= link_to 'Upload Logo', edit_admin_site_layout_path(current_layout) %>
+      <%= link_to 'Customers', admin_customers_path %>
+    </div>
 <% end %>

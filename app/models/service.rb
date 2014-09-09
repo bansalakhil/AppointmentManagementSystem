@@ -1,4 +1,5 @@
 class Service < ActiveRecord::Base
+
   #Associations..................................................
   has_and_belongs_to_many :staffs, :join_table => :services_staffs
   

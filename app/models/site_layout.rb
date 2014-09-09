@@ -1,7 +1,7 @@
 class SiteLayout < ActiveRecord::Base
   #Associations......................................................
   has_attached_file :logo, :styles => { thumb: "60x60>" }, :default_url => "logo/vinsol.jpg"
-  has_attached_file :background, :styles => { full: "900x800!" }, :default_url => "background/defaultBG.jpg"
+  has_attached_file :background, :styles => { full: "1300x1300!" }, :default_url => "background/defaultBG.jpg"
 
   #Validations........................................................
   validates_attachment_content_type :logo, :content_type => /\Aimage\/.*\Z/

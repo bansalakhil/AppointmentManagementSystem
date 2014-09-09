@@ -16,21 +16,34 @@
 
 body{
   margin: auto;
-  width: 80%;
+  width: 100%;
+  background-color:  yellow;
+  background-repeat: repeat-y;
 }
 
 #banner {
   background: #022133;
   padding: 10px;
-  height: 15%;
+  width: 100%;
+  //height: 200px;
   border-bottom: 2px solid;
   font: small-caps 40px/40px "Times New Roman", serif;
   color: #CC7A00;
   text-align: center;
-  img {
+  #logo-image{
+    width: 200px;
     float: left;
-    length: 50px;
-    width: 50px;
+    display: table-cell;
+    img {
+      height: 139px;
+      width: 200px;
+      margin: auto;
+      display: table-cell;
+      border-radius: 10px;
+    }
+    h2 {
+      float: left
+    }
   }
 }
 #notice {
@@ -41,38 +54,31 @@ body{
   background-color: #f0f0f0;
   font: bold smaller sans-serif;
 }
-#columns {
-  background: #C57E74;
-  height: auto;
-  min-height: 600px;
-  #main {
-    margin-left: 17em;
-    padding: 1em;
-    background: white;
-    height: 100%;
-    overflow: auto;
-    min-height: 600px;
-  }
-  #side {
-    float: left;
-    padding: 1em 2em;
-    width: 13em;
-    min-height: 600px;
-    form, div {
-      display: inline;
+#main {
+  padding: 20px;
+  .welcome-links{
+    border-bottom: 1px solid #cfcfcf;
+    h1{
+      border-bottom: 1px solid #cfcfcf;
     }
-    input {
-      font-size: small;
-    }
-    ul {
-      padding: 0;
-      li {
-        list-style: none;
-        a {
-          color: #bfb;
-          font-size: small;
-        }
-      }
+    a{
+      color: red;
+      border: 1px solid black;
+      text-decoration: none;
+      min-width: 100px;
+      font-style: italic;
+      font-size: 18px;
+      height: 20px;
+      border-bottom: 1px solid #6d6d6d;
+      margin-left: 20px;
+      margin-top:20px;
+      max-width: 250px;
+      display: inline-block;
+      text-align: center;
+      margin-right:1px;
+      margin-left: 1px;
+      background-color: #cfcfcf;
+      padding: 3px 5px 3px 5px;
     }
   }
 }

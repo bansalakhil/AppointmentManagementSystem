@@ -3,7 +3,7 @@
 <h2>Appointment history</h2>
 <br>
 
-<h4>Past Appointments</h4>
+<h4>Upcoming Appointments</h4>
 
 <table>
   <tr>
@@ -14,7 +14,7 @@
     <th>Cancel</th>
   </tr>
 
-  <% @past_appointments.each do |appointment| %>
+  <% @future_appointments.each do |appointment| %>
     
     <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
       <td class="list_description">
@@ -42,12 +42,11 @@
       </td>
     </tr>
   <% end %>
-
 </table>
 <br/>
 <br />
 
-<h4>Upcoming Appointments</h4>
+<h4>Past Appointments</h4>
 
 <table>
   <tr>
@@ -58,7 +57,7 @@
     <th>Cancel</th>
   </tr>
 
-  <% @future_appointments.each do |appointment| %>
+  <% @past_appointments.each do |appointment| %>
     
     <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
       <td class="list_description">

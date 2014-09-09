@@ -99,8 +99,8 @@ class Admin::AppointmentsController < Admin::BaseController
     end
 
     def appointment_history
-      @future_appointments = Appointment.where('starttime > :current_time', current_time: Time.now)
-      @past_appointments = Appointment.where('endtime < :current_time', current_time: Time.now)
+      @future_appointments = Appointment.where('starttime > :current_time and status_id = 1', current_time: Time.now)
+      @past_appointments = Appointment.where('endtime < :current_time and status_id = 4', current_time: Time.now)
     end
 
     def cancel

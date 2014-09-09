@@ -1,19 +1,22 @@
 class Appointment < ActiveRecord::Base
+  STATUSES = { '1' => 'pending', '2' => 'in_process', '3' => 'cancelled', '4' => 'done' }
+
+  #Associations...............................................................
   belongs_to :customer, class_name: 'User', foreign_key: 'customer_id'
   belongs_to :staff, class_name: 'User', foreign_key: 'staff_id'
   belongs_to :service
-  has_one :status
+
+  #Validations................................................................
   validates :description, presence: true
-  # validate :appointment_datetime, on: :create, if: :time_slot_available?
-  # validate :starttime, on: :create, if: :time_slot_available?
+  validate :starttime, on: :create, if: :time_slot_available?
 
   def time_slot_available?
-    appointments = Appointment.where("appointment_datetime > ?", DateTime.now.to_date)
-    outcome = appointments.all? do |apt|
-      end_time =  apt.appointment_datetime + (apt.doctor.doctors_information.slot_window * apt.slots * 60)
-      !(self.appointment_datetime >= apt.appointment_datetime && self.appointment_datetime < end_time)
+    # Pick all appointments of that day
+    appointments = Appointment.where("starttime > ?", Time.now.beginning_of_day())
+    outcome = appointments.all? do |var|
+      !((self.starttime >= var.starttime && self.starttime < var.endtime) || (self.endtime >= var.starttime && self.endtime < var.endtime))
     end
-    self.errors[:appointment_datetime] = 'coinsides with an existing appointment' unless outcome
+    self.errors[:starttime] = 'coinsides with an existing appointment' unless outcome
     return outcome
   end
 

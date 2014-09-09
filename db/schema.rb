@@ -16,13 +16,13 @@ ActiveRecord::Schema.define(version: 20140907184524) do
   create_table "appointments", force: true do |t|
     t.integer  "staff_id"
     t.integer  "customer_id"
+    t.integer  "service_id"
     t.datetime "starttime"
     t.datetime "endtime"
-    t.integer  "status_id",   default: 0
+    t.integer  "status_id",   default: 1
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "service_id"
   end
 
   create_table "availabilities", force: true do |t|
@@ -87,10 +87,6 @@ ActiveRecord::Schema.define(version: 20140907184524) do
     t.string   "background_content_type"
     t.integer  "background_file_size"
     t.datetime "background_updated_at"
-  end
-
-  create_table "statuses", force: true do |t|
-    t.string "name"
   end
 
   create_table "users", force: true do |t|
