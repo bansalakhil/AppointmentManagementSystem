@@ -62,12 +62,8 @@ class Admin::StaffsController < Admin::BaseController
   end
 
   def deactivate
-<<<<<<< HEAD
     @staff.update_attributes({ active: false, deleted_at: Time.now })
-=======
-    #FIX- Use update_column
-    @staff.update_attribute('active', false)
->>>>>>> b21b561be7fc4a391a60abb0101279b34e28f7fa
+
     flash[:notice] = 'Staff sucessfully deleted'
     redirect_to_path(admin_staffs_path)
   end
