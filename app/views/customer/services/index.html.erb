@@ -5,6 +5,9 @@
   <tr>
     <th>Service Name</th>
     <th>Duration</th>
+    <th>Edit</th>
+    <th>Delete</th>
+
   </tr>
 
   <% @services.each do |service| %>
@@ -13,13 +16,32 @@
       <td class="list_description">
         <%= service.name %>
       </td>
+
       <td class="list_description">
         <%= service.slot_window %>
+      </td>
+
+      <td class="list_actions">
+        <% if service.active %>
+          <%= link_to 'Edit', edit_admin_service_path(service), remote: true %>
+        <% else %>
+          NA
+        <% end %>
+      </td>
+
+      <td>
+        <% if service.active %>
+          <%= link_to 'Delete', admin_service_path(service), method: :delete, data: { confirm: 'Are you sure?' } %>
+        <% else %>
+          NA
+        <% end %>
       </td>
     </tr>
   <% end %>
 
 </table>
+<br/>
+<%= will_paginate @services %>
 <br/>
 
 <%= link_to 'Home' , welcome_path %>

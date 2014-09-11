@@ -1,5 +1,5 @@
 
-<%= form_for(@appointment ||= Appointment.new, url: customer_appointments_path(@appointment), html: { :'data-remote' => true, id: 'event_form' } ) do |f| %>
+<%= form_for(@appointment ||= Appointment.new, url: customer_appointments_path(@appointment), html: { :'data-remote' => true, id: 'appointment_form' } ) do |f| %>
 
 <div class="field">
   <%= f.label :staff_id, 'Staff :' %><br />

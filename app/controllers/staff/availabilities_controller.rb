@@ -1,5 +1,5 @@
 class Staff::AvailabilitiesController < Staff::BaseController
-  before_action :find_availability, only: [:edit, :update, :destroy]
+  before_action :get_availability, only: [:edit, :update, :destroy]
   before_action :get_services_staffs, only: [:index, :new, :edit]
   before_action :get_all_availabilities, only: [:index]
 
@@ -7,7 +7,7 @@ class Staff::AvailabilitiesController < Staff::BaseController
   end
 
   def new
-    new_availability
+    @availability = Availability.new
   end
 
   def edit
@@ -15,7 +15,8 @@ class Staff::AvailabilitiesController < Staff::BaseController
 
   def create
 
-    new_availability(availability_params)
+    @availability = Availability.new(availability_params)
+
     respond_to do |format|
       if @availability.save
         format.js { render action: 'refresh' }
@@ -33,7 +34,7 @@ class Staff::AvailabilitiesController < Staff::BaseController
     if @availability.destroy
       flash[:notice] = 'Availability sucessfully deleted'
     else
-      flash[:notice] = 'Availability could not be deleted'
+      flash[:error] = 'Availability could not be deleted'
     end
     redirect_to_path(staff_availabilities_path)
   end
@@ -55,25 +56,27 @@ class Staff::AvailabilitiesController < Staff::BaseController
   def serving_staff #call it after ajax
     respond_to do |format|
       format.js do
-        @people = Service.where(id: params[:service_id]).first.staffs
-        render json: @people
+        @staffs = Service.where(id: params[:service_id]).first.staffs
+        render json: @staffs
       end
     end
   end
 
   private
 
-  def find_availability
+  def get_availability
     @availability = Availability.where(id: params[:id]).first
+
+    if @availability
+      return @availability
+    else
+      flash[:error] = 'Availability not found'
+    end
   end
 
   def availability_params
     params.require(:availability)
       .permit(:service_id, :staff_id, :start_time, :end_time, :start_date, :end_date)
-  end
-
-  def new_availability(params = nil)
-    @availability = Availability.new(params)
   end
 
   def get_services_staffs
@@ -82,6 +85,6 @@ class Staff::AvailabilitiesController < Staff::BaseController
   end
 
   def get_all_availabilities
-    @availabilities = Availability.where(true)
+    @availabilities = Availability.all.paginate :page => params[:page], :per_page => 5
   end
 end

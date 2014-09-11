@@ -1,16 +1,17 @@
 class Customer::AppointmentsController < Customer::BaseController
 
-  before_action :load_event, only: [:edit, :update, :destroy, :move, :resize]
+  before_action :get_event, only: [:edit, :update, :destroy, :move, :resize]
   before_action :get_controller
+  before_action :get_staff_service_customer, only: [:index, :new, :update]
+
 
   def index
-    @staffs = Staff.all
-    @customers = Customer.all
-    @services = Service.all
   end
 
   def create
+
     @event = Appointment.new(event_params)
+
     if @event.save
       render nothing: true, status: :created
     else
@@ -19,9 +20,6 @@ class Customer::AppointmentsController < Customer::BaseController
   end
 
   def new
-    @staffs = Staff.all
-    @services = Service.all
-    @customers = Customer.all
     @event = Appointment.new
     respond_to do |format|
       format.js
@@ -29,21 +27,19 @@ class Customer::AppointmentsController < Customer::BaseController
   end
 
   def get_events
+
     start_time = Time.at(params[:start].to_i).to_formatted_s(:db)
     end_time   = Time.at(params[:end].to_i).to_formatted_s(:db)
-    @events = Appointment.where('
-                (starttime >= :start_time and endtime <= :end_time) or
-                (starttime >= :start_time and endtime > :end_time and starttime <= :end_time) or
-                (starttime <= :start_time and endtime >= :start_time and endtime <= :end_time) or
-                (starttime <= :start_time and endtime > :end_time)',
-                start_time: start_time, end_time: end_time)
+
+    appointments = Appointment.by_timerange(start_time, end_time)
     events = []
-    @events.each do |event|
+    appointments.each do |event|
       events << { id: event.id,
                   description: event.description || '', 
                   start: event.starttime.iso8601,
                   end: event.endtime.iso8601,
-                  allDay: false }
+                  allDay: false
+                }
     end
     render json: events.to_json
   end
@@ -74,10 +70,7 @@ class Customer::AppointmentsController < Customer::BaseController
   end
 
   def update
-    @staffs = Staff.all
-    @customers = Customer.all
-    @services = Service.all
-    @event = Appointment.new
+
     case params[:event][:commit_button]
     when 'Update All Occurrence'
       @events = @event.event_series.events
@@ -100,7 +93,7 @@ class Customer::AppointmentsController < Customer::BaseController
 
   private
 
-  def load_event
+  def get_event
     @event = Appointment.where(:id => params[:id]).first
     unless @event
       render json: { message: "Appointment Not Found.."}, status: 404 and return
@@ -108,10 +101,17 @@ class Customer::AppointmentsController < Customer::BaseController
   end
 
   def event_params
-    params.require(:appointment).permit(:staff_id, :customer_id, :starttime, :endtime, :status_id, :description )
+    params.require(:appointment)
+      .permit(:staff_id, :customer_id, :starttime, :endtime, :status_id, :description )
   end
 
   def get_controller
     @controller_name = params[:controller]
+  end
+
+  def get_staff_service_customer
+    @staffs = Staff.all
+    @services = Service.all
+    @customers = Customer.all
   end
 end

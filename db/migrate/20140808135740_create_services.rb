@@ -4,6 +4,7 @@ class CreateServices < ActiveRecord::Migration
       t.string :name
       t.integer :slot_window, default: 15
       t.boolean :active, default: true
+      t.datetime :deleted_at
       t.timestamps
     end
   end

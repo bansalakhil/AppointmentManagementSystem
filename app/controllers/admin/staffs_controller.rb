@@ -1,7 +1,7 @@
 class Admin::StaffsController < Admin::BaseController
 
-  PERMITTED_ATTRS = [:name, :email, :phone_number, {service_ids: []}] 
-  before_action :find_staff_member, only: [ :edit, :update, :destroy, :deactivate ]
+  PERMITTED_ATTRS = [:name, :email, :phone_number, { service_ids: [] }] 
+  before_action :get_staff_member, only: [ :edit, :update, :destroy, :deactivate ]
   before_action :get_all_staffs, only: [ :index ]
   before_action :get_all_services, only: [:create, :new, :update, :edit]
 
@@ -9,7 +9,7 @@ class Admin::StaffsController < Admin::BaseController
   end
 
   def new
-    new_staff
+    @staff = Staff.new
   end
 
   def edit
@@ -17,7 +17,7 @@ class Admin::StaffsController < Admin::BaseController
 
   def create
 
-    new_staff(staff_params)
+    @staff = Staff.new(staff_params)
 
     respond_to do |format|
       if @staff.save
@@ -25,7 +25,7 @@ class Admin::StaffsController < Admin::BaseController
         flash[:notice] = 'Staff sucessfully created'
         format.js { render action: 'refresh' }
       else
-        flash.now[:notice] = 'Staff could not be created'
+        flash.now[:error] = 'Staff could not be created'
         format.js do
           render action: 'new'
         end
@@ -40,7 +40,7 @@ class Admin::StaffsController < Admin::BaseController
         flash[:notice] = 'Staff sucessfully updated'
         format.js { render action: 'refresh' }
       else
-        flash.now[:notice] = 'Staff could not be updated'
+        flash.now[:error] = 'Staff could not be updated'
         format.js do
           get_all_services
           render action: 'edit'
@@ -50,24 +50,32 @@ class Admin::StaffsController < Admin::BaseController
   end
 
   def destroy
+
     if @staff.destroy
       flash[:notice] = 'Staff sucessfully deleted'
     else
-      flash[:notice] = 'Staff could not be deleted'
+      flash[:error] = 'Staff could not be deleted'
     end
     redirect_to_path(admin_staffs_path)
   end
 
   def deactivate
-    @staff.update_attribute('active', false)
+    @staff.update_attributes({ active: false, deleted_at: Time.now })
     flash[:notice] = 'Staff sucessfully deleted'
     redirect_to_path(admin_staffs_path)
   end
 
   private
 
-  def find_staff_member
+  def get_staff_member
+
     @staff = Staff.where(id: params[:id]).first
+
+    if @staff
+      return @staff
+    else
+      flash[:error] = 'Staff member not found'
+    end
   end
 
   def staff_params
@@ -77,11 +85,7 @@ class Admin::StaffsController < Admin::BaseController
   end
 
   def get_all_staffs
-    @staffs = Staff.where(true)
-  end
-
-  def new_staff(params = nil)
-    @staff = Staff.new(params)
+    @staffs = Staff.all.paginate :page => params[:page], :per_page => 5
   end
 
   def get_all_services

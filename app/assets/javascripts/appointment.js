@@ -22,11 +22,10 @@ custom_calendar = function() {
     disableDragging: false,
     disableResizing: false,
     allDay      : false,
-    select      : function(start, end, jsEvent, view){
+    select      : function(startDate, endDate, jsEvent, view){
                     FullcalendarEngine.Form.display({ 
-                      // starttime: new Date(startDate.getTime()), 
-                      // endtime:   new Date(endDate.getTime()), 
-                      // allDay:    allDay 
+                      starttime: startDate,
+                      endtime:   endDate,
                     })
                   },
     eventResize : function(event, revertFunc, jsEvent) {

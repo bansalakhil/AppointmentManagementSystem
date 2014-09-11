@@ -38,15 +38,25 @@
         <%= availability.end_date %>
       </td>
       <td class="list_actions">
-        <%= link_to 'Edit', edit_staff_availability_path(availability), remote: true %>
+        <% if availability.active %>
+          <%= link_to 'Edit', edit_staff_availability_path(availability), remote: true %>
+        <% else %>
+          NA
+        <% end %>
       </td>
       <td>
-        <%= link_to 'Delete', staff_availability_path(availability), method: :delete, data: { confirm: 'Are you sure?' } %>
+        <% if availability.active %>
+          <%= link_to 'Delete', staff_availability_path(availability), method: :delete, data: { confirm: 'Are you sure?' } %>
+        <% else %>
+          NA
+        <% end %> 
       </td>
     </tr>
   <% end %>
 
 </table>
+<br/>
+<%= will_paginate @availabilities %>
 <br/>
 
 <div class = 'new-availability-container'>

@@ -6,7 +6,7 @@ class Admin::ServicesController < Admin::BaseController
   end
 
   def new
-    new_service
+    @service = Service.new
   end
 
   def edit
@@ -14,7 +14,7 @@ class Admin::ServicesController < Admin::BaseController
 
   def create
 
-    new_service(service_params)
+    @service = Service.new(service_params)
 
     respond_to do |format|
       if @service.save
@@ -27,10 +27,10 @@ class Admin::ServicesController < Admin::BaseController
 
   def destroy
 
-    if @service.update_column('active', false) #soft delete
+    if @service.update_attributes({ active: false, deleted_at: Time.now }) #soft delete
       flash[:notice] = 'Service sucessfully deleted'
     else
-      flash[:notice] = 'Service could not be deleted'
+      flash[:error] = 'Service could not be deleted'
     end
     redirect_to_path(admin_services_path)
   end
@@ -49,7 +49,14 @@ class Admin::ServicesController < Admin::BaseController
   private
 
   def find_service
+
     @service = Service.find(params[:id])
+
+    if @service
+      return @service
+    else
+      flash[:error] = 'Service not found'
+    end
   end
 
   def service_params
@@ -57,10 +64,7 @@ class Admin::ServicesController < Admin::BaseController
   end
 
   def get_all_services
-    @services = Service.all
+    @services = Service.all.paginate :page => params[:page], :per_page => 5
   end
 
-  def new_service(params = nil)
-    @service = Service.new(params)
-  end
 end

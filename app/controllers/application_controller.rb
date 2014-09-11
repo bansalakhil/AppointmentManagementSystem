@@ -48,7 +48,7 @@ class ApplicationController < ActionController::Base
   end
 
   def validate_access
-    namespace = ((params[:controller]).scan(/^(\w+)\//i).flatten).first
+    namespace = params[:controller].split('/').first
     redirect_to welcome_path unless (current_user.type).downcase == namespace
   end
 

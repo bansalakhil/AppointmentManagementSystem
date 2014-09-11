@@ -9,12 +9,13 @@ FullcalendarEngine = {
       FullcalendarEngine.Form.fetch(options)
     },
     render: function(options){
-      $('#event_form').trigger('reset');
-      var startTime = options['starttime'] || new Date(), endTime = options['endtime'] || new Date(startTime.getTime());
+      $('#appointment_form').trigger('reset');
+      var startTime = options['starttime'] || new Date(), 
+          endTime = options['endtime'] || new Date(startTime.getTime());
       if(startTime.getTime() == endTime.getTime()) { endTime.setMinutes(startTime.getMinutes() + 15); }
-      FullcalendarEngine.setTime('#event_starttime', startTime)
-      FullcalendarEngine.setTime('#event_endtime', endTime)
-      $('#event_all_day').attr('checked', options['allDay'])
+      FullcalendarEngine.setTime('#appointment_starttime', startTime)
+      FullcalendarEngine.setTime('#appointment_endtime', endTime)
+
       $('#create_event_dialog').dialog({
         title: 'New Event',
         modal: true,
@@ -26,7 +27,7 @@ FullcalendarEngine = {
       $.ajax({
         type: 'get',
         dataType: 'script',
-        async: true,
+        async: false,
         url: "/" + app_path + "/new",
         success: function(){ FullcalendarEngine.Form.render(options) }
       });
@@ -131,7 +132,7 @@ FullcalendarEngine = {
 }
 
 $(document).ready(function(){
-  $('#create_event_dialog, #event_desc_dialog').on('submit', "#event_form", function(event) {
+  $('#create_event_dialog, #event_desc_dialog').on('submit', "#appointment_form", function(event) {
     var $spinner = $('.spinner');
     event.preventDefault();
     $.ajax({

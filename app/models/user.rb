@@ -8,17 +8,16 @@ class User < ActiveRecord::Base
          :confirmable, :invitable, :invite_for => 2.weeks
 
   #Associations..........................................................
-  has_many :appointments
+  # has_many :appointments
 
   #Query Interface.......................................................
   default_scope { where(active: true) }
 
   #Validations............................................................
-  validates_presence_of :name, :email, :phone_number
+  validates_presence_of :name, :email
   validates :email, format: { with: /\A\w+@\w+\.\w+\Z/,
                               message: 'is Invalid'},
                               uniqueness: true, allow_blank: true
-  validates :phone_number, length: { minimum: 9 }, allow_blank: true
 
   #Callbacks..............................................................
 end

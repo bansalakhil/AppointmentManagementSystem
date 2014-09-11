@@ -1,11 +1,11 @@
 class Staff::AppointmentsController < Staff::BaseController
 
-  before_action :load_event, only: [:edit, :update, :destroy, :move, :resize]
+  before_action :get_event, only: [:edit, :update, :destroy, :move, :resize]
   before_action :get_controller
+  before_action :get_staff_service_customer, only: [:index, :new, :update]
+
 
   def index
-    @staffs = Staff.all
-    @customers = Customer.all
   end
 
   def create
@@ -18,8 +18,6 @@ class Staff::AppointmentsController < Staff::BaseController
   end
 
   def new
-    @staffs = Staff.all
-    @customers = Customer.all
     @event = Appointment.new
     respond_to do |format|
       format.js
@@ -30,19 +28,15 @@ class Staff::AppointmentsController < Staff::BaseController
     start_time = Time.at(params[:start].to_i).to_formatted_s(:db)
     end_time   = Time.at(params[:end].to_i).to_formatted_s(:db)
 
-    @events = Appointment.where('
-                (starttime >= :start_time and endtime <= :end_time) or
-                (starttime >= :start_time and endtime > :end_time and starttime <= :end_time) or
-                (starttime <= :start_time and endtime >= :start_time and endtime <= :end_time) or
-                (starttime <= :start_time and endtime > :end_time)',
-                start_time: start_time, end_time: end_time)
+    appointments = Appointment.by_timerange(start_time, end_time)
     events = []
-    @events.each do |event|
+    appointments.each do |event|
       events << { id: event.id,
                   description: event.description || '', 
                   start: event.starttime.iso8601,
                   end: event.endtime.iso8601,
-                  allDay: false }
+                  allDay: false
+                }
     end
     render json: events.to_json
   end
@@ -73,8 +67,6 @@ class Staff::AppointmentsController < Staff::BaseController
   end
 
   def update
-    @staffs = Staff.all
-    @customers = Customer.all
     @event = Appointment.new
     case params[:event][:commit_button]
     when 'Update All Occurrence'
@@ -107,7 +99,7 @@ class Staff::AppointmentsController < Staff::BaseController
 
   private
 
-  def load_event
+  def get_event
     @event = Appointment.where(:id => params[:id]).first
     unless @event
       render json: { message: "Appointment Not Found.."}, status: 404 and return
@@ -120,5 +112,11 @@ class Staff::AppointmentsController < Staff::BaseController
 
   def get_controller
     @controller_name = params[:controller]
+  end
+
+  def get_staff_service_customer
+    @staffs = Staff.all
+    @services = Service.all
+    @customers = Customer.all
   end
 end

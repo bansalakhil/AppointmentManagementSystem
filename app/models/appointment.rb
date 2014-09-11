@@ -8,16 +8,44 @@ class Appointment < ActiveRecord::Base
 
   #Validations................................................................
   validates :description, presence: true
-  validate :starttime, on: :create, if: :time_slot_available?
+  validate :time_slot_available?, on: :create
+
+  #Scopes.....................................................................
+  scope :future, -> { where('starttime > :current_time', current_time: Time.now) }
+  scope :past, -> { where('endtime < :current_time', current_time: Time.now) }
+  scope :pending, -> { where('status = 1')}
+  scope :in_process, -> { where('status = 2')}
+  scope :cancelled, -> { where('status = 3')}
+  scope :done, -> { where('status = 4')}
+  scope :in_between, ->(starts, ends) { where(starttime: (starts..ends))}
+  scope :by_timerange, ->(start_time, end_time) { where('
+                          (starttime >= :start_time and endtime <= :end_time) or
+                          (starttime >= :start_time and endtime > :end_time and starttime <= :end_time) or
+                          (starttime <= :start_time and endtime >= :start_time and endtime <= :end_time) or
+                          (starttime <= :start_time and endtime > :end_time)',
+                          start_time: start_time, end_time: end_time)
+                        }
+
+  private
 
   def time_slot_available?
-    # Pick all appointments of that day
-    appointments = Appointment.where("starttime > ?", Time.now.beginning_of_day())
-    outcome = appointments.all? do |var|
-      !((self.starttime >= var.starttime && self.starttime < var.endtime) || (self.endtime >= var.starttime && self.endtime < var.endtime))
+    # picks all appointment of that very day
+    start_date = self.starttime.beginning_of_day()
+    end_date = self.starttime.end_of_day()
+    appointments = Appointment.in_between(start_date, end_date)
+    appointments.any? do |appointment|
+      overlapping?
     end
-    self.errors[:starttime] = 'coinsides with an existing appointment' unless outcome
-    return outcome
+    self.errors[:starttime] = 'coinsides with an existing appointment' unless is_overlapping
   end
+
+  def overlapping?
+    (((self.starttime).between?(appointment.starttime, appointment.endtime)) || ((self.endtime).between?(appointment.starttime, appointment.endtime)) || 
+        ((appointment.starttime).between?(self.starttime, self.endtime)) || ((appointment.endtime).between?(self.starttime, self.endtime)))
+  end
+
+  # def past_time?
+  #   (self.starttime < 
+  # end
 
 end

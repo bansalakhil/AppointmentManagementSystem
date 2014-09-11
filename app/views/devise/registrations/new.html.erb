@@ -13,12 +13,6 @@
     <%= f.email_field :email, autofocus: true %>
   </div>
 
-  <div>
-    <%= f.label :phone_number, 'Enter phone number: ' %><br />
-    <%= f.text_field :phone_number, autofocus: true %>
-  </div>
-
-
   <div><%= f.label :password %>
     <% if @validatable %>
       <i>(<%= @minimum_password_length %> characters minimum)</i>

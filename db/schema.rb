@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140907184524) do
+ActiveRecord::Schema.define(version: 20140910084647) do
 
   create_table "appointments", force: true do |t|
     t.integer  "staff_id"
@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20140907184524) do
     t.integer  "service_id"
     t.datetime "starttime"
     t.datetime "endtime"
-    t.integer  "status_id",   default: 1
+    t.integer  "status",      default: 1
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -32,12 +32,6 @@ ActiveRecord::Schema.define(version: 20140907184524) do
     t.time    "end_time"
     t.date    "start_date"
     t.date    "end_date"
-  end
-
-  create_table "cancellations", force: true do |t|
-    t.string   "reason"
-    t.integer  "cancelled_by"
-    t.datetime "created_at"
   end
 
   create_table "fullcalendar_engine_event_series", force: true do |t|
@@ -67,6 +61,7 @@ ActiveRecord::Schema.define(version: 20140907184524) do
     t.string   "name"
     t.integer  "slot_window", default: 15
     t.boolean  "active",      default: true
+    t.datetime "deleted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -91,7 +86,6 @@ ActiveRecord::Schema.define(version: 20140907184524) do
 
   create_table "users", force: true do |t|
     t.string   "name"
-    t.string   "phone_number"
     t.string   "type",                   default: "Customer"
     t.boolean  "active",                 default: true
     t.string   "email",                  default: "",         null: false
@@ -106,6 +100,7 @@ ActiveRecord::Schema.define(version: 20140907184524) do
     t.integer  "invitation_limit"
     t.integer  "invited_by_id"
     t.string   "invited_by_type"
+    t.datetime "deleted_at"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

@@ -1,5 +1,6 @@
-<%= javascript_include_tag :availability %>
-
+<br />
+<%= link_to 'Home' , welcome_path %>
+<br />
 <h2>Availabilities</h2>
 
 <%= link_to 'New Availability', new_admin_availability_path, class: 'new-availability-link', remote: true %><br /><br />
@@ -45,13 +46,12 @@
       </td>
     </tr>
   <% end %>
-
 </table>
 <br/>
+<%= will_paginate @availabilities %>
+<br />
 
 <div class = 'new-availability-container'>
   <div id="form_render">
   </div>
 </div>
-
-<%= link_to 'Home' , welcome_path %>

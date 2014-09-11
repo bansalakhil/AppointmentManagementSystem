@@ -1,12 +1,12 @@
 class Customer::ServicesController < Customer::BaseController
-  before_action :find_service, only: [ :edit, :update, :destroy ]
+  before_action :get_service, only: [ :edit, :update, :destroy ]
   before_action :get_all_services, only: [:index]
 
   def index
   end
 
   def new
-    new_service
+    @service = Service.new
   end
 
   def edit
@@ -14,7 +14,7 @@ class Customer::ServicesController < Customer::BaseController
 
   def create
 
-    new_service(service_params)
+    @service = Service.new(service_params)
 
     respond_to do |format|
       if @service.save
@@ -30,7 +30,7 @@ class Customer::ServicesController < Customer::BaseController
     if @service.update_column('active', false) #soft delete
       flash[:notice] = 'Service sucessfully deleted'
     else
-      flash[:notice] = 'Service could not be deleted'
+      flash[:error] = 'Service could not be deleted'
     end
     redirect_to_path(customer_services_path)
   end
@@ -48,8 +48,14 @@ class Customer::ServicesController < Customer::BaseController
 
   private
 
-  def find_service
+  def get_service
     @service = Service.find(params[:id])
+
+    if @service
+      return @service
+    else
+      flash[:error] = 'Service not found'
+    end
   end
 
   def service_params
@@ -57,10 +63,7 @@ class Customer::ServicesController < Customer::BaseController
   end
 
   def get_all_services
-    @services = Service.all
+    @services = Service.all.paginate :page => params[:page], :per_page => 5
   end
 
-  def new_service(params = nil)
-    @service = Service.new(params)
-  end
 end

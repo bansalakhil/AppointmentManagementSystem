@@ -6,14 +6,15 @@ class Admin::CustomersController < Admin::BaseController
   end
 
   def new
-    new_customer
+    @customer = Customer.new
   end
 
   def edit
   end
 
   def create
-    new_customer(customer_params)
+
+    @customer = Customer.new(customer_params)
 
     respond_to do |format|
       if @customer.save
@@ -30,7 +31,7 @@ class Admin::CustomersController < Admin::BaseController
     if @customer.destroy
       flash[:notice] = 'Customer sucessfully deleted'
     else
-      flash[:notice] = 'Customer could not be deleted'
+      flash[:error] = 'Customer could not be deleted'
     end
     redirect_to_path(admin_customers_path)
   end
@@ -44,6 +45,7 @@ class Admin::CustomersController < Admin::BaseController
         format.js { render :action => "edit" }
       end
     end
+
   end
 
   # def search
@@ -58,19 +60,23 @@ class Admin::CustomersController < Admin::BaseController
   private
 
   def find_customer
+
     @customer = Customer.where(id: params[:id]).first
+
+    if @customer
+      return @customer
+    else
+      flash[:error] = 'Customer not found'
+    end
   end
 
   def customer_params
     params.require(:customer)
-      .permit(:name, :phone_number, :email)
+      .permit(:name, :email)
   end
 
   def get_all_customers
-    @customers = Customer.where(true)
+    @customers = Customer.all.paginate :page => params[:page], :per_page => 5
   end
 
-  def new_customer(params = nil)
-    @customer = Customer.new(params)
-  end
 end
