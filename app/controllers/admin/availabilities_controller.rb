@@ -1,4 +1,5 @@
 class Admin::AvailabilitiesController < Admin::BaseController
+  PERMITTED_ATTRS = [:service_id, :staff_id, :start_time, :end_time, :start_date, :end_date]
   before_action :get_availability, only: [:edit, :update, :destroy]
   before_action :get_services_staffs, only: [:index, :new, :edit]
   before_action :get_all_availabilities, only: [:index]
@@ -17,16 +18,12 @@ class Admin::AvailabilitiesController < Admin::BaseController
 
     @availability = Availability.new(availability_params)
 
-    respond_to do |format|
       if @availability.save
-        format.js { render action: 'refresh' }
+        render 'refresh'
       else
-        format.js do
-          get_services_staffs
-          render action: 'new'
-        end
+        get_services_staffs
+        render 'new'
       end
-    end
   end
 
   def destroy
@@ -40,19 +37,18 @@ class Admin::AvailabilitiesController < Admin::BaseController
 
   def update
 
-    respond_to do |format|
-      if @availability.update(availability_params)
-        render js: { action: 'refresh' }
-      else
-        format.js do
-          get_services_staffs
-          render action: "edit"
-        end
+    if @availability.update(availability_params)
+      render 'refresh'
+    else
+      format.js do
+        get_services_staffs
+        render 'edit'
       end
     end
   end
 
   #method fetches all the staff corresponding to a service
+  #FIX- change name
   def serving_staff
     respond_to do |format|
       format.js do
@@ -65,19 +61,15 @@ class Admin::AvailabilitiesController < Admin::BaseController
   private
 
   def get_availability
-    # FIX- Use params.require(:id) instead of params[:id]
-    @availability = Availability.where(id: params[:id]).first
 
-    if @availability
-      return @availability
-    else
-      flash[:error] = 'Availability not found'
-    end
+    @availability = Availability.where(id: params.require(:id)).first
+
+    @availability ||= (flash[:error] = 'Availability not found')
   end
 
   def availability_params
     params.require(:availability)
-      .permit(:service_id, :staff_id, :start_time, :end_time, :start_date, :end_date)
+      .permit(*PERMITTED_ATTRS)
   end
 
   def get_services_staffs

@@ -1,4 +1,5 @@
 class Admin::ServicesController < Admin::BaseController
+  PERMITTED_ATTRS = [:name, :slot_window]
   before_action :find_service, only: [ :edit, :update, :destroy ]
   before_action :get_all_services, only: [:index]
 
@@ -59,7 +60,7 @@ class Admin::ServicesController < Admin::BaseController
   end
 
   def service_params
-    params.require(:service).permit(:name, :slot_window)
+    params.require(:service).permit(*PERMITTED_ATTRS)
   end
 
   def get_all_services

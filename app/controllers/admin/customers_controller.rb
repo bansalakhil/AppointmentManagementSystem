@@ -1,4 +1,5 @@
 class Admin::CustomersController < Admin::BaseController
+  PERMITTED_ATTRS = [:name, :email]
   before_action :find_customer, only: [ :edit, :update, :destroy ]
   before_action :get_all_customers, only: [:index]
 
@@ -73,7 +74,7 @@ class Admin::CustomersController < Admin::BaseController
 
   def customer_params
     params.require(:customer)
-      .permit(:name, :email)
+      .permit(*PERMITTED_ATTRS)
   end
 
   def get_all_customers
