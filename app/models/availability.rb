@@ -7,9 +7,16 @@ class Availability < ActiveRecord::Base
 
   # Validations..................................................
   # validates :start_time, uniqueness: { scope: :staff_id }, presence: true
-  # validates :start_time, :end_time, :start_date, :end_date, :service_id, :staff_id, presence: true
+  validates :start_time, :end_time, :start_date, :end_date, :service_id, :staff_id, presence: true
+  validate :time_period, on: :create
 
   #Query Interface...............................................
   default_scope { order(:start_time) }
+
+  private
+
+  def time_period
+    error[:base] = 'Invalid Time' unless (start_time < end_time) && (start_date < end_date)
+  end
 
 end
