@@ -40,7 +40,7 @@
 
       <td>
         <% if staff.active %>
-          <%= link_to 'Delete', deactivate_admin_staff_path(staff), method: :put, data: { confirm: 'Are you sure?' } %>
+          <%= link_to 'Delete', admin_staff_path(staff), method: :put, data: { confirm: 'Are you sure?' } %>
         <% else %>
           NA
         <% end %>

@@ -29,7 +29,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'byebug', group: [:development, :test]
 
 #Full-calender-engine gem
-# gem 'fullcalendar_engine', '~> 1.0.6'
+# gem 'fullcalendar_engine', '~> 1.0.6'serv
 
 #Rspec
 gem 'rspec-rails'
@@ -50,3 +50,6 @@ gem 'devise_invitable'
 
 #for pagination
 gem 'will_paginate'
+
+#soft deletion
+gem "paranoia", "~> 2.0"

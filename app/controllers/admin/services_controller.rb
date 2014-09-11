@@ -1,6 +1,7 @@
 class Admin::ServicesController < Admin::BaseController
+
   PERMITTED_ATTRS = [:name, :slot_window]
-  before_action :find_service, only: [ :edit, :update, :destroy ]
+  before_action :get_service, only: [ :edit, :update, :destroy ]
   before_action :get_all_services, only: [:index]
 
   def index
@@ -28,7 +29,7 @@ class Admin::ServicesController < Admin::BaseController
 
   def destroy
 
-    if @service.update_attributes({ active: false, deleted_at: Time.now }) #soft delete
+    if @service.destroy
       flash[:notice] = 'Service sucessfully deleted'
     else
       flash[:error] = 'Service could not be deleted'
@@ -48,7 +49,7 @@ class Admin::ServicesController < Admin::BaseController
 
   private
 
-  def find_service
+  def get_service
 
     @service = Service.find(params[:id])
 
@@ -64,7 +65,7 @@ class Admin::ServicesController < Admin::BaseController
   end
 
   def get_all_services
-    @services = Service.all.paginate :page => params[:page], :per_page => 5
+    @services = Service.with_deleted.paginate :page => params[:page], :per_page => 5
   end
 
 end

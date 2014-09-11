@@ -1,4 +1,5 @@
 class Admin::AvailabilitiesController < Admin::BaseController
+
   PERMITTED_ATTRS = [:service_id, :staff_id, :start_time, :end_time, :start_date, :end_date]
   before_action :get_availability, only: [:edit, :update, :destroy]
   before_action :get_services_staffs, only: [:index, :new, :edit]

@@ -86,7 +86,7 @@ class Admin::StaffsController < Admin::BaseController
   end
 
   def get_all_staffs
-    @staffs = Staff.all.paginate :page => params[:page], :per_page => 5
+    @staffs = Staff.unscoped.all.paginate :page => params[:page], :per_page => 5
   end
 
   def get_all_services

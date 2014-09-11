@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  acts_as_paranoid
 
   #devise................................................................
   # Include default devise modules. Others available are:
@@ -11,7 +12,6 @@ class User < ActiveRecord::Base
   # has_many :appointments
 
   #Query Interface.......................................................
-  default_scope { where(active: true) }
 
   #Validations............................................................
   validates_presence_of :name, :email
