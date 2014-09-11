@@ -1,24 +1,13 @@
 
 class Customer::AppointmentsController < Customer::BaseController
   before_action :get_event, only: [:edit, :update, :destroy, :move, :resize]
-
   before_action :get_controller
-  before_action :get_staff_service_customer, only: [:index, :new, :update]
+  before_action :get_services, only: [:index, :new, :update]
 
 
   def index
   end
 
-  def create
-
-    @event = Appointment.new(event_params)
-
-    if @event.save
-      render nothing: true, status: :created
-    else
-      render text: @event.errors.full_messages.to_sentence, status: 422
-    end
-  end
 
   def new
     @event = Appointment.new
@@ -28,11 +17,13 @@ class Customer::AppointmentsController < Customer::BaseController
   end
 
   def create
+
     @event = Appointment.new(event_params)
+    @event.customer_id = current_user.id
+
     if @event.save
       render nothing: true, status: :created
     else
-      # FIX- Use symbol for status code
       render text: @event.errors.full_messages.to_sentence, status: 422
     end
   end
@@ -53,6 +44,15 @@ class Customer::AppointmentsController < Customer::BaseController
                 }
     end
     render json: events.to_json
+  end
+
+  def serving_staff
+    respond_to do |format|
+      format.js do
+        @staffs = Service.where(id: params[:service_id]).first.try(:staffs)
+        render json: @staffs
+      end
+    end
   end
 
   def move
@@ -118,7 +118,7 @@ class Customer::AppointmentsController < Customer::BaseController
 
   def event_params
     params.require(:appointment)
-      .permit(:staff_id, :customer_id, :starttime, :endtime, :status_id, :description )
+      .permit(:staff_id, :service_id, :starttime, :endtime, :status_id, :description )
   end
 
   # FIX- Move to helpers
@@ -126,9 +126,7 @@ class Customer::AppointmentsController < Customer::BaseController
     @controller_name = params[:controller]
   end
 
-  def get_staff_service_customer
-    @staffs = Staff.all
+  def get_services
     @services = Service.all
-    @customers = Customer.all
   end
 end

@@ -14,6 +14,7 @@ Rails.application.routes.draw do
       collection do
         get :get_events
         get :appointment_history
+        get :listing
       end
       member do
         delete :cancel
@@ -56,6 +57,7 @@ Rails.application.routes.draw do
     resources :appointments do
       collection do
         get :get_events
+        get :serving_staff
       end
       member do
         post :move

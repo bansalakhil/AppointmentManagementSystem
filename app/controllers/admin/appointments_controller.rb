@@ -89,13 +89,17 @@ class Admin::AppointmentsController < Admin::BaseController
     end
 
     def appointment_history
-      @future_appointments = Appointment.future.pending
-      @past_appointments = Appointment.past.done
+      @future_appointments = Appointment.future
+      @past_appointments = Appointment.past
     end
 
     def cancel
       @event.destroy
       redirect_to appointment_history_admin_appointments_path
+    end
+
+    def listing
+      @appointments = Appointment.future
     end
 
     private

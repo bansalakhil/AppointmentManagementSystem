@@ -2,7 +2,7 @@ class Admin::AvailabilitiesController < Admin::BaseController
 
   PERMITTED_ATTRS = [:service_id, :staff_id, :start_time, :end_time, :start_date, :end_date]
   before_action :get_availability, only: [:edit, :update, :destroy]
-  before_action :get_services_staffs, only: [:index, :new, :edit]
+  before_action :get_services, only: [:new, :edit]
   before_action :get_all_availabilities, only: [:index]
 
   def index
@@ -13,6 +13,7 @@ class Admin::AvailabilitiesController < Admin::BaseController
   end
 
   def edit
+    @staff = @availability.service.staffs
   end
 
   def create
@@ -73,9 +74,8 @@ class Admin::AvailabilitiesController < Admin::BaseController
       .permit(*PERMITTED_ATTRS)
   end
 
-  def get_services_staffs
+  def get_services
     @services = Service.all
-    @staffs = Staff.all
   end
 
   def get_all_availabilities

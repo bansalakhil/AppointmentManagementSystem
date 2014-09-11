@@ -17,10 +17,7 @@
 
   <div class="field">
     <%= f.label :staff_id, 'Staff :' %><br />
-    <!--<#%= f.collection_select(:staff_id, @staffs, :id, :name) %>-->
-    <select id='availability_staff_id'>
-      <option value = 'null'>Select</option>
-    </select>
+    <%= f.collection_select(:staff_id, @staff || [], :id, :name, {:prompt => 'Select'}) %>
   </div>
 
   <div class="field">

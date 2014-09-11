@@ -1,6 +1,5 @@
 // Place all the behaviors and hooks related to the matching controller here.
 // All this logic will automatically be available in application.js.
-
 if (typeof(FullcalendarEngine) === 'undefined') { FullcalendarEngine = {}; }
 FullcalendarEngine = {
   Form: {
@@ -10,6 +9,7 @@ FullcalendarEngine = {
     },
     render: function(options){
       $('#appointment_form').trigger('reset');
+      FullcalendarEngine.Form.get_staff();
       var startTime = options['starttime'] || new Date(), 
           endTime = options['endtime'] || new Date(startTime.getTime());
       if(startTime.getTime() == endTime.getTime()) { endTime.setMinutes(startTime.getMinutes() + 15); }
@@ -21,6 +21,31 @@ FullcalendarEngine = {
         modal: true,
         width: 500,
         close: function(event, ui) { $('#create_event_dialog').dialog('destroy') }
+      });
+    },
+    get_staff: function(){
+      $('#appointment_service_id').on('change', function(){
+        var service_id = $('#appointment_service_id').val();
+        $.ajax({
+          type: 'get',
+          data: '&service_id=' + service_id,
+          async: true,
+          dataType: 'json',
+          url: "/customer/appointments/serving_staff",
+          success: function(staffs, status, xhr) {
+
+            var selectbox = $('#appointment_staff_id');
+            selectbox.empty();
+            if(staffs) {
+              $.each (staffs, function(index, staff) {
+                option = $("<option />").attr({value: staff.id}).text(staff.name)
+                selectbox.append(option);
+              })
+            }
+          },
+          error: function() {}
+        });
+
       });
     },
     fetch: function(options){
@@ -155,7 +180,9 @@ $(document).ready(function(){
 
     function handle_error(xhr) {
       alert(xhr.responseText);
+      $('.dialog:visible').dialog('destroy');
     }
+    return false;
   })
 });
 

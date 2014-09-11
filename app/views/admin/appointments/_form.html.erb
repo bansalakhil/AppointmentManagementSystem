@@ -9,12 +9,11 @@
 <div class="field">
   <%= f.label :service_id, 'Services :' %><br />
   <%= f.collection_select(:service_id, @services, :id, :name) %>
+  <!-- <select id='availability_staff_id'>
+    <option value = 'null'>Select</option>
+  </select> -->
 </div>
 
-<div class="field">
-  <%= f.label :customer_id, 'Customer :' %><br />
-  <%= f.collection_select(:customer_id, @customers, :id, :name) %>
-</div>
 <p>
   <%=f.label :description %>
   <br/>

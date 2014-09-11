@@ -13,10 +13,14 @@ class Appointment < ActiveRecord::Base
   #Validations................................................................
   # FIX- Add validations for start_time, end_time, customer_id, staff_id, service_id
   validates :description, presence: true
-  validate :time_slot_available?, on: :create
+  validate :staff_available, on: :create
+  validate :time_slot_available, on: :create
+  validates :service_id, :staff_id, :customer_id, presence: :true
+  validate :past_time?, on: :create
 
   #Scopes.....................................................................
   scope :future, -> { where('starttime > :current_time', current_time: Time.now) }
+  scope :for_customer, -> { where('customer_id = :customer', customer: customer_id) }
   scope :past, -> { where('endtime < :current_time', current_time: Time.now) }
   scope :pending, -> { where('status = 1')}
   scope :in_process, -> { where('status = 2')}
@@ -31,26 +35,36 @@ class Appointment < ActiveRecord::Base
                           start_time: start_time, end_time: end_time)
                         }
 
+  def overlapping_with?(starts_at, ends_at)
+
+    (((starttime).between?(starts_at, ends_at)) || ((endtime).between?(starts_at, ends_at)) || 
+        ((starts_at).between?(starttime, endtime)) || ((ends_at).between?(starttime, endtime)))
+  end
+
   private
 
-  def time_slot_available?
+  def time_slot_available
     # picks all appointment of that very day
-    start_date = self.starttime.beginning_of_day()
-    end_date = self.starttime.end_of_day()
-    appointments = Appointment.in_between(start_date, end_date)
-    appointments.any? do |appointment|
-      overlapping?
-    end
-    self.errors[:starttime] = 'coinsides with an existing appointment' unless is_overlapping
+    start_date = starttime.beginning_of_day()
+    end_date = starttime.end_of_day()
+    starts_at = starttime
+    ends_at = endtime
+    appointments = self.class.where('service_id = ? and staff_id = ?',service_id, staff_id).in_between(start_date, end_date)
+    not_overlapping = appointments.any? { |apt| apt.overlapping_with?(starts_at, ends_at) }
+    self.errors[:starttime] = 'coinsides with an existing appointment' if not_overlapping
   end
 
-  def overlapping?
-    (((self.starttime).between?(appointment.starttime, appointment.endtime)) || ((self.endtime).between?(appointment.starttime, appointment.endtime)) || 
-        ((appointment.starttime).between?(self.starttime, self.endtime)) || ((appointment.endtime).between?(self.starttime, self.endtime)))
+  def staff_available
+    availability = staff.availabilities.where(service_id: service_id)
+          .where('start_date <= :app_start and end_date >= :app_end', app_start: starttime.to_date, app_end: endtime.to_date ).where('start_time <= :app_start and end_time >= :app_end', app_start: starttime.strftime('%H:%M'), app_end: endtime.strftime('%H:%M') ).first
+    errors[:base] = 'Staff not available' unless availability
+
   end
 
-  # def past_time?
-  #   (self.starttime < 
-  # end
+
+  def past_time?
+    # past = starttime < Time.now
+    errors[:base] = 'This time has already passed' if (starttime < Time.now)
+  end
 
 end
