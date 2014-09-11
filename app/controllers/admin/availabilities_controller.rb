@@ -16,6 +16,7 @@ class Admin::AvailabilitiesController < Admin::BaseController
   def create
 
     @availability = Availability.new(availability_params)
+
     respond_to do |format|
       if @availability.save
         format.js { render action: 'refresh' }
@@ -29,7 +30,6 @@ class Admin::AvailabilitiesController < Admin::BaseController
   end
 
   def destroy
-
     if @availability.destroy
       flash[:notice] = 'Availability sucessfully deleted'
     else
@@ -42,11 +42,11 @@ class Admin::AvailabilitiesController < Admin::BaseController
 
     respond_to do |format|
       if @availability.update(availability_params)
-        format.js { render action: 'refresh' }
+        render js: { action: 'refresh' }
       else
         format.js do
           get_services_staffs
-          render :action => "edit"
+          render action: "edit"
         end
       end
     end
@@ -65,7 +65,7 @@ class Admin::AvailabilitiesController < Admin::BaseController
   private
 
   def get_availability
-
+    # FIX- Use params.require(:id) instead of params[:id]
     @availability = Availability.where(id: params[:id]).first
 
     if @availability

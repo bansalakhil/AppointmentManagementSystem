@@ -36,7 +36,6 @@ class Admin::ServicesController < Admin::BaseController
   end
 
   def update
-
     respond_to do |format|
       if @service.update(service_params)
         format.js { render action: 'refresh' }

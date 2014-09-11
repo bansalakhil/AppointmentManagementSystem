@@ -1,4 +1,8 @@
 class Appointment < ActiveRecord::Base
+  # FIX-
+  #   Rename status_id to status in table
+  #   Fix default value for status. It should be set to 1 by default.
+
   STATUSES = { '1' => 'pending', '2' => 'in_process', '3' => 'cancelled', '4' => 'done' }
 
   #Associations...............................................................
@@ -7,6 +11,7 @@ class Appointment < ActiveRecord::Base
   belongs_to :service
 
   #Validations................................................................
+  # FIX- Add validations for start_time, end_time, customer_id, staff_id, service_id
   validates :description, presence: true
   validate :time_slot_available?, on: :create
 

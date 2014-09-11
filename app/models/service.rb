@@ -1,6 +1,7 @@
 class Service < ActiveRecord::Base
 
   #Associations..................................................
+  # FIX- No need to specify join_table
   has_and_belongs_to_many :staffs, :join_table => :services_staffs
   
   #Query Interface...............................................

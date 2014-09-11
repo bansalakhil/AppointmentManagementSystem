@@ -48,6 +48,7 @@ class Admin::CustomersController < Admin::BaseController
 
   end
 
+  # FIX- Remove all commented code. We can always get previous versions of code from Git whenever required.
   # def search
 
   #   if params[:customer]

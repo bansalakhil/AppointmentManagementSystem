@@ -19,5 +19,4 @@ class User < ActiveRecord::Base
                               message: 'is Invalid'},
                               uniqueness: true, allow_blank: true
 
-  #Callbacks..............................................................
 end

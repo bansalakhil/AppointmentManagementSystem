@@ -101,6 +101,7 @@ class Admin::AppointmentsController < Admin::BaseController
     private
 
     def get_event
+      
       @event = Appointment.where(:id => params[:id]).first
       unless @event
         render json: { message: "Appointment Not Found.."}, status: 404 and return
@@ -111,6 +112,7 @@ class Admin::AppointmentsController < Admin::BaseController
       params.require(:appointment).permit(:staff_id, :service_id, :customer_id, :starttime, :endtime, :status_id, :description )
     end
 
+    # FIX- Move it to helper as it is related to view only.
     def get_controller
       @controller_name = params[:controller]
     end

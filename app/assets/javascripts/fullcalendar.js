@@ -566,7 +566,6 @@ function Calendar(element, options, eventSources) {
 	
 
 	function select(start, end, allDay) {
-		debugger
 		currentView.select(start, end, allDay===undefined ? true : allDay);
 	}
 	

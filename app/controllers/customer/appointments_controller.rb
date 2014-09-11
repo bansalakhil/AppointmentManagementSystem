@@ -1,6 +1,7 @@
-class Customer::AppointmentsController < Customer::BaseController
 
+class Customer::AppointmentsController < Customer::BaseController
   before_action :get_event, only: [:edit, :update, :destroy, :move, :resize]
+
   before_action :get_controller
   before_action :get_staff_service_customer, only: [:index, :new, :update]
 
@@ -26,6 +27,16 @@ class Customer::AppointmentsController < Customer::BaseController
     end
   end
 
+  def create
+    @event = Appointment.new(event_params)
+    if @event.save
+      render nothing: true, status: :created
+    else
+      # FIX- Use symbol for status code
+      render text: @event.errors.full_messages.to_sentence, status: 422
+    end
+  end
+
   def get_events
 
     start_time = Time.at(params[:start].to_i).to_formatted_s(:db)
@@ -45,12 +56,14 @@ class Customer::AppointmentsController < Customer::BaseController
   end
 
   def move
+    # FIX- @event will always be present here.
     if @event
       # @event.starttime = make_time_from_minute_and_day_delta(@event.starttime)
       @event.starttime = params[:start_time]
       # @event.endtime = params[:end_time]
       # @event.endtime   = make_time_from_minute_and_day_delta(@event.endtime)
       # @event.all_day   = params[:all_day]
+      # FIX- What if @event is not saved successfully?
       @event.save
     end
     render nothing: true
@@ -69,6 +82,7 @@ class Customer::AppointmentsController < Customer::BaseController
     render json: { form: render_to_string(partial: 'edit_form') } 
   end
 
+  # FIX- Refactor this. Unable to review.
   def update
 
     case params[:event][:commit_button]
@@ -87,6 +101,7 @@ class Customer::AppointmentsController < Customer::BaseController
   end
 
   def destroy
+    # FIX- No failure case handled
     @event.destroy
     render nothing: true
   end
@@ -96,6 +111,7 @@ class Customer::AppointmentsController < Customer::BaseController
   def get_event
     @event = Appointment.where(:id => params[:id]).first
     unless @event
+      # FIX- We dont need to call return here
       render json: { message: "Appointment Not Found.."}, status: 404 and return
     end
   end
@@ -105,6 +121,7 @@ class Customer::AppointmentsController < Customer::BaseController
       .permit(:staff_id, :customer_id, :starttime, :endtime, :status_id, :description )
   end
 
+  # FIX- Move to helpers
   def get_controller
     @controller_name = params[:controller]
   end

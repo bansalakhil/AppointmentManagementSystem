@@ -21,6 +21,7 @@ class Admin::StaffsController < Admin::BaseController
 
     respond_to do |format|
       if @staff.save
+        # FIX- Move to after_save callback in model
         @staff.invite!
         flash[:notice] = 'Staff sucessfully created'
         format.js { render action: 'refresh' }
@@ -34,9 +35,10 @@ class Admin::StaffsController < Admin::BaseController
   end
 
   def update
-
     respond_to do |format|
+      # FIX- Why not using #update here? Be consistent.
       if @staff.update_attributes(staff_params)
+        # FIX- Use flash.now
         flash[:notice] = 'Staff sucessfully updated'
         format.js { render action: 'refresh' }
       else
@@ -60,7 +62,12 @@ class Admin::StaffsController < Admin::BaseController
   end
 
   def deactivate
+<<<<<<< HEAD
     @staff.update_attributes({ active: false, deleted_at: Time.now })
+=======
+    #FIX- Use update_column
+    @staff.update_attribute('active', false)
+>>>>>>> b21b561be7fc4a391a60abb0101279b34e28f7fa
     flash[:notice] = 'Staff sucessfully deleted'
     redirect_to_path(admin_staffs_path)
   end
@@ -79,9 +86,7 @@ class Admin::StaffsController < Admin::BaseController
   end
 
   def staff_params
-
-    params.require(:staff)
-      .permit(*PERMITTED_ATTRS)
+    params.require(:staff).permit(*PERMITTED_ATTRS)
   end
 
   def get_all_staffs

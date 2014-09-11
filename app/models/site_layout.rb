@@ -5,5 +5,4 @@ class SiteLayout < ActiveRecord::Base
 
   #Validations........................................................
   validates_attachment_content_type [:logo, :background], :content_type => /\Aimage\/.*\Z/
-
 end
