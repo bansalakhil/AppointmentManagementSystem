@@ -26,7 +26,8 @@ class Admin::ServicesController < Admin::BaseController
   end
 
   def destroy
-
+    # FIX- Use a field 'deleted_at' for soft delete
+    # FIX- Use #update instead of #update_column
     if @service.update_column('active', false) #soft delete
       flash[:notice] = 'Service sucessfully deleted'
     else
@@ -36,7 +37,6 @@ class Admin::ServicesController < Admin::BaseController
   end
 
   def update
-
     respond_to do |format|
       if @service.update(service_params)
         format.js { render action: 'refresh' }
@@ -49,6 +49,7 @@ class Admin::ServicesController < Admin::BaseController
   private
 
   def find_service
+    # FIX- Use #where. #find raises exception if record is not found
     @service = Service.find(params[:id])
   end
 

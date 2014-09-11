@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :validate_access, unless: :skip_validation?
 
+  # FIX- Move to helpers
   def current_layout
     @site_layout ||= SiteLayout.first
   end
@@ -28,6 +29,7 @@ class ApplicationController < ActionController::Base
     accept_user_invitation_path
   end
 
+  # FIX- Give any reason to do this?
   def redirect_to_path(path)
     redirect_to path
   end
@@ -39,14 +41,18 @@ class ApplicationController < ActionController::Base
     ['staff', 'customer'].include? namespace && params[:action] == 'get_events'
   end
 
+  # Why?
   def welcome_controller?
+    # Discuss
     params[:controller] == 'welcome' ? true : false
   end
 
+  # FIX- What does it do?
   def skip_validation?
     devise_controller? || welcome_controller? || appointment_path?
   end
 
+  # FIX- Define a method in user model to check if admin
   def validate_access
     namespace = ((params[:controller]).scan(/^(\w+)\//i).flatten).first
     redirect_to welcome_path unless (current_user.type).downcase == namespace

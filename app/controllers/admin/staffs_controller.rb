@@ -1,6 +1,8 @@
 class Admin::StaffsController < Admin::BaseController
 
-  PERMITTED_ATTRS = [:name, :email, :phone_number, {service_ids: []}] 
+  # FIX- Please make constant for permitted attributes in all controllers
+  PERMITTED_ATTRS = [:name, :email, :phone_number, {service_ids: []}]
+
   before_action :find_staff_member, only: [ :edit, :update, :destroy, :deactivate ]
   before_action :get_all_staffs, only: [ :index ]
   before_action :get_all_services, only: [:create, :new, :update, :edit]
@@ -21,6 +23,7 @@ class Admin::StaffsController < Admin::BaseController
 
     respond_to do |format|
       if @staff.save
+        # FIX- Move to after_save callback in model
         @staff.invite!
         flash[:notice] = 'Staff sucessfully created'
         format.js { render action: 'refresh' }
@@ -34,9 +37,10 @@ class Admin::StaffsController < Admin::BaseController
   end
 
   def update
-
     respond_to do |format|
+      # FIX- Why not using #update here? Be consistent.
       if @staff.update_attributes(staff_params)
+        # FIX- Use flash.now
         flash[:notice] = 'Staff sucessfully updated'
         format.js { render action: 'refresh' }
       else
@@ -59,6 +63,7 @@ class Admin::StaffsController < Admin::BaseController
   end
 
   def deactivate
+    #FIX- Use update_column
     @staff.update_attribute('active', false)
     flash[:notice] = 'Staff sucessfully deleted'
     redirect_to_path(admin_staffs_path)
@@ -71,9 +76,7 @@ class Admin::StaffsController < Admin::BaseController
   end
 
   def staff_params
-
-    params.require(:staff)
-      .permit(*PERMITTED_ATTRS)
+    params.require(:staff).permit(*PERMITTED_ATTRS)
   end
 
   def get_all_staffs
