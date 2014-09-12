@@ -12,10 +12,11 @@ class Appointment < ActiveRecord::Base
 
   #Validations................................................................
   # FIX- Add validations for start_time, end_time, customer_id, staff_id, service_id
-  validate :staff_available, on: :create
-  validate :time_slot_available, on: :create
+  validate :staff_available, on: :save
+  validate :time_slot_available, on: :save
   validates :service_id, :staff_id, :customer_id,:description, presence: :true
-  validate :past_time?, on: :create
+  validates :starttime, uniqueness: {scope: [:service_id, :staff_id] }, allow_black: true
+  validate :past_time?, on: :save
 
   #Scopes.....................................................................
   scope :future, -> { where('starttime > :current_time', current_time: Time.now) }
@@ -70,7 +71,6 @@ class Appointment < ActiveRecord::Base
 
 
   def past_time?
-    # past = starttime < Time.now
     errors[:base] = 'This time has already passed' if (starttime < Time.now)
   end
 

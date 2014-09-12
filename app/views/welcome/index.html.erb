@@ -3,8 +3,7 @@
 <% case current_user.type %>
   <% when 'Customer' %>
     <div class = 'welcome-links'>
-      <%= link_to 'Services', customer_services_path %>
-      <%= link_to 'Appointment', customer_appointments_path %>
+      <%= link_to 'Book Appointment', customer_appointments_path %>
     </div>
   <% when 'Staff' %>
     <div class = 'welcome-links'>
