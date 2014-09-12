@@ -15,7 +15,7 @@ class Appointment < ActiveRecord::Base
   validate :staff_available, on: :save
   validate :time_slot_available, on: :save
   validates :service_id, :staff_id, :customer_id,:description, presence: :true
-  validates :starttime, uniqueness: {scope: [:service_id, :staff_id] }, allow_black: true
+  validates :starttime, uniqueness: {scope: [:service_id, :staff_id] }, allow_blank: true
   validate :past_time?, on: :save
 
   #Scopes.....................................................................

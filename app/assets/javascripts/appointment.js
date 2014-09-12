@@ -23,10 +23,14 @@ custom_calendar = function() {
     disableResizing: false,
     allDay      : false,
     select      : function(startDate, endDate, jsEvent, view){
-                    FullcalendarEngine.Form.display({ 
-                      starttime: startDate,
-                      endtime:   endDate,
-                    })
+                    debugger
+                    controller = app_path.slice(0, app_path.search('/'))
+                    if (controller != 'admin') {
+                      FullcalendarEngine.Form.display({ 
+                        starttime: startDate,
+                        endtime:   endDate,
+                      }) 
+                    }
                   },
     eventResize : function(event, revertFunc, jsEvent) {
                     FullcalendarEngine.Events.resize(event);

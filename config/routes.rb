@@ -64,7 +64,6 @@ Rails.application.routes.draw do
         post :resize
       end
     end
-    resources :services
   end
 
 
