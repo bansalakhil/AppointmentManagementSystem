@@ -28,7 +28,7 @@ class Staff::AppointmentsController < Staff::BaseController
     start_time = Time.at(params[:start].to_i).to_formatted_s(:db)
     end_time   = Time.at(params[:end].to_i).to_formatted_s(:db)
 
-    appointments = Appointment.by_timerange(start_time, end_time)
+    appointments = Appointment.for_staff(current_user.id).by_timerange(start_time, end_time)
     events = []
     appointments.each do |event|
       events << { id: event.id,

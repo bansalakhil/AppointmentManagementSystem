@@ -1,1 +1,23 @@
 $('#form_render').html("<%==j render 'form' %>");
+
+$('#availability_service_id').on('change', function(){
+  var service_id = $('#availability_service_id').val();
+  $.ajax({
+    type: 'get',
+    data: '&service_id=' + service_id,
+    async: true,
+    dataType: 'json',
+    url: "/admin/availabilities/get_staff",
+    success: function(staffs, status, xhr) {
+
+      var selectbox = $('#availability_staff_id');
+      selectbox.empty();
+      $.each (staffs, function(index, staff) {
+        option = $("<option />").attr({value: staff.id}).text(staff.name)
+        selectbox.append(option);
+      })
+    },
+    error: function() {}
+  });
+
+});

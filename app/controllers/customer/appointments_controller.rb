@@ -33,7 +33,7 @@ class Customer::AppointmentsController < Customer::BaseController
     start_time = Time.at(params[:start].to_i).to_formatted_s(:db)
     end_time   = Time.at(params[:end].to_i).to_formatted_s(:db)
 
-    appointments = Appointment.by_timerange(start_time, end_time)
+    appointments = Appointment.for_customer(current_user.id).by_timerange(start_time, end_time)
     events = []
     appointments.each do |event|
       events << { id: event.id,
@@ -46,7 +46,7 @@ class Customer::AppointmentsController < Customer::BaseController
     render json: events.to_json
   end
 
-  def serving_staff
+  def get_staff
     respond_to do |format|
       format.js do
         @staffs = Service.where(id: params[:service_id]).first.try(:staffs)
@@ -84,19 +84,9 @@ class Customer::AppointmentsController < Customer::BaseController
 
   # FIX- Refactor this. Unable to review.
   def update
-
-    case params[:event][:commit_button]
-    when 'Update All Occurrence'
-      @events = @event.event_series.events
-      @event.update_events(@events, event_params)
-    when 'Update All Following Occurrence'
-      @events = @event.event_series.events.where('starttime > :start_time', 
-                                                 start_time: @event.starttime.to_formatted_s(:db)).to_a
-      @event.update_events(@events, event_params)
-    else
-      @event.attributes = event_params
-      @event.save
-    end
+    # @event.attributes = event_params
+    @event.update(event_params)
+    # @event.save
     render nothing: true
   end
 
@@ -111,7 +101,6 @@ class Customer::AppointmentsController < Customer::BaseController
   def get_event
     @event = Appointment.where(:id => params[:id]).first
     unless @event
-      # FIX- We dont need to call return here
       render json: { message: "Appointment Not Found.."}, status: 404 and return
     end
   end

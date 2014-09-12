@@ -38,14 +38,14 @@
         <%= availability.end_date %>
       </td>
       <td class="list_actions">
-        <% if availability.active %>
+        <% if !availability.deleted_at %>
           <%= link_to 'Edit', edit_staff_availability_path(availability), remote: true %>
         <% else %>
           NA
         <% end %>
       </td>
       <td>
-        <% if availability.active %>
+        <% if !availability.deleted_at %>
           <%= link_to 'Delete', staff_availability_path(availability), method: :delete, data: { confirm: 'Are you sure?' } %>
         <% else %>
           NA

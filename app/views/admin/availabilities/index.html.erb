@@ -1,3 +1,5 @@
+<%= stylesheet_link_tag :availability %>
+
 <br />
 <%= link_to 'Home' , welcome_path %>
 <br />
@@ -9,10 +11,10 @@
   <tr>
     <th>Service</th>
     <th>Staff</th>
-    <th>Time(from)</th>
-    <th>Time(to)</th>
     <th>Date(from)</th>
+    <th>Time(from)</th>
     <th>Date(to)</th>
+    <th>Time(to)</th>
     <th>Edit</th>
     <th>Delete</th>
   </tr>
@@ -27,22 +29,30 @@
         <%= availability.staff.name %>
       </td>
       <td class="list_description">
-        <%= availability.start_time.strftime("%I:%M %p") %>
-      </td>
-      <td class="list_description">
-        <%= availability.end_time.strftime("%I:%M %p") %>
-      </td>
-      <td class="list_description">
         <%= availability.start_date %>
+      </td>
+      <td class="list_description">
+        <%= availability.start_time.strftime("%I:%M %p") %>
       </td>
       <td class="list_description">
         <%= availability.end_date %>
       </td>
+      <td class="list_description">
+        <%= availability.end_time.strftime("%I:%M %p") %>
+      </td>
       <td class="list_actions">
-        <%= link_to 'Edit', edit_admin_availability_path(availability), remote: true %>
+        <% if !availability.deleted_at %>
+          <%= link_to 'Edit', edit_admin_availability_path(availability), remote: true %>
+        <% else %>
+          NA
+        <% end %>
       </td>
       <td>
-        <%= link_to 'Delete', admin_availability_path(availability), method: :delete, data: { confirm: 'Are you sure?' } %>
+        <% if !availability.deleted_at %>
+          <%= link_to 'Delete', admin_availability_path(availability), method: :delete, data: { confirm: 'Are you sure?' } %>
+        <% else %>
+          NA
+        <% end %> 
       </td>
     </tr>
   <% end %>

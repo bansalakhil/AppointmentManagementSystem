@@ -20,12 +20,13 @@ class Admin::AvailabilitiesController < Admin::BaseController
 
     @availability = Availability.new(availability_params)
 
-      if @availability.save
-        render 'refresh'
-      else
-        get_services_staffs
-        render 'new'
-      end
+    if @availability.save
+      render 'refresh'
+    else
+      get_services
+      @staff = @availability.service.staffs
+      render action: 'new'
+    end
   end
 
   def destroy
@@ -43,7 +44,6 @@ class Admin::AvailabilitiesController < Admin::BaseController
       render 'refresh'
     else
       format.js do
-        get_services_staffs
         render 'edit'
       end
     end
@@ -51,7 +51,7 @@ class Admin::AvailabilitiesController < Admin::BaseController
 
   #method fetches all the staff corresponding to a service
   #FIX- change name
-  def serving_staff
+  def get_staff
     respond_to do |format|
       format.js do
         @staffs = Service.where(id: params[:service_id]).first.staffs
@@ -79,6 +79,6 @@ class Admin::AvailabilitiesController < Admin::BaseController
   end
 
   def get_all_availabilities
-    @availabilities = Availability.all.paginate :page => params[:page], :per_page => 5
+    @availabilities = Availability.with_deleted.paginate :page => params[:page], :per_page => 5
   end
 end

@@ -24,7 +24,7 @@ Rails.application.routes.draw do
     end
     resources :availabilities do
       collection do
-        get :serving_staff
+        get :get_staff
       end
     end
 
@@ -48,7 +48,7 @@ Rails.application.routes.draw do
 
     resources :availabilities do
       collection do
-        get :serving_staff
+        get :get_staff
       end
     end
   end
@@ -57,7 +57,7 @@ Rails.application.routes.draw do
     resources :appointments do
       collection do
         get :get_events
-        get :serving_staff
+        get :get_staff
       end
       member do
         post :move

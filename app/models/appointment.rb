@@ -12,15 +12,15 @@ class Appointment < ActiveRecord::Base
 
   #Validations................................................................
   # FIX- Add validations for start_time, end_time, customer_id, staff_id, service_id
-  validates :description, presence: true
   validate :staff_available, on: :create
   validate :time_slot_available, on: :create
-  validates :service_id, :staff_id, :customer_id, presence: :true
+  validates :service_id, :staff_id, :customer_id,:description, presence: :true
   validate :past_time?, on: :create
 
   #Scopes.....................................................................
   scope :future, -> { where('starttime > :current_time', current_time: Time.now) }
-  scope :for_customer, -> { where('customer_id = :customer', customer: customer_id) }
+  scope :for_customer, ->(customer_id) { where('customer_id = :customer', customer: customer_id) }
+  scope :for_staff, ->(staff_id) { where('staff_id = :staff', staff: staff_id) }
   scope :past, -> { where('endtime < :current_time', current_time: Time.now) }
   scope :pending, -> { where('status = 1')}
   scope :in_process, -> { where('status = 2')}
@@ -34,6 +34,9 @@ class Appointment < ActiveRecord::Base
                           (starttime <= :start_time and endtime > :end_time)',
                           start_time: start_time, end_time: end_time)
                         }
+
+  #Callbacks..........................................................................
+  before_save :set_status
 
   def overlapping_with?(starts_at, ends_at)
 
@@ -59,6 +62,10 @@ class Appointment < ActiveRecord::Base
           .where('start_date <= :app_start and end_date >= :app_end', app_start: starttime.to_date, app_end: endtime.to_date ).where('start_time <= :app_start and end_time >= :app_end', app_start: starttime.strftime('%H:%M'), app_end: endtime.strftime('%H:%M') ).first
     errors[:base] = 'Staff not available' unless availability
 
+  end
+
+  def set_status
+    status = 1
   end
 
 

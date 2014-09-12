@@ -7,7 +7,7 @@ $('#availability_service_id').on('change', function(){
     data: '&service_id=' + service_id,
     async: true,
     dataType: 'json',
-    url: "/staff/availabilities/serving_staff",
+    url: "/staff/availabilities/get_staff",
     success: function(staffs, status, xhr) {
 
       var selectbox = $('#availability_staff_id');
