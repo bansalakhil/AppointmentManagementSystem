@@ -1,0 +1,46 @@
+<%= stylesheet_link_tag :listing %>
+<br />
+<%= link_to 'Home' , welcome_path %>
+<br />
+
+<h2>Appointments</h2>
+
+<table>
+  <tr>
+    <th>Customer</th>
+    <th>Staff</th>
+    <th>Service</th>
+    <th>Description</th>
+    <th>Start Time</th>
+    <th>End Time</th>
+    <th>Remark</th>
+  </tr>
+
+  <% @appointments.each do |appointment| %>
+    
+    <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
+      <td class="list_description">
+        <%= appointment.customer.name %>
+      </td>
+      <td class="list_description">
+        <%= appointment.staff.name %>
+      </td>
+      <td class="list_description">
+        <%= appointment.service.name %>
+      </td>
+      <td class="list_description">
+        <%= appointment.description %>
+      </td>
+      <td class="list_description">
+        <%= appointment.starttime.strftime("%I:%M %p") %> - <%= appointment.starttime.strftime("%d %B %Y") %>
+      </td>
+      <td class="list_description">
+        <%= appointment.endtime.strftime("%I:%M %p") %> - <%= appointment.endtime.strftime("%d %B %Y") %>
+      </td>
+      <td class="list_description">
+        <%= Appointment::STATUSES[appointment.status.to_s] %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+      
