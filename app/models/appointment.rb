@@ -11,8 +11,8 @@ class Appointment < ActiveRecord::Base
   validate :staff_available, on: [:create, :update]
   validate :time_slot_available, on: [:create, :update]
   validates :service_id, :staff_id, :customer_id,:description, presence: :true
-  # validates :starttime, uniqueness: { scope: [:service_id, :staff_id] }, allow_blank: true
   validate :past_time?, on: [:create, :update]
+  validate :check_service_slot_time, on: [:create, :update]
 
   #Scopes.....................................................................
   scope :future, -> { where('starttime > :current_time', current_time: Time.now) }
@@ -69,6 +69,10 @@ class Appointment < ActiveRecord::Base
 
   def past_time?
     errors[:base] = 'This time has already passed' if (starttime < Time.now)
+  end
+
+  def check_service_slot_time
+    errors[:base] = "This appointment can be booked for minimum #{ service.slot_window } mins"  unless service.slot_window < (endtime - starttime)/60 
   end
 
 end

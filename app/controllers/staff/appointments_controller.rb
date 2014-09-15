@@ -35,7 +35,8 @@ class Staff::AppointmentsController < Staff::BaseController
                   description: event.description || '', 
                   start: event.starttime.iso8601,
                   end: event.endtime.iso8601,
-                  allDay: false
+                  allDay: false,
+                  title: event.title
                 }
     end
     render json: events.to_json
