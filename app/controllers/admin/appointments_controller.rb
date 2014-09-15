@@ -90,8 +90,8 @@ class Admin::AppointmentsController < Admin::BaseController
     end
 
     def appointment_history
-      @future_appointments = Appointment.future
-      @past_appointments = Appointment.past
+      @future_appointments = Appointment.future.paginate page: params[:page], per_page: 10
+      @past_appointments = Appointment.past.paginate page: params[:page], per_page: 10
     end
 
     def cancel

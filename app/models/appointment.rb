@@ -15,6 +15,7 @@ class Appointment < ActiveRecord::Base
   validate :check_service_slot_time, on: [:create, :update]
 
   #Scopes.....................................................................
+  default_scope { order('starttime desc')}
   scope :future, -> { where('starttime > :current_time', current_time: Time.now) }
   scope :for_customer, ->(customer_id) { where('customer_id = :customer', customer: customer_id) }
   scope :for_staff, ->(staff_id) { where('staff_id = :staff', staff: staff_id) }

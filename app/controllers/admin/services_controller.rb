@@ -69,8 +69,7 @@ class Admin::ServicesController < Admin::BaseController
   end
 
   def get_all_services
-    @services = Service.with_deleted.order(deleted_at: :desc).paginate page: params[:page], per_page: 3
-    @deleted, @non_deleted =  @services.partition { |serv|  serv.deleted? }
+    @services = Service.with_deleted.order(deleted_at: :desc).paginate page: params[:page], per_page: 10
   end
 
 end

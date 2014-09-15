@@ -81,6 +81,6 @@ class Admin::AvailabilitiesController < Admin::BaseController
   end
 
   def get_all_availabilities
-    @availabilities = Availability.all.paginate page: params[:page], per_page: 5
+    @availabilities = Availability.with_deleted.paginate page: params[:page], per_page: 10
   end
 end

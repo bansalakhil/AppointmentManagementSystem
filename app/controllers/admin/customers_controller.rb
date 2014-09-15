@@ -1,6 +1,6 @@
 class Admin::CustomersController < Admin::BaseController
   PERMITTED_ATTRS = [:name, :email]
-  before_action :find_customer, only: [ :edit, :update, :destroy ]
+  before_action :find_customer, only: [ :edit, :update, :destroy, :enable ]
   before_action :get_all_customers, only: [:index]
 
   def index
@@ -34,7 +34,7 @@ class Admin::CustomersController < Admin::BaseController
     else
       flash[:error] = 'Customer could not be deleted'
     end
-    redirect_to_path(admin_customers_path)
+    redirect_to admin_customers_path
   end
 
   def update
@@ -49,21 +49,16 @@ class Admin::CustomersController < Admin::BaseController
 
   end
 
-  # FIX- Remove all commented code. We can always get previous versions of code from Git whenever required.
-  # def search
-
-  #   if params[:customer]
-  #     @found_customer = Customer.where(phone_number: params[:customer][:phone_number]).first
-  #   else
-  #     @found_customer = nil
-  #   end
-  # end
+  def enable
+    @customer.restore
+    redirect_to admin_customers_path
+  end
 
   private
 
   def find_customer
 
-    @customer = Customer.where(id: params[:id]).first
+    @customer = Customer.with_deleted.where(id: params[:id]).first
 
     if @customer
       return @customer
@@ -78,7 +73,7 @@ class Admin::CustomersController < Admin::BaseController
   end
 
   def get_all_customers
-    @customers = Customer.all.paginate :page => params[:page], :per_page => 5
+    @customers = Customer.with_deleted.paginate :page => params[:page], :per_page => 10
   end
 
 end

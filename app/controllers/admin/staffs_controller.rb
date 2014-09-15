@@ -62,6 +62,7 @@ class Admin::StaffsController < Admin::BaseController
   end
 
   def enable
+    debugger
     @staff.restore
     redirect_to_path(admin_staffs_path)
   end
@@ -70,7 +71,7 @@ class Admin::StaffsController < Admin::BaseController
 
   def get_staff_member
 
-    @staff = Staff.where(id: params[:id]).first
+    @staff = Staff.with_deleted.where(id: params[:id]).first
 
     if @staff
       return @staff
@@ -84,7 +85,7 @@ class Admin::StaffsController < Admin::BaseController
   end
 
   def get_all_staffs
-    @staffs = Staff.all.paginate :page => params[:page], :per_page => 5
+    @staffs = Staff.with_deleted.paginate :page => params[:page], :per_page => 10
   end
 
   def get_all_services

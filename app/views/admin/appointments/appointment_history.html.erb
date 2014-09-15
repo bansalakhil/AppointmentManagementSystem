@@ -20,7 +20,7 @@
 
   <% @future_appointments.each do |appointment| %>
     
-    <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
+    <tr class='greenify'>
       <td class="list_description">
         <%= appointment.starttime.strftime("%d/%m/%y %A") %>
       </td>
@@ -63,7 +63,7 @@
 
   <% @past_appointments.each do |appointment| %>
     
-    <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
+    <tr class='redify'>
       <td class="list_description">
         <%= appointment.starttime.strftime("%d/%m/%y %A") %>
       </td>

@@ -7,7 +7,11 @@ Rails.application.routes.draw do
   end
 
   namespace 'admin' do
-    resources :customers
+    resources :customers do
+      member do
+        put :enable
+      end
+    end
     resources :services do
       member do
         put :enable

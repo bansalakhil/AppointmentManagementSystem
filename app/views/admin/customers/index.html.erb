@@ -17,7 +17,7 @@
 
   <% @customers.each do |customer| %>
     
-    <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
+    <tr class="<%= customer.destroyed? ? 'redify' : 'greenify' %>">
       <td class="list_description">
         <%= customer.name %>
       </td>
@@ -25,22 +25,19 @@
       <td class="list_description">
         <%= customer.email %>
       </td>
-      
-      <td class="list_actions">
-        <% if customer.active %>
+      <% if customer.destroyed? %>
+        <td class="list_actions" colspan = 2 >
+          <%= link_to 'Enable', enable_admin_customer_path(customer), method: :put %>
+        </td >
+      <% else %>
+        <td class="list_actions">
           <%= link_to 'Edit', edit_admin_customer_path(customer), remote: true %>
-        <% else %>
-          NA
-        <% end %>
-      </td>
+        </td>
 
-      <td class="list_actions">
-        <% if customer.active %>
-          <%= link_to 'Delete', admin_customer_path(customer), method: :delete, data: { confirm: 'Are you sure?' } %>
-        <% else %>
-          NA
-        <% end %>
-      </td>
+        <td class="list_actions">
+          <%= link_to 'Disable', admin_customer_path(customer), method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+      <% end %>
 
     </tr>
   <% end %>

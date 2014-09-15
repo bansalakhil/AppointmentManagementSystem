@@ -14,47 +14,37 @@
     <th>Delete</th>
   </tr>
 
-  <% @non_deleted.each do |service| %>
+  <% @services.each do |service| %>
     
-    <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
+    <tr class="<%= service.destroyed? ? 'redify' : 'greenify' %>">
+
       <td class="list_description">
         <%= service.name %>
       </td>
+
       <td class="list_description">
         <%= service.slot_window %>
       </td>
-      <% if !service.deleted? %>
-        <td class="list_actions">
-          <%= link_to 'Edit', edit_admin_service_path(service), remote: true %>
-        </td>
 
-        <td>
-          <%= link_to 'Disable', admin_service_path(service), method: :delete, data: { confirm: 'Are you sure?' } %>
-        </td>
-      <% else %>
+      <% if service.destroyed? %>
+
         <td class="list_actions" colspan = 2>
           <%= link_to 'Enable', enable_admin_service_path(service), method: :put %>
         </td>
+
+      <% else %>
+
+        <td class="list_actions">
+          <%= link_to 'Edit', edit_admin_service_path(service), remote: true %>
+        </td>
+        <td>
+          <%= link_to 'Disable', admin_service_path(service), method: :delete, data: { confirm: 'Are you sure?' } %>
+        </td>
+
       <% end %>
 
     </tr>
   <% end %>
-  <% @deleted.each do |service| %>
-    
-    <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
-      <td class="list_description">
-        <%= service.name %>
-      </td>
-      <td class="list_description">
-        <%= service.slot_window %>
-      </td>
-
-      <td class="list_actions" colspan = 2>
-        <%= link_to 'Enable', enable_admin_service_path(service), method: :put %>
-      </td>
-    </tr>
-  <% end %>
-
 </table>
 <br/>
 <%= will_paginate @services %>
