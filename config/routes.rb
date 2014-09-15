@@ -54,6 +54,7 @@ Rails.application.routes.draw do
       member do
         post :move
         post :resize
+        get :cancel
       end
     end
 
@@ -73,6 +74,7 @@ Rails.application.routes.draw do
       member do
         post :move
         post :resize
+        get :cancel
       end
     end
   end

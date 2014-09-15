@@ -62,7 +62,6 @@ class Admin::StaffsController < Admin::BaseController
   end
 
   def enable
-    debugger
     @staff.restore
     redirect_to_path(admin_staffs_path)
   end

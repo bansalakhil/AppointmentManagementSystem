@@ -1,12 +1,11 @@
 class Customer::AppointmentsController < Customer::BaseController
-  before_action :get_event, only: [:edit, :update, :destroy, :move, :resize]
+  before_action :get_event, only: [:edit, :update, :destroy, :move, :resize, :cancel]
   before_action :get_controller
   before_action :get_services, only: [:index, :new, :update]
-
+  before_action :set_remark, only: [:destroy]
 
   def index
   end
-
 
   def new
     @event = Appointment.new
@@ -56,23 +55,6 @@ class Customer::AppointmentsController < Customer::BaseController
     end
   end
 
-  def move
-    @event.starttime = make_time_from_minute_and_day_delta(@event.starttime)
-    @event.endtime   = make_time_from_minute_and_day_delta(@event.endtime)
-    if @event.save
-      flash[:notice] = 'Appointment saved succssfully'
-    else
-      flash[:error] = 'Appointment could not be saved'
-    end
-    render nothing: true
-  end
-
-  def resize
-    @event.endtime = make_time_from_minute_and_day_delta(@event.endtime)
-    @event.save
-    render nothing: true
-  end
-
   def edit
     render json: { form: render_to_string(partial: 'edit_form') } 
   end
@@ -90,6 +72,14 @@ class Customer::AppointmentsController < Customer::BaseController
     render nothing: true
   end
 
+  def cancel
+    render json: { form: render_to_string(partial: 'cancel_form') } 
+  end
+
+  def set_remark
+    @event.remark = params[:appointment][:remark]
+  end
+
   private
 
   def get_event
@@ -101,7 +91,7 @@ class Customer::AppointmentsController < Customer::BaseController
 
   def event_params
     params.require(:appointment)
-      .permit(:staff_id, :service_id, :title, :starttime, :endtime, :status_id, :description )
+      .permit(:staff_id, :service_id, :title, :starttime, :endtime, :status_id, :description, :remark )
   end
 
   # FIX- Move to helpers

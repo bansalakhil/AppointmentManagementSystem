@@ -35,11 +35,6 @@ class ApplicationController < ActionController::Base
     redirect_to path
   end
 
-  # def after_resetting_password_path_for(resource)
-  #   debugger
-  #   redirect_to "/"
-  # end
-
   private
 
   def appointment_path?

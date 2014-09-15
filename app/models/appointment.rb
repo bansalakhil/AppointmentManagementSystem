@@ -1,4 +1,5 @@
 class Appointment < ActiveRecord::Base
+  acts_as_paranoid
 
   STATUSES = { '1' => 'pending', '2' => 'in_process', '3' => 'cancelled', '4' => 'done' }
 
@@ -73,7 +74,7 @@ class Appointment < ActiveRecord::Base
   end
 
   def check_service_slot_time
-    errors[:base] = "This appointment can be booked for minimum #{ service.slot_window } mins"  unless service.slot_window < (endtime - starttime)/60 
+    errors[:base] = "This appointment can be booked for minimum #{ service.slot_window } mins"  unless service.slot_window <= (endtime - starttime)/60 
   end
 
 end

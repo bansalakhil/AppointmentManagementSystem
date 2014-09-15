@@ -93,17 +93,24 @@ FullcalendarEngine = {
         }
       });
     },
-    delete: function(event_id, delete_all){
+    // delete: function(event_id, delete_all){
+    //     $.ajax({
+    //     data: 'authenticity_token=' + FullcalendarEngine.Form.authenticity_token() + '&delete_all=' + delete_all,
+    //     dataType: 'script',
+    //     type: 'delete',
+    //     url: '/' + app_path + '/' + event_id,
+    //     success: FullcalendarEngine.Events.refetch_events_and_close_dialog
+    //   });
+    // },
+    cancel: function(event_id, delete_all){
       $.ajax({
-        data: 'authenticity_token=' + FullcalendarEngine.Form.authenticity_token() + '&delete_all=' + delete_all,
-        dataType: 'script',
-        type: 'delete',
-        url: '/' + app_path + '/' + event_id,
-        success: FullcalendarEngine.Events.refetch_events_and_close_dialog
+        url: '/' + app_path + '/' + event_id + '/cancel',
+        success: function(data) {
+          $('#edit_event_description').html(data['form']);
+        }
       });
     },
     refetch_events_and_close_dialog: function() {
-      debugger
       $('.calendar').fullCalendar('refetchEvents');
       $('.dialog:visible').dialog('destroy');
     },
@@ -113,16 +120,18 @@ FullcalendarEngine = {
       $event_actions      = $('<div />').attr("id", "event_actions");
       $edit_event         = $('<span />').attr("id", "edit_event").html("<a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.edit(" + event.id + ")'>Edit</a>");
       $delete_event       = $('<span />').attr("id", "delete_event")
-      // title = event.service.name + ' -- ' + event.staff.name;
       title = event.title
-      $delete_event.html("<a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.delete(" + event.id + ", " + false + ")'>Cancel</a>");
+      $delete_event.html("<a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.cancel(" + event.id + ", " + false + ")'>Cancel</a>");
       $event_actions.append($edit_event).append(" | ").append($delete_event)
       $('#event_desc_dialog').append($event_description).append($event_actions)
       $('#event_desc_dialog').dialog({
         title: title,
         modal: true,
         width: 500,
-        close: function(event, ui){ $('#event_desc_dialog').html(''); $('#event_desc_dialog').dialog('destroy') }
+        close: function(event, ui){ 
+          $('#event_desc_dialog').html(''); 
+          $('#event_desc_dialog').dialog('destroy')
+        }
       });
     },
     showPeriodAndFrequency: function(value){

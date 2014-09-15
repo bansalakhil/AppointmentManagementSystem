@@ -22,13 +22,14 @@ custom_calendar = function() {
     disableDragging: false,
     disableResizing: false,
     allDay      : false,
+    eventBackgroundColor : '#ff0000',
     select      : function(startDate, endDate, jsEvent, view){
                     controller = app_path.slice(0, app_path.search('/'))
-                    if (controller != 'admin') {
+                    if (controller == 'customer') {
                       FullcalendarEngine.Form.display({ 
                         starttime: startDate,
                         endtime:   endDate,
-                      }) 
+                      });
                     }
                   },
     eventResize : function(event, dayDelta, minuteDelta, revertFunc){

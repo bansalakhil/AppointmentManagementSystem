@@ -1,6 +1,6 @@
 class Staff::AppointmentsController < Staff::BaseController
 
-  before_action :get_event, only: [:edit, :update, :destroy, :move, :resize]
+  before_action :get_event, only: [:edit, :update, :destroy, :move, :resize, :cancel]
   before_action :get_controller
   before_action :get_staff_service_customer, only: [:index, :new, :update]
 
@@ -42,27 +42,6 @@ class Staff::AppointmentsController < Staff::BaseController
     render json: events.to_json
   end
 
-  def move
-    if @event
-      # @event.starttime = make_time_from_minute_and_day_delta(@event.starttime)
-      @event.starttime = params[:start_time]
-      # @event.endtime = params[:end_time]
-      # @event.endtime   = make_time_from_minute_and_day_delta(@event.endtime)
-      # @event.all_day   = params[:all_day]
-      @event.save
-    end
-    render nothing: true
-  end
-
-  def resize
-    if @event
-      @event.endtime = params[:end_time]
-      # @event.endtime = make_time_from_minute_and_day_delta(@event.endtime)
-      @event.save
-    end    
-    render nothing: true
-  end
-
   def edit
     render json: { form: render_to_string(partial: 'edit_form') } 
   end
@@ -98,6 +77,10 @@ class Staff::AppointmentsController < Staff::BaseController
     render nothing: true
   end
 
+  def cancel
+    render json: { form: render_to_string(partial: 'cancel_form') } 
+  end
+
   private
 
   def get_event
@@ -108,7 +91,7 @@ class Staff::AppointmentsController < Staff::BaseController
   end
 
   def event_params
-    params.require(:appointment).permit(:staff_id, :customer_id, :starttime, :endtime, :status_id, :description )
+    params.require(:appointment).permit(:staff_id, :customer_id, :starttime, :endtime, :status_id, :description, :remark )
   end
 
   def get_controller
