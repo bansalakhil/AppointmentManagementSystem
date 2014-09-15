@@ -1,7 +1,4 @@
 class Appointment < ActiveRecord::Base
-  # FIX-
-  #   Rename status_id to status in table
-  #   Fix default value for status. It should be set to 1 by default.
 
   STATUSES = { '1' => 'pending', '2' => 'in_process', '3' => 'cancelled', '4' => 'done' }
 
@@ -11,12 +8,11 @@ class Appointment < ActiveRecord::Base
   belongs_to :service
 
   #Validations................................................................
-  # FIX- Add validations for start_time, end_time, customer_id, staff_id, service_id
-  validate :staff_available, on: :save
-  validate :time_slot_available, on: :save
+  validate :staff_available, on: [:create, :update]
+  validate :time_slot_available, on: [:create, :update]
   validates :service_id, :staff_id, :customer_id,:description, presence: :true
-  validates :starttime, uniqueness: {scope: [:service_id, :staff_id] }, allow_blank: true
-  validate :past_time?, on: :save
+  # validates :starttime, uniqueness: { scope: [:service_id, :staff_id] }, allow_blank: true
+  validate :past_time?, on: [:create, :update]
 
   #Scopes.....................................................................
   scope :future, -> { where('starttime > :current_time', current_time: Time.now) }
@@ -53,14 +49,16 @@ class Appointment < ActiveRecord::Base
     end_date = starttime.end_of_day()
     starts_at = starttime
     ends_at = endtime
-    appointments = self.class.where('service_id = ? and staff_id = ?',service_id, staff_id).in_between(start_date, end_date)
-    not_overlapping = appointments.any? { |apt| apt.overlapping_with?(starts_at, ends_at) }
-    self.errors[:starttime] = 'coinsides with an existing appointment' if not_overlapping
+    appointments = self.class.where('service_id = ? and staff_id = ?',service_id, staff_id).in_between(start_date, end_date).where.not(id: id)
+    overlapping = appointments.any? { |apt| apt.overlapping_with?(starts_at, ends_at) }
+    errors[:base] = 'Appointment coinsides with an existing appointment' if overlapping
   end
 
   def staff_available
     availability = staff.availabilities.where(service_id: service_id)
-          .where('start_date <= :app_start and end_date >= :app_end', app_start: starttime.to_date, app_end: endtime.to_date ).where('start_time <= :app_start and end_time >= :app_end', app_start: starttime.strftime('%H:%M'), app_end: endtime.strftime('%H:%M') ).first
+          .where('start_date <= :app_start and end_date >= :app_end', app_start: starttime.to_date, app_end: endtime.to_date )
+          .where('start_time <= :app_start and end_time >= :app_end', app_start: starttime.strftime('%H:%M'), app_end: endtime.strftime('%H:%M') )
+          .first
     errors[:base] = 'Staff not available' unless availability
 
   end
@@ -68,7 +66,6 @@ class Appointment < ActiveRecord::Base
   def set_status
     status = 1
   end
-
 
   def past_time?
     errors[:base] = 'This time has already passed' if (starttime < Time.now)

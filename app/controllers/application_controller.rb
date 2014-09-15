@@ -26,13 +26,19 @@ class ApplicationController < ActionController::Base
   end
 
   def after_accept_path_for(resource)
-    accept_user_invitation_path
+    # accept_user_invitation_path
+    redirect_to "/"
   end
 
   # FIX- Give any reason to do this?
   def redirect_to_path(path)
     redirect_to path
   end
+
+  # def after_resetting_password_path_for(resource)
+  #   debugger
+  #   redirect_to "/"
+  # end
 
   private
 

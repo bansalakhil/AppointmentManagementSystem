@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   #devise automatic setup on install
-  devise_for :users, :controllers => { registrations: 'registrations', confirmations: 'confirmations' }
+  devise_for :users, :controllers => { registrations: 'registrations', confirmations: 'confirmations', invitations: 'invitations' }
 
   devise_scope :user do
     root 'devise/sessions#new'
@@ -8,7 +8,11 @@ Rails.application.routes.draw do
 
   namespace 'admin' do
     resources :customers
-    resources :services
+    resources :services do
+      member do
+        put :enable
+      end
+    end
     resources :site_layouts
     resources :appointments do
       collection do
@@ -26,11 +30,14 @@ Rails.application.routes.draw do
       collection do
         get :get_staff
       end
+      member do
+        put :enable
+      end
     end
 
     resources :staffs do
       member do
-        put 'deactivate'
+        put :enable
       end
     end
   end

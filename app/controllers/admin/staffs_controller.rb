@@ -1,7 +1,7 @@
 class Admin::StaffsController < Admin::BaseController
 
   PERMITTED_ATTRS = [:name, :email, :phone_number, { service_ids: [] }] 
-  before_action :get_staff_member, only: [ :edit, :update, :destroy, :deactivate ]
+  before_action :get_staff_member, only: [ :edit, :update, :destroy, :enable]
   before_action :get_all_staffs, only: [ :index ]
   before_action :get_all_services, only: [:create, :new, :update, :edit]
 
@@ -61,10 +61,8 @@ class Admin::StaffsController < Admin::BaseController
     redirect_to_path(admin_staffs_path)
   end
 
-  def deactivate
-    @staff.update_attributes({ active: false, deleted_at: Time.now })
-
-    flash[:notice] = 'Staff sucessfully deleted'
+  def enable
+    @staff.restore
     redirect_to_path(admin_staffs_path)
   end
 
@@ -86,11 +84,11 @@ class Admin::StaffsController < Admin::BaseController
   end
 
   def get_all_staffs
-    @staffs = Staff.unscoped.all.paginate :page => params[:page], :per_page => 5
+    @staffs = Staff.all.paginate :page => params[:page], :per_page => 5
   end
 
   def get_all_services
-    @services = Service.where(true)
+    @services = Service.all
   end
 
 end

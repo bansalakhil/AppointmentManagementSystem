@@ -31,19 +31,37 @@
       </td>
 
       <td class="list_actions">
-        <% if staff.active %>
-          <%= link_to 'Edit', edit_admin_staff_path(staff), remote: true %>
-        <% else %>
-          NA
-        <% end %>
+        <%= link_to 'Edit', edit_admin_staff_path(staff), remote: true %>
       </td>
 
       <td>
-        <% if staff.active %>
-          <%= link_to 'Delete', admin_staff_path(staff), method: :put, data: { confirm: 'Are you sure?' } %>
-        <% else %>
-          NA
-        <% end %>
+        <%= link_to 'Disable', admin_staff_path(staff), method: :delete, data: { confirm: 'Are you sure?' } %>
+      </td>
+
+    </tr>
+  <% end %>
+
+  <% @staffs.only_deleted.each do |staff| %>
+    
+    <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
+      <td class="list_description">
+        <%= staff.name %>
+      </td>
+
+      <td class="list_description">
+        <%= staff.email %>
+      </td>
+
+      <td class='list_actions'>
+        <%= ((staff.services).map{|service| service.name}).join(',') %>
+      </td>
+
+      <td class="list_actions">
+        <%= link_to 'Enable', enable_admin_staff_path(staff), method: :put %>
+      </td>
+
+      <td>
+        NA
       </td>
 
     </tr>

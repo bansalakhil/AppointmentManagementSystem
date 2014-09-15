@@ -64,7 +64,7 @@ FullcalendarEngine = {
   Events: {
     move: function(event, dayDelta, minuteDelta, allDay){
       $.ajax({
-        data: '&start_time=' + event.start + '&all_day=' + allDay + '&authenticity_token=' + FullcalendarEngine.Form.authenticity_token(),
+        data: 'title=' + event.title + '&day_delta=' + dayDelta + '&minute_delta=' + minuteDelta + '&all_day=' + allDay + '&authenticity_token=' + FullcalendarEngine.Form.authenticity_token(),
         dataType: 'script',
         type: 'post',
         url: '/' + app_path + '/' + event.id + '/move',
@@ -74,14 +74,14 @@ FullcalendarEngine = {
       });
     },
     resize: function(event, dayDelta, minuteDelta){
-      
       $.ajax({
-        data: '&end_time=' + event.end + '&authenticity_token=' + FullcalendarEngine.Form.authenticity_token(),
+        data: 'title=' + event.title + '&day_delta=' + dayDelta + '&minute_delta=' + minuteDelta + '&authenticity_token=' + FullcalendarEngine.Form.authenticity_token(),
         dataType: 'script',
         type: 'post',
         url: '/' + app_path + '/'+ event.id + '/resize',
         error: function(xhr){
-          alert(JSON.parse(xhr.responseText)["message"])
+          alert(xhr.responseText);
+          // alert(JSON.parse(xhr.responseText)["message"])
         }
       });
     },
@@ -103,6 +103,7 @@ FullcalendarEngine = {
       });
     },
     refetch_events_and_close_dialog: function() {
+      debugger
       $('.calendar').fullCalendar('refetchEvents');
       $('.dialog:visible').dialog('destroy');
     },
@@ -113,7 +114,7 @@ FullcalendarEngine = {
       $edit_event         = $('<span />').attr("id", "edit_event").html("<a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.edit(" + event.id + ")'>Edit</a>");
       $delete_event       = $('<span />').attr("id", "delete_event")
       // title = event.service.name + ' -- ' + event.staff.name;
-      title = event.id
+      title = event.title
       $delete_event.html("<a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.delete(" + event.id + ", " + false + ")'>Cancel</a>");
       $event_actions.append($edit_event).append(" | ").append($delete_event)
       $('#event_desc_dialog').append($event_description).append($event_actions)

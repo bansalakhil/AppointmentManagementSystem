@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140911084110) do
+ActiveRecord::Schema.define(version: 20140914175340) do
 
   create_table "appointments", force: true do |t|
     t.integer  "staff_id"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20140911084110) do
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "title"
   end
 
   create_table "availabilities", force: true do |t|
@@ -68,6 +69,8 @@ ActiveRecord::Schema.define(version: 20140911084110) do
     t.boolean  "active",                 default: true
     t.string   "email",                  default: "",         null: false
     t.string   "encrypted_password",     default: ""
+    t.string   "reset_password_token"
+    t.datetime "reset_password_sent_at"
     t.string   "confirmation_token"
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
@@ -84,5 +87,6 @@ ActiveRecord::Schema.define(version: 20140911084110) do
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
+  add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
 
 end

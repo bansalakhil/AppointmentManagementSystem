@@ -3,7 +3,7 @@
 
 <div class="field">
   <%= f.label :service_id, 'Services :' %><br />
-  <%= f.collection_select(:service_id, @services, :id, :name, {:prompt => 'Select'}) %>
+  <%= f.collection_select(:service_id, @services || [], :id, :name, {:prompt => 'Select'}) %>
 </div>
 
 <div class="field">
@@ -26,6 +26,7 @@
   <br/>
   <%=f.datetime_select :endtime %>
 </p>
+<%= f.hidden_field :title,  :value => "hello" %>
 <p>
   <%=f.submit %>
   <span id = "creating_events" class="spinner" style = "display:none;">Creating, Please wait...</span>

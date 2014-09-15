@@ -6,7 +6,7 @@ class User < ActiveRecord::Base
   # :confirmable, :lockable, :timeoutable and :omniauthable,
   # :recoverable, :rememberable, :validatable,
   devise :invitable, :database_authenticatable, :registerable,
-         :confirmable, :invitable, :invite_for => 2.weeks
+         :confirmable, :recoverable, :invitable, :invite_for => 2.weeks
 
   #Associations..........................................................
   # has_many :appointments
@@ -18,5 +18,10 @@ class User < ActiveRecord::Base
   validates :email, format: { with: /\A\w+@\w+\.\w+\Z/,
                               message: 'is Invalid'},
                               uniqueness: true, allow_blank: true
+
+  protected
+  def confirmation_required?
+    false
+  end
 
 end

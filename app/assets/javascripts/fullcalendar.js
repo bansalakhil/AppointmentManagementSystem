@@ -1992,7 +1992,6 @@ function MonthView(element, calendar) {
 			addDays(visEnd, (6 - rowCnt) * 7); // add weeks to make up for it
 			rowCnt = 6;
 		}
-
 		t.title = formatDate(start, opt('titleFormat'));
 
 		t.start = start;

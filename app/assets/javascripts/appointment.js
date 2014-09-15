@@ -23,7 +23,6 @@ custom_calendar = function() {
     disableResizing: false,
     allDay      : false,
     select      : function(startDate, endDate, jsEvent, view){
-                    debugger
                     controller = app_path.slice(0, app_path.search('/'))
                     if (controller != 'admin') {
                       FullcalendarEngine.Form.display({ 
@@ -32,11 +31,11 @@ custom_calendar = function() {
                       }) 
                     }
                   },
-    eventResize : function(event, revertFunc, jsEvent) {
-                    FullcalendarEngine.Events.resize(event);
+    eventResize : function(event, dayDelta, minuteDelta, revertFunc){
+                    FullcalendarEngine.Events.resize(event, dayDelta, minuteDelta);
                   },
-    eventDrop   : function(event) {
-                    FullcalendarEngine.Events.move(event);
+    eventDrop   : function(event, dayDelta, minuteDelta, allDay, revertFunc){
+                    FullcalendarEngine.Events.move(event, dayDelta, minuteDelta, allDay);
                   },
     eventClick  : function(event, jsEvent, view){
                     FullcalendarEngine.Events.showEventDetails(event);
@@ -52,6 +51,9 @@ custom_calendar = function() {
 
   $('#new_event').click(function(event) {
     event.preventDefault();
-    FullcalendarEngine.Form.display();
+    controller = app_path.slice(0, app_path.search('/'))
+    if (controller != 'admin') {
+      FullcalendarEngine.Form.display();
+    }
   });
 }

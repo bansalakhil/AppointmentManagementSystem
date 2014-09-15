@@ -1,4 +1,3 @@
-
 class Customer::AppointmentsController < Customer::BaseController
   before_action :get_event, only: [:edit, :update, :destroy, :move, :resize]
   before_action :get_controller
@@ -20,6 +19,7 @@ class Customer::AppointmentsController < Customer::BaseController
 
     @event = Appointment.new(event_params)
     @event.customer_id = current_user.id
+    @event.title = @event.staff.name + '//' + @event.service.name
 
     if @event.save
       render nothing: true, status: :created
@@ -40,7 +40,8 @@ class Customer::AppointmentsController < Customer::BaseController
                   description: event.description || '', 
                   start: event.starttime.iso8601,
                   end: event.endtime.iso8601,
-                  allDay: false
+                  allDay: false,
+                  title: event.title
                 }
     end
     render json: events.to_json
@@ -56,25 +57,19 @@ class Customer::AppointmentsController < Customer::BaseController
   end
 
   def move
-    # FIX- @event will always be present here.
-    if @event
-      # @event.starttime = make_time_from_minute_and_day_delta(@event.starttime)
-      @event.starttime = params[:start_time]
-      # @event.endtime = params[:end_time]
-      # @event.endtime   = make_time_from_minute_and_day_delta(@event.endtime)
-      # @event.all_day   = params[:all_day]
-      # FIX- What if @event is not saved successfully?
-      @event.save
+    @event.starttime = make_time_from_minute_and_day_delta(@event.starttime)
+    @event.endtime   = make_time_from_minute_and_day_delta(@event.endtime)
+    if @event.save
+      flash[:notice] = 'Appointment saved succssfully'
+    else
+      flash[:error] = 'Appointment could not be saved'
     end
     render nothing: true
   end
 
   def resize
-    if @event
-      @event.endtime = params[:end_time]
-      # @event.endtime = make_time_from_minute_and_day_delta(@event.endtime)
-      @event.save
-    end    
+    @event.endtime = make_time_from_minute_and_day_delta(@event.endtime)
+    @event.save
     render nothing: true
   end
 
@@ -82,7 +77,6 @@ class Customer::AppointmentsController < Customer::BaseController
     render json: { form: render_to_string(partial: 'edit_form') } 
   end
 
-  # FIX- Refactor this. Unable to review.
   def update
     # @event.attributes = event_params
     @event.update(event_params)
@@ -107,7 +101,7 @@ class Customer::AppointmentsController < Customer::BaseController
 
   def event_params
     params.require(:appointment)
-      .permit(:staff_id, :service_id, :starttime, :endtime, :status_id, :description )
+      .permit(:staff_id, :service_id, :title, :starttime, :endtime, :status_id, :description )
   end
 
   # FIX- Move to helpers
@@ -117,5 +111,9 @@ class Customer::AppointmentsController < Customer::BaseController
 
   def get_services
     @services = Service.all
+  end
+
+  def make_time_from_minute_and_day_delta(event_time)
+    params[:minute_delta].to_i.minutes.from_now((params[:day_delta].to_i).days.from_now(event_time))
   end
 end

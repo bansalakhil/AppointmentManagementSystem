@@ -1,7 +1,7 @@
 class Admin::ServicesController < Admin::BaseController
 
   PERMITTED_ATTRS = [:name, :slot_window]
-  before_action :get_service, only: [ :edit, :update, :destroy ]
+  before_action :get_service, only: [ :edit, :update, :destroy, :enable ]
   before_action :get_all_services, only: [:index]
 
   def index
@@ -47,11 +47,15 @@ class Admin::ServicesController < Admin::BaseController
     end
   end
 
+  def enable
+    @service.restore
+    redirect_to_path(admin_services_path)
+  end
+
   private
 
   def get_service
-
-    @service = Service.find(params[:id])
+    @service = Service.with_deleted.where(id: params[:id]).first
 
     if @service
       return @service
@@ -65,7 +69,8 @@ class Admin::ServicesController < Admin::BaseController
   end
 
   def get_all_services
-    @services = Service.with_deleted.paginate :page => params[:page], :per_page => 5
+    @services = Service.with_deleted.order(deleted_at: :desc).paginate page: params[:page], per_page: 3
+    @deleted, @non_deleted =  @services.partition { |serv|  serv.deleted? }
   end
 
 end

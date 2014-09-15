@@ -1,7 +1,7 @@
 class Admin::AvailabilitiesController < Admin::BaseController
 
   PERMITTED_ATTRS = [:service_id, :staff_id, :start_time, :end_time, :start_date, :end_date]
-  before_action :get_availability, only: [:edit, :update, :destroy]
+  before_action :get_availability, only: [:edit, :update, :destroy, :enable]
   before_action :get_services, only: [:new, :edit]
   before_action :get_all_availabilities, only: [:index]
 
@@ -39,7 +39,6 @@ class Admin::AvailabilitiesController < Admin::BaseController
   end
 
   def update
-
     if @availability.update(availability_params)
       render 'refresh'
     else
@@ -49,8 +48,12 @@ class Admin::AvailabilitiesController < Admin::BaseController
     end
   end
 
+  def enable
+    @availability.restore
+    redirect_to_path(admin_availabilities_path)
+  end
+
   #method fetches all the staff corresponding to a service
-  #FIX- change name
   def get_staff
     respond_to do |format|
       format.js do
@@ -63,8 +66,7 @@ class Admin::AvailabilitiesController < Admin::BaseController
   private
 
   def get_availability
-
-    @availability = Availability.where(id: params.require(:id)).first
+    @availability = Availability.with_deleted.where(id: params.require(:id)).first
 
     @availability ||= (flash[:error] = 'Availability not found')
   end
@@ -79,6 +81,6 @@ class Admin::AvailabilitiesController < Admin::BaseController
   end
 
   def get_all_availabilities
-    @availabilities = Availability.with_deleted.paginate :page => params[:page], :per_page => 5
+    @availabilities = Availability.all.paginate page: params[:page], per_page: 5
   end
 end

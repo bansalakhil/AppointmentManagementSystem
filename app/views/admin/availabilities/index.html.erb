@@ -41,18 +41,37 @@
         <%= availability.end_time.strftime("%I:%M %p") %>
       </td>
       <td class="list_actions">
-        <% if !availability.deleted_at %>
-          <%= link_to 'Edit', edit_admin_availability_path(availability), remote: true %>
-        <% else %>
-          NA
-        <% end %>
+        <%= link_to 'Edit', edit_admin_availability_path(availability), remote: true %>
       </td>
       <td>
-        <% if !availability.deleted_at %>
-          <%= link_to 'Delete', admin_availability_path(availability), method: :delete, data: { confirm: 'Are you sure?' } %>
-        <% else %>
-          NA
-        <% end %> 
+        <%= link_to 'Disable', admin_availability_path(availability), method: :delete, data: { confirm: 'Are you sure?' } %>
+      </td>
+    </tr>
+  <% end %>
+
+  <% @availabilities.only_deleted.each do |availability| %>
+    
+    <tr class="<%= cycle('list_line_odd', 'list_line_even') %>">
+      <td class="list_description">
+        <%= availability.service.name %>
+      </td>
+      <td class="list_description">
+        <%= availability.staff.name %>
+      </td>
+      <td class="list_description">
+        <%= availability.start_date %>
+      </td>
+      <td class="list_description">
+        <%= availability.start_time.strftime("%I:%M %p") %>
+      </td>
+      <td class="list_description">
+        <%= availability.end_date %>
+      </td>
+      <td class="list_description">
+        <%= availability.end_time.strftime("%I:%M %p") %>
+      </td>
+      <td class="list_actions" colspan = 2 >
+        <%= link_to 'Enable', enable_admin_availability_path(availability), method: :put %>
       </td>
     </tr>
   <% end %>

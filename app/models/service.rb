@@ -9,5 +9,5 @@ class Service < ActiveRecord::Base
   default_scope { order(:name) }
 
   #Validations...................................................
-  validates :name, presence: true
+  validates :name, uniqueness: { case_sensitive: false }, presence: true
 end
