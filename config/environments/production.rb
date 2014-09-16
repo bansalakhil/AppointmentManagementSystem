@@ -81,6 +81,9 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
+  #secret key
+  config.secret_key = '26afd8a5cfec93f83e336cad84014b03525031adb670184544937c5ee898d9f8a9c37ab8aa6246e3ebd36b2cff2e0bbe59c6d603576284df8d84f258c5156114'
+
   config.action_mailer.smtp_settings = {
     :address        => 'smtp.sendgrid.net',
     :port           => '587',
