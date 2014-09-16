@@ -20,6 +20,7 @@ class User < ActiveRecord::Base
                               uniqueness: true, allow_blank: true
 
   protected
+  
   def confirmation_required?
     false
   end

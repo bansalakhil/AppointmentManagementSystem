@@ -22,7 +22,7 @@ class Admin::StaffsController < Admin::BaseController
     respond_to do |format|
       if @staff.save
         # FIX- Move to after_save callback in model
-        @staff.invite!
+        # @staff.invite!
         flash[:notice] = 'Staff sucessfully created'
         format.js { render action: 'refresh' }
       else
