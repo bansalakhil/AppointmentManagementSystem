@@ -46,7 +46,7 @@ gem "paperclip"
 gem 'devise'
 
 #an add-o to devise
-gem 'devise_invitable'
+# gem 'devise_invitable'
 
 #for pagination
 gem 'will_paginate'

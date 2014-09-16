@@ -9,9 +9,9 @@ class Appointment < ActiveRecord::Base
   belongs_to :service
 
   #Validations................................................................
+  validates :service_id, :staff_id, :customer_id,:description, presence: :true
   validate :staff_available, on: [:create, :update]
   validate :time_slot_available, on: [:create, :update]
-  validates :service_id, :staff_id, :customer_id,:description, presence: :true
   validate :past_time?, on: [:create, :update]
   validate :check_service_slot_time, on: [:create, :update]
 
@@ -35,7 +35,7 @@ class Appointment < ActiveRecord::Base
                         }
 
   #Callbacks..........................................................................
-  before_save :set_status
+  before_save :set_pending
 
   def overlapping_with?(starts_at, ends_at)
 
@@ -65,7 +65,7 @@ class Appointment < ActiveRecord::Base
 
   end
 
-  def set_status
+  def set_pending
     status = 1
   end
 

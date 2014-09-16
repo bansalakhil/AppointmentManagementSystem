@@ -13,7 +13,8 @@
     <th>Description</th>
     <th>Start Time</th>
     <th>End Time</th>
-    <th>Remark</th>
+    <th>Status</th>
+    <th>Cancellation Remark</th>
   </tr>
 
   <% @appointments.each do |appointment| %>
@@ -39,6 +40,13 @@
       </td>
       <td class="list_description">
         <%= Appointment::STATUSES[appointment.status.to_s] %>
+      </td>
+      <td class="list_description">
+        <% if appointment.destroyed? %>
+          <%= appointment.remark %>
+        <% else %>
+          NA
+        <% end %>
       </td>
     </tr>
   <% end %>

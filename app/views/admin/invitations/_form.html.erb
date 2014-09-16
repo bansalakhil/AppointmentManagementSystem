@@ -1,10 +1,10 @@
-<!--<#%= path = if @customer.new_record? ? new_admin_customer_path : edit_admin_customer_path %>-->
+<!--<#%= path = if @invitation.new_record? ? new_admin_customer_path : edit_admin_customer_path %>-->
 
-<%= form_for [:admin, @customer], url: admin_customers_path, html: { :'data-remote' => true } do |f| %>
-  <% if @customer.errors.any? %>
+<%= form_for [:admin, @invitation], html: { :'data-remote' => true } do |f| %>
+  <% if @invitation.errors.any? %>
     <div id="error_explanation">
       <ul>
-      <% @customer.errors.full_messages.each do |msg| %>
+      <% @invitation.errors.full_messages.each do |msg| %>
         <li><%= msg %></li>
       <% end %>
       </ul>

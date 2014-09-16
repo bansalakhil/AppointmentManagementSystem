@@ -6,25 +6,7 @@ class Admin::CustomersController < Admin::BaseController
   def index
   end
 
-  def new
-    @customer = Customer.new
-  end
-
   def edit
-  end
-
-  def create
-
-    @customer = Customer.new(customer_params)
-
-    respond_to do |format|
-      if @customer.save
-        @customer.invite!
-        format.js { render :action => "refresh" }
-      else
-        format.js { render :action => "new" }
-      end
-    end
   end
 
   def destroy

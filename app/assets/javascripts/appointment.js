@@ -3,6 +3,7 @@ $(document).ready(function(){
 });
 
 custom_calendar = function() {
+  controller = app_path.slice(0, app_path.search('/'))
   $('#calendar').fullCalendar({
     editable    : true,
     header      : {
@@ -24,7 +25,6 @@ custom_calendar = function() {
     allDay      : false,
     eventBackgroundColor : '#ff0000',
     select      : function(startDate, endDate, jsEvent, view){
-                    controller = app_path.slice(0, app_path.search('/'))
                     if (controller == 'customer') {
                       FullcalendarEngine.Form.display({ 
                         starttime: startDate,
@@ -33,10 +33,14 @@ custom_calendar = function() {
                     }
                   },
     eventResize : function(event, dayDelta, minuteDelta, revertFunc){
-                    FullcalendarEngine.Events.resize(event, dayDelta, minuteDelta);
+                    if (controller == 'customer'){
+                      FullcalendarEngine.Events.resize(event, dayDelta, minuteDelta);
+                    }
                   },
     eventDrop   : function(event, dayDelta, minuteDelta, allDay, revertFunc){
-                    FullcalendarEngine.Events.move(event, dayDelta, minuteDelta, allDay);
+                    if (controller == 'customer'){
+                      FullcalendarEngine.Events.move(event, dayDelta, minuteDelta, allDay);
+                    }
                   },
     eventClick  : function(event, jsEvent, view){
                     FullcalendarEngine.Events.showEventDetails(event);

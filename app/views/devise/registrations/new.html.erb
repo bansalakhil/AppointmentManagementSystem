@@ -13,12 +13,12 @@
 
   <div>
     <%= f.label :name, 'Enter your name: ' %><br />
-    <%= f.text_field :name, autofocus: true %>
+    <%= f.text_field :name, value: @invitation.try(:name), autofocus: true %>
   </div>
 
   <div>
     <%= f.label :email %><br />
-    <%= f.email_field :email, autofocus: true %>
+    <%= f.email_field :email, value: @invitation.try(:email), autofocus: true %>
   </div>
 
   <div><%= f.label :password %>

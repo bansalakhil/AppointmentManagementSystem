@@ -5,8 +5,8 @@ class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable,
   # :recoverable, :rememberable, :validatable,
-  devise :invitable, :database_authenticatable, :registerable,
-         :confirmable, :recoverable, :invitable, :invite_for => 2.weeks
+  devise :database_authenticatable, :registerable,
+         :confirmable, :recoverable
 
   #Associations..........................................................
   # has_many :appointments

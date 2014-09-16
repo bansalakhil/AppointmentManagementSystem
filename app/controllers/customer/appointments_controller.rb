@@ -67,8 +67,7 @@ class Customer::AppointmentsController < Customer::BaseController
   end
 
   def destroy
-    # FIX- No failure case handled
-    @event.destroy
+    flash[:error] = 'Appointment cannot be cancelled' unless @event.destroy
     render nothing: true
   end
 
@@ -78,6 +77,7 @@ class Customer::AppointmentsController < Customer::BaseController
 
   def set_remark
     @event.remark = params[:appointment][:remark]
+    @event.save
   end
 
   private

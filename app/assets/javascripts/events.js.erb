@@ -110,19 +110,34 @@ FullcalendarEngine = {
         }
       });
     },
+    set_status_done: function(event_id, delete_all){
+      $.ajax({
+        url: '/' + app_path + '/' + event_id + '/set_done',
+        success: function(data) {
+          $('.dialog:visible').dialog('destroy');
+        }
+      });
+    },
     refetch_events_and_close_dialog: function() {
       $('.calendar').fullCalendar('refetchEvents');
       $('.dialog:visible').dialog('destroy');
-    },
+    }, // needs to be refactored 
     showEventDetails: function(event){
       $('#event_desc_dialog').html('')
       $event_description  = $('<div />').html(event.description).attr("id", "edit_event_description");
       $event_actions      = $('<div />').attr("id", "event_actions");
       $edit_event         = $('<span />').attr("id", "edit_event").html("<a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.edit(" + event.id + ")'>Edit</a>");
-      $delete_event       = $('<span />').attr("id", "delete_event")
-      title = event.title
-      $delete_event.html("<a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.cancel(" + event.id + ", " + false + ")'>Cancel</a>");
-      $event_actions.append($edit_event).append(" | ").append($delete_event)
+      $delete_event       = $('<span />').attr("id", "delete_event");
+      $status_event       = $('<span />').attr("id", "status_event");
+      title = event.title;
+      $delete_event.html("<input type='button' onclick ='FullcalendarEngine.Events.cancel(" + event.id + ", " + false + ")' value = 'Cancel'>");
+      $status_event.html("<input type='button' onclick ='FullcalendarEngine.Events.set_status_done(" + event.id + ", " + false + ")' value = 'Done'>");
+      
+      if(app_path.slice(0, app_path.search('/')) == 'customer'){
+        $event_actions.append($edit_event).append(" | ").append($delete_event)
+      }else{
+        $event_actions.append($delete_event).append("  ").append($status_event)
+      }
       $('#event_desc_dialog').append($event_description).append($event_actions)
       $('#event_desc_dialog').dialog({
         title: title,

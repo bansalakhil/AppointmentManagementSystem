@@ -56,7 +56,7 @@ class ApplicationController < ActionController::Base
   # FIX- Define a method in user model to check if admin
   def validate_access
     namespace = params[:controller].split('/').first
-    redirect_to welcome_path unless (current_user.type).downcase == namespace
+    redirect_to welcome_path unless (current_user.type).downcase == namespace if current_user
   end
 
   def authorize
