@@ -15,8 +15,7 @@
     <th>Time(from)</th>
     <th>Date(to)</th>
     <th>Time(to)</th>
-    <th>Edit</th>
-    <th>Delete</th>
+    <th>Disable</th>
   </tr>
 
   <% @availabilities.each do |availability| %>
@@ -41,13 +40,10 @@
         <%= availability.end_time.strftime("%I:%M %p") %>
       </td>
       <% if availability.destroyed? %>
-        <td class="list_actions" colspan = 2 >
+        <td class="list_actions">
           <%= link_to 'Enable', enable_admin_availability_path(availability), method: :put %>
         </td>
       <% else %>
-        <td class="list_actions">
-          <%= link_to 'Edit', edit_admin_availability_path(availability), remote: true %>
-        </td>
         <td>
           <%= link_to 'Disable', admin_availability_path(availability), method: :delete, data: { confirm: 'Are you sure?' } %>
         </td>

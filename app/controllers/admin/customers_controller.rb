@@ -1,5 +1,5 @@
 class Admin::CustomersController < Admin::BaseController
-  PERMITTED_ATTRS = [:name, :email]
+  PERMITTED_ATTRS = [:name, :email, :phone_number]
   before_action :find_customer, only: [ :edit, :update, :destroy, :enable ]
   before_action :get_all_customers, only: [:index]
 

@@ -80,8 +80,9 @@ FullcalendarEngine = {
         type: 'post',
         url: '/' + app_path + '/'+ event.id + '/resize',
         error: function(xhr){
-          alert(xhr.responseText);
-          // alert(JSON.parse(xhr.responseText)["message"])
+          debugger
+          // alert(xhr.responseText);
+          alert(JSON.parse(xhr.responseText)["message"])
         }
       });
     },

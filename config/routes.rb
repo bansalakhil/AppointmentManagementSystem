@@ -26,7 +26,6 @@ Rails.application.routes.draw do
     resources :appointments do
       collection do
         get :get_events
-        get :appointment_history
         get :listing
       end
       member do
@@ -36,7 +35,7 @@ Rails.application.routes.draw do
     end
     resources :availabilities do
       collection do
-        get :get_staff
+        get :get_services
       end
       member do
         put :enable
@@ -61,12 +60,6 @@ Rails.application.routes.draw do
         get :cancel
       end
     end
-
-    resources :availabilities do
-      collection do
-        get :get_staff
-      end
-    end
   end
 
   namespace 'customer' do
@@ -74,9 +67,13 @@ Rails.application.routes.draw do
       collection do
         get :get_events
         get :get_staff
+        get :appointment_history
       end
       member do
         get :cancel
+        post :move
+        post :resize
+        get :cancel_list
       end
     end
   end

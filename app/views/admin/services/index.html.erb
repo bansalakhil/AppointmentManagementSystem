@@ -10,7 +10,6 @@
   <tr>
     <th>Service Name</th>
     <th>Duration</th>
-    <th>Edit</th>
     <th>Delete</th>
   </tr>
 
@@ -28,15 +27,12 @@
 
       <% if service.destroyed? %>
 
-        <td class="list_actions" colspan = 2>
+        <td class="list_actions">
           <%= link_to 'Enable', enable_admin_service_path(service), method: :put %>
         </td>
 
       <% else %>
 
-        <td class="list_actions">
-          <%= link_to 'Edit', edit_admin_service_path(service), remote: true %>
-        </td>
         <td>
           <%= link_to 'Disable', admin_service_path(service), method: :delete, data: { confirm: 'Are you sure?' } %>
         </td>

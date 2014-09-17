@@ -39,9 +39,9 @@ class Availability < ActiveRecord::Base
     day_end = start_time.end_of_day()
     avaialability_starts_at = start_time
     avaialability_ends_at = end_time
-    schedule_list = self.class.where('staff_id = ? and start_time between ? and ?', staff_id, day_begin, day_end)
+    schedule_list = self.class.where('staff_id = ? and service_id = ? and start_time between ? and ?', staff_id, service_id, day_begin, day_end)
     overlapping = schedule_list.any? { |availability| availability.overlapping_with?(avaialability_starts_at, avaialability_ends_at) }
-    self.errors[:base] = 'Your availability coinsides with an existing availability' if overlapping
+    self.errors[:base] = " #{ self.staff.name.capitalize } is busy for this time period " if overlapping
 
   end
 

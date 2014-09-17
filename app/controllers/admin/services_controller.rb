@@ -1,7 +1,7 @@
 class Admin::ServicesController < Admin::BaseController
 
   PERMITTED_ATTRS = [:name, :slot_window]
-  before_action :get_service, only: [ :edit, :update, :destroy, :enable ]
+  before_action :get_service, only: [ :update, :destroy, :enable ]
   before_action :get_all_services, only: [:index]
 
   def index
@@ -9,9 +9,6 @@ class Admin::ServicesController < Admin::BaseController
 
   def new
     @service = Service.new
-  end
-
-  def edit
   end
 
   def create
@@ -34,7 +31,7 @@ class Admin::ServicesController < Admin::BaseController
     else
       flash[:error] = 'Service could not be deleted'
     end
-    redirect_to_path(admin_services_path)
+    redirect_to admin_services_path
   end
 
   def update
@@ -49,7 +46,7 @@ class Admin::ServicesController < Admin::BaseController
 
   def enable
     @service.restore
-    redirect_to_path(admin_services_path)
+    redirect_to admin_services_path
   end
 
   private

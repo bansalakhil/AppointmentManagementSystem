@@ -1,8 +1,8 @@
 class Admin::AvailabilitiesController < Admin::BaseController
 
   PERMITTED_ATTRS = [:service_id, :staff_id, :start_time, :end_time, :start_date, :end_date]
-  before_action :get_availability, only: [:edit, :update, :destroy, :enable]
-  before_action :get_services, only: [:new, :edit]
+  before_action :get_availability, only: [:update, :destroy, :enable]
+  before_action :get_staffs, only: [:new]
   before_action :get_all_availabilities, only: [:index]
 
   def index
@@ -12,10 +12,6 @@ class Admin::AvailabilitiesController < Admin::BaseController
     @availability = Availability.new
   end
 
-  def edit
-    @staff = @availability.service.staffs
-  end
-
   def create
 
     @availability = Availability.new(availability_params)
@@ -23,8 +19,8 @@ class Admin::AvailabilitiesController < Admin::BaseController
     if @availability.save
       render 'refresh'
     else
-      get_services
-      @staff = @availability.service.staffs
+      get_staffs
+      @services = @availability.staff.services
       render action: 'new'
     end
   end
@@ -53,12 +49,12 @@ class Admin::AvailabilitiesController < Admin::BaseController
     redirect_to_path(admin_availabilities_path)
   end
 
-  #method fetches all the staff corresponding to a service
-  def get_staff
+  #fetches all the sservices corresponding to a staff
+  def get_services
     respond_to do |format|
       format.js do
-        @staffs = Service.where(id: params[:service_id]).first.staffs
-        render json: @staffs
+        @services = Staff.where(id: params[:staff_id]).first.services
+        render json: @services
       end
     end
   end
@@ -76,8 +72,8 @@ class Admin::AvailabilitiesController < Admin::BaseController
       .permit(*PERMITTED_ATTRS)
   end
 
-  def get_services
-    @services = Service.all
+  def get_staffs
+    @staff = Staff.all
   end
 
   def get_all_availabilities

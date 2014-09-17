@@ -20,6 +20,11 @@
   </div>
 
   <div>
+    <%= f.label :phone_number, 'Phone Number:' %><br />
+    <%= f.text_field :phone_number %>
+  </div>
+
+  <div>
     <%= f.label :services, 'Services :' %><br />
     <%= f.collection_select('service_ids', @services, :id, :name,{name: 'staff[service_ids][]'}, multiple: true) %>
   </div>

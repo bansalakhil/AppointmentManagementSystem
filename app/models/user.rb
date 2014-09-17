@@ -14,7 +14,7 @@ class User < ActiveRecord::Base
   #Query Interface.......................................................
 
   #Validations............................................................
-  validates_presence_of :name, :email
+  validates_presence_of :name, :email, :phone_number
   validates :email, format: { with: /\A\w+@\w+\.\w+\Z/,
                               message: 'is Invalid'},
                               uniqueness: true, allow_blank: true

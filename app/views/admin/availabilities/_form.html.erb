@@ -10,13 +10,13 @@
   <% end %>
 
   <div class="field">
-    <%= f.label :service_id, 'Service :' %><br />
-    <%= f.collection_select(:service_id, @services, :id, :name, {:prompt => 'Select'}) %>
+    <%= f.label :staff_id, 'Staff :' %><br />
+    <%= f.collection_select(:staff_id, @staff, :id, :name, {:prompt => 'Select'}) %>
   </div>
 
   <div class="field">
-    <%= f.label :staff_id, 'Staff :' %><br />
-    <%= f.collection_select(:staff_id, @staff || [], :id, :name, {:prompt => 'Select'}) %>
+    <%= f.label :service_id, 'Service :' %><br />
+    <%= f.collection_select(:service_id, @services || [], :id, :name, {:prompt => 'Select'}) %>
   </div>
 
   <div class="field">
@@ -25,13 +25,13 @@
   </div>
 
   <div class="field">
-    <%= f.label :start_time, 'Time(From) :' %><br />
-    <%= time_field(:availability, :start_time) %>
+    <%= f.label :start_time, 'Date(To) :' %><br />
+    <%= date_field(:availability, :end_date) %>
   </div>
 
   <div class="field">
-    <%= f.label :start_time, 'Date(To) :' %><br />
-    <%= date_field(:availability, :end_date) %>
+    <%= f.label :start_time, 'Time(From) :' %><br />
+    <%= time_field(:availability, :start_time) %>
   </div>
 
   <div class="field">

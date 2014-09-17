@@ -42,13 +42,14 @@
         <% end %>
       </td>
       <td>
-        <%= link_to 'Cancel', cancel_admin_appointment_path(appointment), method: :delete, data: { confirm: 'Are you sure?' } %>
+        <%= link_to 'Cancel', cancel_list_customer_appointment_path(appointment), data: { confirm: 'Are you sure?' }, remote: true %>
       </td>
     </tr>
   <% end %>
 </table>
 <br/>
 <br />
+<div id = 'cancellation-form'></div>
 
 <h4>Past Appointments</h4>
 
@@ -58,7 +59,6 @@
     <th>Time</th>
     <th>Service</th>
     <th>Staff</th>
-    <th>Cancel</th>
   </tr>
 
   <% @past_appointments.each do |appointment| %>
@@ -71,21 +71,10 @@
         <%= appointment.starttime.strftime("%I:%M %p") %> - <%= appointment.endtime.strftime("%I:%M %p") %>
       </td>
       <td class="list_description">
-        <% if appointment.service %>
-          <%= appointment.service.name %>
-        <% else %>
-          no service
-        <% end %>
+        <%= appointment.service.name %>
       </td>
       <td class="list_description">
-        <% if appointment.staff %> 
-         <%= appointment.staff.name %>
-        <% else %>
-          No staff
-        <% end %>
-      </td>
-      <td>
-        <%= link_to 'Cancel', cancel_admin_appointment_path(appointment), method: :delete, data: { confirm: 'Are you sure?' } %>
+        <%= appointment.staff.name %>
       </td>
     </tr>
   <% end %>

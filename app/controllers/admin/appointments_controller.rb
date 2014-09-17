@@ -70,15 +70,6 @@ class Admin::AppointmentsController < Admin::BaseController
     render nothing: true
   end
 
-  def appointment_history
-    @future_appointments = Appointment.future.paginate page: params[:page], per_page: 10
-    @past_appointments = Appointment.past.paginate page: params[:page], per_page: 10
-  end
-
-  def cancel
-    render json: { form: render_to_string(partial: 'cancel_form') }
-  end
-
   def listing
     @appointments = Appointment.with_deleted.future
   end
@@ -92,6 +83,20 @@ class Admin::AppointmentsController < Admin::BaseController
   def set_done
     @event.status = 4
     @event.save(validate: false)
+    render nothing: true
+  end
+
+  def move
+    @event.starttime = make_time_from_minute_and_day_delta(@event.starttime)
+    @event.endtime   = make_time_from_minute_and_day_delta(@event.endtime)
+    @event.all_day   = params[:all_day]
+    @event.save
+    render nothing: true
+  end
+
+  def resize
+    @event.endtime = make_time_from_minute_and_day_delta(@event.endtime)
+    @event.save
     render nothing: true
   end
 

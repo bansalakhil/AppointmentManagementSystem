@@ -18,7 +18,7 @@ class Customer::AppointmentsController < Customer::BaseController
 
     @event = Appointment.new(event_params)
     @event.customer_id = current_user.id
-    @event.title = @event.staff.name + '//' + @event.service.name
+    @event.title = @event.staff.name + '--' + @event.service.name
 
     if @event.save
       render nothing: true, status: :created
@@ -78,6 +78,33 @@ class Customer::AppointmentsController < Customer::BaseController
   def set_remark
     @event.remark = params[:appointment][:remark]
     @event.save
+  end
+
+  def appointment_history
+    @future_appointments = Appointment.future.where(customer_id: current_user.id).paginate page: params[:page], per_page: 10
+    @past_appointments = Appointment.past.where(customer_id: current_user.id).paginate page: params[:page], per_page: 10
+  end
+
+  #Customer can move events
+  def move
+    @event.starttime = make_time_from_minute_and_day_delta(@event.starttime)
+    @event.endtime   = make_time_from_minute_and_day_delta(@event.endtime)
+    flash[:error] = 'This service could not be moved' unless @event.save
+    render nothing: true
+  end
+
+  #Customer can move events
+  def resize
+    @event.endtime = make_time_from_minute_and_day_delta(@event.endtime)
+    flash[:error] = 'This service could not be resized' unless@event.save
+    render nothing: true
+  end
+
+  def cancel
+    render json: { form: render_to_string(partial: 'cancel_form') }
+  end
+
+  def cancel_list
   end
 
   private

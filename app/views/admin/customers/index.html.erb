@@ -10,7 +10,8 @@
   <tr>
     <th>Name</th>
     <th>Email</th>
-    <!--<th>Appointments</th>-->
+    <th>Phone Number</th>
+    <th>Appointments</th>
     <th>Edit</th>
     <th>Delete</th>
   </tr>
@@ -25,6 +26,15 @@
       <td class="list_description">
         <%= customer.email %>
       </td>
+
+      <td class="list_description">
+        <%= customer.phone_number %>
+      </td>
+
+      <td class="list_description">
+        <%= customer.appointments.count %>
+      </td>
+
       <% if customer.destroyed? %>
         <td class="list_actions" colspan = 2 >
           <%= link_to 'Enable', enable_admin_customer_path(customer), method: :put %>
