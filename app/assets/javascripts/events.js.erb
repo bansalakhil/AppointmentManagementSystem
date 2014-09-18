@@ -141,7 +141,7 @@ FullcalendarEngine = {
       if($user == 'admin'){
         $event_actions.append($edit_event).append("  ").append($status_event).append("  ").append($delete_event)
       }else if($user == 'staff'){
-        $event_actions.append($status_event)
+        $event_actions.append($status_event).append("  ").append($delete_event)
       }else {
         $event_actions.append($delete_event)
       }
