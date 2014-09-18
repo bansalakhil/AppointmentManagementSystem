@@ -7,4 +7,4 @@
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 
  SiteLayout.create!
- Admin.create!({name: 'vinsol', email: 'vinsol2011@gmail.com', password: 'vinsolvinsol', confirmed_at: Time.now})
+ Admin.create!({name: 'vinsol', email: 'vinsol2011@gmail.com', password: 'vinsolvinsol', phone_number: '213123213123213', confirmed_at: Time.now})
