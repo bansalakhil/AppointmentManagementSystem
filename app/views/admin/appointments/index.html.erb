@@ -4,11 +4,12 @@
 <%= stylesheet_link_tag :fullcalendar, :jquery_ui, :style %>
 <%= javascript_include_tag :fullcalendar, :events, :appointment %>
 
-<%= link_to 'Home' , welcome_path %>
-
-<p>
-  <%= link_to 'Create Event', 'javascript:void()', id: 'new_event' %>
-</p>
+<!--<#%= form_tag("/get_events", method: "get") do %>
+  <#%= label_tag(:staff_id, 'Staff :') %>
+  <#%= collection_select(:staff_id, @staffs, :id, :name) %>
+  <#%= label_tag(:service_id, 'Services :') %>
+  <#%= collection_select(:service_id, @services, :id, :name) %>
+<#% end %>-->
 
 <h2>Calendar</h2>
   <div id='calendar'></div>

@@ -31,7 +31,7 @@ class Admin::AvailabilitiesController < Admin::BaseController
     else
       flash[:error] = 'Availability could not be deleted'
     end
-    redirect_to_path(admin_availabilities_path)
+    redirect_to admin_availabilities_path
   end
 
   def update
@@ -46,10 +46,10 @@ class Admin::AvailabilitiesController < Admin::BaseController
 
   def enable
     @availability.restore
-    redirect_to_path(admin_availabilities_path)
+    redirect_to admin_availabilities_path
   end
 
-  #fetches all the sservices corresponding to a staff
+  #fetches all the services corresponding to a staff
   def get_services
     respond_to do |format|
       format.js do

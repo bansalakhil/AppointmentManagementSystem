@@ -1,6 +1,6 @@
 class Admin::InvitationsController < Admin::BaseController
   skip_before_action :authorize, only: [:accept]
-  PERMITTED_ATTRS = [:name, :email]
+  PERMITTED_ATTRS = [:name, :email, :phone_number]
 
   def new
     @invitation = Invitation.new

@@ -21,6 +21,11 @@
     <%= f.email_field :email, value: @invitation.try(:email), autofocus: true %>
   </div>
 
+  <div>
+    <%= f.label :phone_number %><br />
+    <%= f.text_field :phone_number, value: @invitation.try(:phone_number), autofocus: true %>
+  </div>
+
   <div><%= f.label :password %>
     <% if @validatable %>
       <i>(<%= @minimum_password_length %> characters minimum)</i>

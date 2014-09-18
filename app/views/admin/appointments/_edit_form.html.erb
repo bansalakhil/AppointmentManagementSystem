@@ -1,4 +1,14 @@
 <%= form_for [:admin, @event], :html => { :id => 'appointment_form' } do |f| %>
+
+<div class="field">
+  <%= f.label :staff_id, 'Staff :' %><br />
+  <%= f.collection_select(:staff_id, @staffs, :id, :name) %>
+</div>
+
+<div class="field">
+  <%= f.label :service_id, 'Services :' %><br />
+  <%= f.collection_select(:service_id, @services, :id, :name) %>
+</div>
 <p>
   <%=f.label :description %>
   <br/>
@@ -13,6 +23,11 @@
   <%=f.label :endtime, 'End Time' %>
   <br/>
   <%=f.datetime_select :endtime %>
+</p>
+<p>
+  <%=f.label :remark, 'Remark' %>
+  <br/>
+  <%=f.text_field :remark %>
 </p>
 
 <p>

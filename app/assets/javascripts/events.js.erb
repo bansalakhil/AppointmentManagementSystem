@@ -80,7 +80,6 @@ FullcalendarEngine = {
         type: 'post',
         url: '/' + app_path + '/'+ event.id + '/resize',
         error: function(xhr){
-          debugger
           // alert(xhr.responseText);
           alert(JSON.parse(xhr.responseText)["message"])
         }
@@ -90,29 +89,25 @@ FullcalendarEngine = {
       $.ajax({
         url: '/' + app_path + '/' + event_id + '/edit',
         success: function(data) {
-          $('#edit_event_description').html(data['form']);
+          $('#event_desc_dialog').html(data['form']);
+          FullcalendarEngine.Form.fetch_staff();
         }
       });
     },
-    // delete: function(event_id, delete_all){
-    //     $.ajax({
-    //     data: 'authenticity_token=' + FullcalendarEngine.Form.authenticity_token() + '&delete_all=' + delete_all,
-    //     dataType: 'script',
-    //     type: 'delete',
-    //     url: '/' + app_path + '/' + event_id,
-    //     success: FullcalendarEngine.Events.refetch_events_and_close_dialog
-    //   });
-    // },
-    cancel: function(event_id, delete_all){
+    delete: function(event_id){
+      remark = $('#event_remark').val();
       $.ajax({
-        url: '/' + app_path + '/' + event_id + '/cancel',
-        success: function(data) {
-          $('#edit_event_description').html(data['form']);
-        }
+        data: 'authenticity_token=' + FullcalendarEngine.Form.authenticity_token() + '&remark=' + remark,
+        dataType: 'script',
+        type: 'delete',
+        url: '/' + app_path + '/' + event_id,
+        success: FullcalendarEngine.Events.refetch_events_and_close_dialog
       });
     },
     set_status_done: function(event_id, delete_all){
+      remark = $('#event_remark').val();
       $.ajax({
+        data: 'remark=' + remark,
         url: '/' + app_path + '/' + event_id + '/set_done',
         success: function(data) {
           $('.dialog:visible').dialog('destroy');
@@ -124,22 +119,39 @@ FullcalendarEngine = {
       $('.dialog:visible').dialog('destroy');
     }, // needs to be refactored 
     showEventDetails: function(event){
-      $('#event_desc_dialog').html('')
+      // debugger
+      $('#event_desc_dialog').html('');
       $event_description  = $('<div />').html(event.description).attr("id", "edit_event_description");
+      $event_customer     = $('<div />').html("Customer Name : " + event.customer).attr("id", "edit_event_customer");
+      $event_date         = $('<div />').html("Date :  " + event.start.toDateString()).attr("id", "edit_event_timings");
+      $event_timings      = $('<div />')
+                              .html("Timings :  " + event.start.getHours() + ":" + event.start.getMinutes() + " To " + event.end.getHours() + ":" + event.end.getMinutes())
+                              .attr("id", "edit_event_timings");
       $event_actions      = $('<div />').attr("id", "event_actions");
-      $edit_event         = $('<span />').attr("id", "edit_event").html("<a href = 'javascript:void(0);' onclick ='FullcalendarEngine.Events.edit(" + event.id + ")'>Edit</a>");
+      $edit_event         = $('<span />').attr("id", "edit_event");
       $delete_event       = $('<span />').attr("id", "delete_event");
       $status_event       = $('<span />').attr("id", "status_event");
+      $remark_field       = $('<input />').attr({id: 'event_remark', type: 'text'});
+      $event_remark_div   = $('<div />').html("Remarks : ").append($remark_field)
       title = event.title;
-      $delete_event.html("<input type='button' onclick ='FullcalendarEngine.Events.cancel(" + event.id + ", " + false + ")' value = 'Cancel'>");
+      $edit_event.html("<input type='button' onclick ='FullcalendarEngine.Events.edit(" + event.id + ")' value = 'Edit'>");
+      $delete_event.html("<input type='button' onclick ='FullcalendarEngine.Events.delete(" + event.id + ", " + false + ")' value = 'Cancel'>");
       $status_event.html("<input type='button' onclick ='FullcalendarEngine.Events.set_status_done(" + event.id + ", " + false + ")' value = 'Done'>");
-      
-      if(app_path.slice(0, app_path.search('/')) == 'customer'){
-        $event_actions.append($edit_event).append(" | ").append($delete_event)
-      }else{
-        $event_actions.append($delete_event).append("  ").append($status_event)
+      $user = app_path.slice(0, app_path.search('/'));
+      if($user == 'admin'){
+        $event_actions.append($edit_event).append("  ").append($status_event).append("  ").append($delete_event)
+      }else if($user == 'staff'){
+        $event_actions.append($status_event)
+      }else {
+        $event_actions.append($delete_event)
       }
-      $('#event_desc_dialog').append($event_description).append($event_actions)
+      $('#event_desc_dialog')
+        .append($event_description)
+        .append($event_customer)
+        .append($event_date)
+        .append($event_timings)
+        .append($event_remark_div)
+        .append($event_actions)
       $('#event_desc_dialog').dialog({
         title: title,
         modal: true,
@@ -150,28 +162,6 @@ FullcalendarEngine = {
         }
       });
     },
-    showPeriodAndFrequency: function(value){
-      switch (value) {
-        case 'Daily':
-          $('#period').html('day');
-          $('#frequency').show();
-          break;
-        case 'Weekly':
-          $('#period').html('week');
-          $('#frequency').show();
-          break;
-        case 'Monthly':
-          $('#period').html('month');
-          $('#frequency').show();
-          break;
-        case 'Yearly':
-          $('#period').html('year');
-          $('#frequency').show();
-          break;
-        default:
-          $('#frequency').hide();
-      }
-    }
   },
   setTime: function(type, time) {
     var $year = $(type + '_1i'), $month = $(type + '_2i'), $day = $(type + '_3i'), $hour = $(type + '_4i'), $minute = $(type + '_5i')

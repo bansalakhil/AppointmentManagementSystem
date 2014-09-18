@@ -43,6 +43,7 @@ class ApplicationController < ActionController::Base
   end
 
   # Why?
+  #ANS - to prevent redirection if u are already on the welcome page
   def welcome_controller?
     # Discuss
     params[:controller] == 'welcome' ? true : false
@@ -54,6 +55,7 @@ class ApplicationController < ActionController::Base
   end
 
   # FIX- Define a method in user model to check if admin
+  # to check if the user is authorized to access the urls
   def validate_access
     namespace = params[:controller].split('/').first
     redirect_to welcome_path unless (current_user.type).downcase == namespace if current_user

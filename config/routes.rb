@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       collection do
         get :get_events
         get :listing
+        get :get_staff
       end
       member do
         get :cancel
@@ -77,8 +78,6 @@ Rails.application.routes.draw do
       end
     end
   end
-
-
 
   get 'welcome', to: 'welcome#index'
   

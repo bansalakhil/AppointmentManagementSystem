@@ -32,7 +32,8 @@ class Staff::AppointmentsController < Staff::BaseController
     events = []
     appointments.each do |event|
       events << { id: event.id,
-                  description: event.description || '', 
+                  description: event.description || '',
+                  customer: event.customer.name, 
                   start: event.starttime.iso8601,
                   end: event.endtime.iso8601,
                   allDay: false,

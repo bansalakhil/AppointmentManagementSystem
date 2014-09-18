@@ -1,25 +1,25 @@
 class Admin::SiteLayoutsController < Admin::BaseController
+  before_action :get_current_layout, only: [:edit, :update]
 
   def edit
-    # FIX- Use SiteLayout.first
-    # FIX- Move to before_action
     # FIX- Handle case when there is no SiteLayout present
-    @site_layout = current_layout
   end
 
   def update
-    # FIX- Use before_action
-    @site_layout = current_layout
 
     if @site_layout.update(site_layout_params)
       flash[:notice] = 'Upload successful'
     else
       flash[:error] = 'Upload failed'
     end
-    redirect_to_path(edit_admin_site_layout_path)
+    redirect_to edit_admin_site_layout_path
   end
 
   private
+
+  def get_current_layout
+    @site_layout = current_layout
+  end
 
   def site_layout_params
     params.require(:site_layout).permit(:logo, :background)

@@ -1,9 +1,7 @@
 class Admin::AppointmentsController < Admin::BaseController
   before_action :get_event, only: [:edit, :update, :destroy, :move, :resize, :cancel, :set_done]
   before_action :get_controller
-  before_action :get_staff_service_customer, only: [:index, :new, :update]
-  before_action :set_remark_status, only: [:destroy]
-
+  before_action :get_staff_service_customer, only: [:index, :new, :update, :edit]
 
   def index
   end
@@ -33,7 +31,8 @@ class Admin::AppointmentsController < Admin::BaseController
     appointments.each do |event|
       events << {
                   id: event.id,
-                  description: event.description || '', 
+                  description: event.description || '',
+                  customer: event.customer.name, 
                   start: event.starttime.iso8601,
                   end: event.endtime.iso8601,
                   allDay: false,
@@ -48,24 +47,12 @@ class Admin::AppointmentsController < Admin::BaseController
   end
 
   def update
-
-    @event = Appointment.new
-    case params[:event][:commit_button]
-    when 'Update All Occurrence'
-      @events = @event.event_series.events
-      @event.update_events(@events, event_params)
-    when 'Update All Following Occurrence'
-      @events = @event.event_series.events.where('starttime > :start_time', 
-                                                 start_time: @event.starttime.to_formatted_s(:db)).to_a
-      @event.update_events(@events, event_params)
-    else
-      @event.attributes = event_params
-      @event.save
-    end
-    render nothing: true
+    @event = @event.update(event_params)
+    render nothing: true #PROBLEM
   end
 
   def destroy
+    @event.update_attributes(remark: params[:remark], status: 3)
     flash[:error] = 'Appointment cannot be cancelled' unless @event.destroy
     render nothing: true
   end
@@ -74,16 +61,21 @@ class Admin::AppointmentsController < Admin::BaseController
     @appointments = Appointment.with_deleted.future
   end
 
-  def set_remark_status
-    @event.remark = params[:appointment][:remark]
-    @event.status = 3
-    flash[:error] = 'Appointment cannot be cancelled' unless @event.save
-  end
-
   def set_done
+    @event.remark = params[:remark]
     @event.status = 4
     @event.save(validate: false)
     render nothing: true
+  end
+
+  def get_staff
+    debugger
+    respond_to do |format|
+      format.js do
+        @staffs = Service.where(id: params[:service_id]).first.try(:staffs)
+        render json: @staffs
+      end
+    end
   end
 
   def move
@@ -111,7 +103,7 @@ class Admin::AppointmentsController < Admin::BaseController
   end
 
   def event_params
-    params.require(:appointment).permit(:staff_id, :service_id, :customer_id, :starttime, :endtime, :status_id, :description )
+    params.require(:appointment).permit(:staff_id, :service_id, :customer_id, :starttime, :endtime, :status_id, :description, :remark )
   end
 
   # FIX- Move it to helper as it is related to view only.

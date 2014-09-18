@@ -2,7 +2,6 @@ class Customer::AppointmentsController < Customer::BaseController
   before_action :get_event, only: [:edit, :update, :destroy, :move, :resize, :cancel]
   before_action :get_controller
   before_action :get_services, only: [:index, :new, :update]
-  before_action :set_remark, only: [:destroy]
 
   def index
   end
@@ -36,7 +35,8 @@ class Customer::AppointmentsController < Customer::BaseController
     events = []
     appointments.each do |event|
       events << { id: event.id,
-                  description: event.description || '', 
+                  description: event.description || '',
+                  customer: event.customer_id, 
                   start: event.starttime.iso8601,
                   end: event.endtime.iso8601,
                   allDay: false,
@@ -60,24 +60,14 @@ class Customer::AppointmentsController < Customer::BaseController
   end
 
   def update
-    # @event.attributes = event_params
     @event.update(event_params)
-    # @event.save
     render nothing: true
   end
 
   def destroy
+    @event.update_attributes(remark: params[:remark], status: 3)
     flash[:error] = 'Appointment cannot be cancelled' unless @event.destroy
     render nothing: true
-  end
-
-  def cancel
-    render json: { form: render_to_string(partial: 'cancel_form') } 
-  end
-
-  def set_remark
-    @event.remark = params[:appointment][:remark]
-    @event.save
   end
 
   def appointment_history
@@ -98,10 +88,6 @@ class Customer::AppointmentsController < Customer::BaseController
     @event.endtime = make_time_from_minute_and_day_delta(@event.endtime)
     flash[:error] = 'This service could not be resized' unless@event.save
     render nothing: true
-  end
-
-  def cancel
-    render json: { form: render_to_string(partial: 'cancel_form') }
   end
 
   def cancel_list
