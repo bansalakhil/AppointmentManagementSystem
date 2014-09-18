@@ -65,9 +65,14 @@ class Customer::AppointmentsController < Customer::BaseController
   end
 
   def destroy
-    @event.update_attributes(remark: params[:remark], status: 3)
+    @event.update_attributes(remark: params[:appointment][:remark], status: 3)
+    debugger
     flash[:error] = 'Appointment cannot be cancelled' unless @event.destroy
-    render nothing: true
+    respond_to do |format|
+      format.js { render nothing: true }
+      format.html { redirect_to action: 'index' }
+    end
+
   end
 
   def appointment_history
