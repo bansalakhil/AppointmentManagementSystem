@@ -52,7 +52,6 @@ class Appointment < ActiveRecord::Base
     starts_at = starttime
     ends_at = endtime
     appointments = self.class.where('service_id = ? and staff_id = ?',service_id, staff_id).in_between(start_date, end_date).where.not(id: id)
-    debugger
     overlapping = appointments.any? { |apt| apt.overlapping_with?(starts_at, ends_at) }
     errors[:base] = 'Appointment coinsides with an existing appointment' if overlapping
   end

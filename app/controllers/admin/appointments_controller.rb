@@ -69,7 +69,6 @@ class Admin::AppointmentsController < Admin::BaseController
   end
 
   def get_staff
-    debugger
     respond_to do |format|
       format.js do
         @staffs = Service.where(id: params[:service_id]).first.try(:staffs)

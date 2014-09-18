@@ -1,5 +1,5 @@
 class Customer::AppointmentsController < Customer::BaseController
-  before_action :get_event, only: [:edit, :update, :destroy, :move, :resize, :cancel]
+  before_action :get_event, only: [:edit, :update, :destroy, :move, :resize, :cancel_list]
   before_action :get_controller
   before_action :get_services, only: [:index, :new, :update]
 
@@ -91,6 +91,7 @@ class Customer::AppointmentsController < Customer::BaseController
   end
 
   def cancel_list
+    # redirect_to 'index'
   end
 
   private
