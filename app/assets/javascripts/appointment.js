@@ -1,10 +1,5 @@
 $(document).ready(function(){
-  custom_calendar();
-});
-
-custom_calendar = function() {
-  controller = app_path.slice(0, app_path.search('/'))
-  $('#calendar').fullCalendar({
+  FULLCALENDAR_OPTIONS = {
     editable    : true,
     header      : {
       left: 'prev,next today',
@@ -52,7 +47,60 @@ custom_calendar = function() {
                       $('#loading').hide();
                   }
 
+  };
+
+  custom_calendar(FULLCALENDAR_OPTIONS);
+
+  $('#appointment_select_staff_id, #appointment_select_service_id').on('change', function(){
+    var staff_id = $('#appointment_select_staff_id').val();
+    var service_id = $('#appointment_select_service_id').val();
+    if(staff_id == ''){
+      alert('Select a staff for this service [MANDATORY]');
+      $.ajax({
+        type: 'get',
+        data: "&service_id=" + service_id,
+        async: true,
+        dataType: 'json',
+        url: '/' + app_path + '/get_staff',
+        success: function(staffs, status, xhr) {
+
+          var selectbox = $('#appointment_select_staff_id');
+          selectbox.empty();
+          if(staffs) {
+            option = $("<option />").attr({value: ''}).text('Staff');
+            selectbox.append(option);
+            $.each (staffs, function(index, staff) {
+              option = $("<option />").attr({value: staff.id}).text(staff.name);
+              selectbox.append(option);
+            })
+          }
+        },
+        error: function() {}
+      });
+    }else if(staff_id != '' && service_id != ''){
+      // custom_calendar = function() {
+        $('#calendar').html('');
+        FULLCALENDAR_OPTIONS.events = '/' + app_path + '/get_events?&staff_id=' + staff_id + "&service_id=" + service_id ;
+        custom_calendar(FULLCALENDAR_OPTIONS);
+      // }
+      // $.ajax({
+      //   type: 'get',
+      //   data: '&staff_id=' + staff_id + "&service_id=" + service_id,
+      //   async: true,
+      //   dataType: 'json',
+      //   url: '/' + app_path + '/get_events',
+      //   success: function(appointments, status, xhr) {
+      //     events :appointments
+      //   },
+      //   error: function() {}
+      // });
+    }
   });
+});
+
+custom_calendar = function(FULLCALENDAR_OPTIONS) {
+  controller = app_path.slice(0, app_path.search('/'))
+  $('#calendar').fullCalendar(FULLCALENDAR_OPTIONS);
 
   $('#new_event').click(function(event) {
     event.preventDefault();

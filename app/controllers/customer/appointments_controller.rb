@@ -30,8 +30,13 @@ class Customer::AppointmentsController < Customer::BaseController
 
     start_time = Time.at(params[:start].to_i).to_formatted_s(:db)
     end_time   = Time.at(params[:end].to_i).to_formatted_s(:db)
-
-    appointments = Appointment.for_customer(current_user.id).by_timerange(start_time, end_time)
+    if params[:staff_id] && params[:service_id]
+      appointments = Appointment.for_customer(current_user.id)
+                      .where('staff_id = ? and service_id = ?', params[:staff_id], params[:service_id])
+                      .by_timerange(start_time, end_time)
+    else
+      appointments = Appointment.for_customer(current_user.id).by_timerange(start_time, end_time)
+    end
     events = []
     appointments.each do |event|
       events << { id: event.id,

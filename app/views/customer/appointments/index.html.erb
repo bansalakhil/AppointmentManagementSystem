@@ -5,7 +5,9 @@
 <%= stylesheet_link_tag :fullcalendar, :jquery_ui, :style %>
 <%= javascript_include_tag :fullcalendar, :events, :appointment %>
 
-<%= link_to 'Home' , welcome_path %>
+<%= label_tag(:populate_calendar, 'Select the staff and service for yourself:  ') %>
+<%= collection_select(:appointment_select, :service_id, Service.all, :id, :name, { prompt: 'Service' }) %>
+<%= collection_select(:appointment_select, :staff_id, [], :id, :name, { prompt: 'Staff' }) %>
 
 <p>
   <%= link_to 'Create Event', 'javascript:void()', id: 'new_event' %>
