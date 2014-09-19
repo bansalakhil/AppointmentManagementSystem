@@ -17,7 +17,7 @@
     <div id="main">
       <!--<div id="main" > -->
         <% if user_signed_in? %>
-          Logged in as <strong><%= current_user.email %></strong>.
+          Logged in as <strong><%= current_user.name %> < <%= current_user.email %> ></strong>.
           <%= link_to 'Sign Out', destroy_user_session_path, :method => 'delete' %>
         <% end %>
         <h1>Welcome</h1>
