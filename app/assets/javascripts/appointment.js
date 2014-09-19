@@ -13,7 +13,7 @@ $(document).ready(function(){
     selectable  : true,
     timeFormat  : "h:mm t{ - h:mm t}",
     handleWindowResize: true,
-    events      : '/' + app_path + '/get_events',
+    events      : '/' + window.app_path + '/get_events',
     editable    : true,
     disableDragging: false,
     disableResizing: false,

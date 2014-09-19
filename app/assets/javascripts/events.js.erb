@@ -22,7 +22,6 @@ FullcalendarEngine = {
         width: 500,
         close: function(event, ui) {
           $('#create_event_dialog').dialog('destroy')
-          $('#calendar').fullCalendar('refetchEvents');
         }
       });
     },
@@ -120,7 +119,7 @@ FullcalendarEngine = {
       });
     },
     refetch_events_and_close_dialog: function() {
-      $('.calendar').fullCalendar('refetchEvents');
+      $('#calendar').fullCalendar('refetchEvents');
       $('.dialog:visible').dialog('destroy');
     }, // needs to be refactored 
     showEventDetails: function(event){
