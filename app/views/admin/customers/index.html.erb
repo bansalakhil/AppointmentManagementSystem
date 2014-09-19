@@ -48,6 +48,30 @@
           <%= link_to 'Disable', admin_customer_path(customer), method: :delete, data: { confirm: 'Are you sure?' } %>
         </td>
       <% end %>
+  <% end %>
+
+  <% @invited_customers.each do |customer| %>
+
+    <tr class="invitees">
+      <td class="list_description">
+        <%= customer.name %>
+      </td>
+
+      <td class="list_description">
+        <%= customer.email %>
+      </td>
+
+      <td class="list_description">
+        <%= customer.phone_number %>
+      </td>
+
+      <td class="list_description">
+        NA
+      </td>
+
+      <td class="list_actions" colspan = 2 >
+        NA
+      </td>
 
     </tr>
   <% end %>

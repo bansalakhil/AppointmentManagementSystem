@@ -56,6 +56,7 @@ class Admin::CustomersController < Admin::BaseController
 
   def get_all_customers
     @customers = Customer.with_deleted.paginate :page => params[:page], :per_page => 10
+    @invited_customers = Invitation.all.paginate :page => params[:page], :per_page => 10
   end
 
 end

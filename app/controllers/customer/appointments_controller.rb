@@ -131,7 +131,7 @@ class Customer::AppointmentsController < Customer::BaseController
   def get_services
     # @services = Service.all
     @services = [['Select', '']]
-    Availability.all.each {|av| @services << [av.service.name, av.service_id]}
+    Availability.all.uniq(:service_id).each {|av| @services << [av.service.name, av.service_id]}
     @services
   end
 
