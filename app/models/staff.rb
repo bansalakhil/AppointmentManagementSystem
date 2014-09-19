@@ -13,11 +13,16 @@ class Staff < User
 
   #Callbacks..........................................................
   after_update :remove_availability, if: Proc.new { |staff| !staff.deleted_at? && staff.deleted_at_changed? }
+  before_create :generate_password
 
   private
 
   def remove_availability
     availabilities.where('start_time > ?', Time.now).destroy_all
+  end
+
+  def generate_password
+    self.password = SecureRandom.urlsafe_base64(20)
   end
 
 end

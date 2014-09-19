@@ -21,8 +21,6 @@ class Admin::StaffsController < Admin::BaseController
 
     respond_to do |format|
       if @staff.save
-        # FIX- Move to after_save callback in model
-        # @staff.invite!
         flash[:notice] = 'Staff sucessfully created'
         format.js { render action: 'refresh' }
       else
@@ -36,10 +34,8 @@ class Admin::StaffsController < Admin::BaseController
 
   def update
     respond_to do |format|
-      # FIX- Why not using #update here? Be consistent.
-      if @staff.update_attributes(staff_params)
-        # FIX- Use flash.now
-        flash[:notice] = 'Staff sucessfully updated'
+      if @staff.update(staff_params)
+        flash.now[:notice] = 'Staff sucessfully updated'
         format.js { render action: 'refresh' }
       else
         flash.now[:error] = 'Staff could not be updated'
@@ -58,12 +54,12 @@ class Admin::StaffsController < Admin::BaseController
     else
       flash[:error] = 'Staff could not be deleted'
     end
-    redirect_to_path(admin_staffs_path)
+    redirect_to admin_staffs_path
   end
 
   def enable
     @staff.restore
-    redirect_to_path(admin_staffs_path)
+    redirect_to admin_staffs_path
   end
 
   private

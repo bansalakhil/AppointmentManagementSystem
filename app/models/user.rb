@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   #Callbacks.............................................................
   before_create :set_user_type
   after_create :delete_invitation
+  # after_create :generate_password
 
   #Query Interface.......................................................
 
@@ -23,6 +24,10 @@ class User < ActiveRecord::Base
                               uniqueness: true, allow_blank: true
 
   protected
+
+  def send_confirmation_notification?
+    true
+  end
   
   def confirmation_required?
     false

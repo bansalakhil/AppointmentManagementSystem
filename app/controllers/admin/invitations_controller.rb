@@ -13,8 +13,10 @@ class Admin::InvitationsController < Admin::BaseController
     @invitation = Invitation.new(invitation_params)
     respond_to do |format|
       if @invitation.save
+        flash[:notice] = 'Invitation is sent successfully'
         format.js { render :action => "create" }
       else
+        flash[:notice] = 'Invitation could not be sent'
         format.js { render :action => "new" }
       end
     end
