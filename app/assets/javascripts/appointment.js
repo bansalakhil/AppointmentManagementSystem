@@ -78,22 +78,9 @@ $(document).ready(function(){
         error: function() {}
       });
     }else if(staff_id != '' && service_id != ''){
-      // custom_calendar = function() {
-        $('#calendar').html('');
-        FULLCALENDAR_OPTIONS.events = '/' + app_path + '/get_events?&staff_id=' + staff_id + "&service_id=" + service_id ;
-        custom_calendar(FULLCALENDAR_OPTIONS);
-      // }
-      // $.ajax({
-      //   type: 'get',
-      //   data: '&staff_id=' + staff_id + "&service_id=" + service_id,
-      //   async: true,
-      //   dataType: 'json',
-      //   url: '/' + app_path + '/get_events',
-      //   success: function(appointments, status, xhr) {
-      //     events :appointments
-      //   },
-      //   error: function() {}
-      // });
+      $('#calendar').html('');
+      FULLCALENDAR_OPTIONS.events = '/' + app_path + '/get_events?&staff_id=' + staff_id + "&service_id=" + service_id ;
+      custom_calendar(FULLCALENDAR_OPTIONS);
     }
   });
 });

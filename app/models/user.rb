@@ -9,7 +9,10 @@ class User < ActiveRecord::Base
          :confirmable, :recoverable
 
   #Associations..........................................................
-  # has_many :appointments
+
+  #Callbacks.............................................................
+  before_create :set_user_type
+  after_create :delete_invitation
 
   #Query Interface.......................................................
 
@@ -23,6 +26,14 @@ class User < ActiveRecord::Base
   
   def confirmation_required?
     false
+  end
+
+  def set_user_type
+    self.type = Invitation.where(email: email).first.invitee_type if Invitation.where(email: email).first
+  end
+
+  def delete_invitation
+    Invitation.where(email: email).first.destroy if Invitation.where(email: email).first
   end
 
 end

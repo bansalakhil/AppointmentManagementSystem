@@ -47,34 +47,9 @@ class Staff::AppointmentsController < Staff::BaseController
     render json: { form: render_to_string(partial: 'edit_form') } 
   end
 
-  def update
-    @event = Appointment.new
-    case params[:event][:commit_button]
-    when 'Update All Occurrence'
-      @events = @event.event_series.events
-      @event.update_events(@events, event_params)
-    when 'Update All Following Occurrence'
-      @events = @event.event_series.events.where('starttime > :start_time', 
-                                                 start_time: @event.starttime.to_formatted_s(:db)).to_a
-      @event.update_events(@events, event_params)
-    else
-      @event.attributes = event_params
-      @event.save
-    end
-    render nothing: true
-  end
-
   def destroy
-    case params[:delete_all]
-    when 'true'
-      @event.event_series.destroy
-    when 'future'
-      @events = @event.event_series.events.where('starttime > :start_time',
-                                                 start_time: @event.starttime.to_formatted_s(:db)).to_a
-      @event.event_series.events.delete(@events)
-    else
-      @event.destroy
-    end
+    @event.update_attributes(remark: params[:remark], status: 3)
+    flash[:error] = 'Appointment cannot be cancelled' unless @event.destroy
     render nothing: true
   end
 

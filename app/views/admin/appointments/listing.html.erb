@@ -11,6 +11,7 @@
     <th>Staff</th>
     <th>Service</th>
     <th>Description</th>
+    <th>Date</th>
     <th>Start Time</th>
     <th>End Time</th>
     <th>Status</th>
@@ -33,10 +34,13 @@
         <%= appointment.description %>
       </td>
       <td class="list_description">
-        <%= appointment.starttime.strftime("%I:%M %p") %> - <%= appointment.starttime.strftime("%d %B %Y") %>
+        <%= appointment.starttime.strftime("%d %B %Y") %>
       </td>
       <td class="list_description">
-        <%= appointment.endtime.strftime("%I:%M %p") %> - <%= appointment.endtime.strftime("%d %B %Y") %>
+        <%= appointment.starttime.strftime("%I:%M %p") %>
+      </td>
+      <td class="list_description">
+        <%= appointment.endtime.strftime("%I:%M %p") %>
       </td>
       <td class="list_description">
         <%= Appointment::STATUSES[appointment.status.to_s] %>

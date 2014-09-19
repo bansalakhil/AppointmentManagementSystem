@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Hello, <%= @appointment.customer.name %> </h1>
+    <p>
+      We are sorry that your appointment scheduled for <%= @appointment.starttime.strftime('%d/%m/%y %A') %> with <%= @appointment.staff.name %> has been cancelled because of 
+      the reason below:
+
+      <%= @appointment.remark %>
+
+    </p>
+    <p>
+      We hope to see you soon.
+    </p>
+    <p>Happy to help!!!</p>
+  </body>
+</html>

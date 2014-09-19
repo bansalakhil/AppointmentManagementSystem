@@ -3,7 +3,15 @@
 
 <div class="field">
   <%= f.label :service_id, 'Services :' %><br />
-  <%= f.collection_select(:service_id, @services || [], :id, :name, {:prompt => 'Select'}) %>
+  <!--<#%= f.collection_select(:service_id, @services || [], :id, :name, {:prompt => 'Select'}) %>-->
+  <%#= f.options_for_select(:service_id, @services, {:prompt => 'Select'}) %>
+  <%#= f.select(:appointment, :service_id, @services) %>
+  <%= f.select(:service_id) do %>
+    <% @services.each do |serv| -%>
+      <%= content_tag(:option, serv.first, value: serv.last) %>
+    <% end %>
+  <% end %>
+
 </div>
 
 <div class="field">

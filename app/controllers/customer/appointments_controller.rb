@@ -14,11 +14,10 @@ class Customer::AppointmentsController < Customer::BaseController
   end
 
   def create
-
     @event = Appointment.new(event_params)
     @event.customer_id = current_user.id
+    @event.staff_id = Service.where(id: @event.service_id).first.try(:staffs).sample.id
     @event.title = @event.staff.name + '--' + @event.service.name
-
     if @event.save
       render nothing: true, status: :created
     else
@@ -30,6 +29,7 @@ class Customer::AppointmentsController < Customer::BaseController
 
     start_time = Time.at(params[:start].to_i).to_formatted_s(:db)
     end_time   = Time.at(params[:end].to_i).to_formatted_s(:db)
+
     if params[:staff_id] && params[:service_id]
       appointments = Appointment.for_customer(current_user.id)
                       .where('staff_id = ? and service_id = ?', params[:staff_id], params[:service_id])
@@ -37,11 +37,12 @@ class Customer::AppointmentsController < Customer::BaseController
     else
       appointments = Appointment.for_customer(current_user.id).by_timerange(start_time, end_time)
     end
+
     events = []
     appointments.each do |event|
       events << { id: event.id,
                   description: event.description || '',
-                  customer: event.customer_id, 
+                  customer: event.customer.name, 
                   start: event.starttime.iso8601,
                   end: event.endtime.iso8601,
                   allDay: false,
@@ -70,11 +71,17 @@ class Customer::AppointmentsController < Customer::BaseController
   end
 
   def destroy
-    @event.update_attributes(remark: params[:appointment][:remark], status: 3)
-    flash[:error] = 'Appointment cannot be cancelled' unless @event.destroy
     respond_to do |format|
-      format.js { render nothing: true }
-      format.html { redirect_to appointment_history_customer_appointments_path }
+      format.js do
+        @event.update_columns(remark: params[:remark], status: 3)
+        flash[:error] = 'Appointment cannot be cancelled' unless @event.destroy
+        render nothing: true
+      end
+      format.html do
+        @event.update_columns(remark: params[:appointment][:remark], status: 3)
+        flash[:error] = 'Appointment cannot be cancelled' unless @event.destroy
+        redirect_to appointment_history_customer_appointments_path
+      end
     end
 
   end
@@ -100,7 +107,6 @@ class Customer::AppointmentsController < Customer::BaseController
   end
 
   def cancel_list
-    # redirect_to 'index'
   end
 
   private
@@ -123,7 +129,10 @@ class Customer::AppointmentsController < Customer::BaseController
   end
 
   def get_services
-    @services = Service.all
+    # @services = Service.all
+    @services = [['Select', '']]
+    Availability.all.each {|av| @services << [av.service.name, av.service_id]}
+    @services
   end
 
   def make_time_from_minute_and_day_delta(event_time)

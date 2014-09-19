@@ -9,7 +9,7 @@ class Staff < User
   default_scope { order(:name) }
 
   #Validations........................................................
-  validates_presence_of :services
+  # validates_presence_of :services
 
   #Callbacks..........................................................
   after_update :remove_availability, if: Proc.new { |staff| !staff.deleted_at? && staff.deleted_at_changed? }

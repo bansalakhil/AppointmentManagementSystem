@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Hello, <%= @appointment.customer.name %> </h1>
+    <p>
+      Your appointment for <%= @appointment.service.name %> service has
+      been successfully booked for <%= @appointment.starttime.strftime('%d/%m/%y %A') %>
+      Serving Staff: <%= @appointment.staff.name %>
+      From : <%= @appointment.starttime.strftime('%I:%M %p') %>
+      To   : <%= @appointment.endtime.strftime('%I:%M %p') %>
+    </p>
+    <p>
+      You can also cancel the appointment from the calendar 
+      or from the list of appointments provided in your account.
+    </p>
+    <p>Have a great Day!</p>
+  </body>
+</html>

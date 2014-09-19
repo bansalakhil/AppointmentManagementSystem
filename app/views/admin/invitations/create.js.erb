@@ -1,1 +1,5 @@
-window.location.href = '/admin/customers'
+<% if @invitation.invitee_type == 'Customer' %>
+  window.location.href = '/admin/customers'
+<% else %>
+  window.location.href = '/admin/staffs'
+<% end %>

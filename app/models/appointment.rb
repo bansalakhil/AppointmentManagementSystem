@@ -36,6 +36,8 @@ class Appointment < ActiveRecord::Base
 
   #Callbacks..........................................................................
   before_save :set_pending
+  after_save :send_booking_mail
+  after_destroy :send_cancellation_mail
 
   def overlapping_with?(starts_at, ends_at)
 
@@ -75,6 +77,14 @@ class Appointment < ActiveRecord::Base
 
   def check_service_slot_time
     errors[:base] = "This appointment can be booked for minimum #{ service.slot_window } mins"  unless service.slot_window <= (endtime - starttime)/60 
+  end
+
+  def send_booking_mail
+    BookingConfirmationMailer.booking_email(self).deliver
+  end
+
+  def send_cancellation_mail
+    AppointmentCancellationMailer.cancellation_email(self).deliver
   end
 
 end

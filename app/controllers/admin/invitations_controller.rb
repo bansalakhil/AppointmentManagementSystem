@@ -1,18 +1,18 @@
 class Admin::InvitationsController < Admin::BaseController
   skip_before_action :authorize, only: [:accept]
-  PERMITTED_ATTRS = [:name, :email, :phone_number]
+  PERMITTED_ATTRS = [:name, :email, :phone_number, :invitee_type]
 
   def new
-    @invitation = Invitation.new
+    @invitation = Invitation.new(invitee_type: params[:invitee_type])
     respond_to do |format|
       format.js { render :action => "new" }
     end
   end
+
   def create
     @invitation = Invitation.new(invitation_params)
     respond_to do |format|
       if @invitation.save
-        # @customer.invite!
         format.js { render :action => "create" }
       else
         format.js { render :action => "new" }

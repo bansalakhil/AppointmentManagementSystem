@@ -20,7 +20,10 @@ FullcalendarEngine = {
         title: 'New Event',
         modal: true,
         width: 500,
-        close: function(event, ui) { $('#create_event_dialog').dialog('destroy') }
+        close: function(event, ui) {
+          $('#create_event_dialog').dialog('destroy')
+          $('#calendar').fullCalendar('refetchEvents');
+        }
       });
     },
     fetch_staff: function(){
@@ -37,6 +40,8 @@ FullcalendarEngine = {
             var selectbox = $('#appointment_staff_id');
             selectbox.empty();
             if(staffs) {
+              option = $("<option />").attr({value: ''}).text('Staff');
+              selectbox.append(option);
               $.each (staffs, function(index, staff) {
                 option = $("<option />").attr({value: staff.id}).text(staff.name)
                 selectbox.append(option);
@@ -119,7 +124,6 @@ FullcalendarEngine = {
       $('.dialog:visible').dialog('destroy');
     }, // needs to be refactored 
     showEventDetails: function(event){
-      // debugger
       $('#event_desc_dialog').html('');
       $event_description  = $('<div />').html(event.description).attr("id", "edit_event_description");
       $event_customer     = $('<div />').html("Customer Name : " + event.customer).attr("id", "edit_event_customer");
