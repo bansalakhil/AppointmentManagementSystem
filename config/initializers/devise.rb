@@ -4,7 +4,7 @@ Devise.setup do |config|
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
-  # config.secret_key = 'b129f7a8f1dd29af3a28f1620ece22280247032efd398c44349c3d86b0bee46e82a251c02925994846fadf62ac78583e6c58d8cd19efe37fa52dedbd3f7ad495'
+  # config.secret_key = 'd439a3a4ee385e2e41898043c27979acf8c112e70fae35d7669e03db82f6bc5d9272954bf550af86c626feb8a35a736c356c88cfca2d2123d3d43c1220f6c3f6'
 
   # ==> Mailer Configuration
   # Configure the e-mail address which will be shown in Devise::Mailer,
@@ -16,7 +16,7 @@ Devise.setup do |config|
   # config.mailer = 'Devise::Mailer'
 
   # ==> ORM configuration
-  # Load and configure the ORM. Supp orts :active_record (default) and
+  # Load and configure the ORM. Supports :active_record (default) and
   # :mongoid (bson_ext recommended) by default. Other ORMs may be
   # available as additional gems.
   require 'devise/orm/active_record'
@@ -97,46 +97,7 @@ Devise.setup do |config|
   config.stretches = Rails.env.test? ? 1 : 10
 
   # Setup a pepper to generate the encrypted password.
-  # config.pepper = 'c9f45af60efe593b4cdafab86297e5fb80be3454dcb1a3a2083ff79ccf31049dd22f46d3ec6af8b83bf24a02252f23a2f44e605959f228777242e45aacf49725'
-
-  # ==> Configuration for :invitable
-  # The period the generated invitation token is valid, after
-  # this period, the invited resource won't be able to accept the invitation.
-  # When invite_for is 0 (the default), the invitation won't expire.
-  # config.invite_for = 2.weeks
-
-  # Number of invitations users can send.
-  # - If invitation_limit is nil, there is no limit for invitations, users can
-  # send unlimited invitations, invitation_limit column is not used.
-  # - If invitation_limit is 0, users can't send invitations by default.
-  # - If invitation_limit n > 0, users can send n invitations.
-  # You can change invitation_limit column for some users so they can send more
-  # or less invitations, even with global invitation_limit = 0
-  # Default: nil
-  # config.invitation_limit = 5
-
-  # The key to be used to check existing users when sending an invitation
-  # and the regexp used to test it when validate_on_invite is not set.
-  # config.invite_key = {:email => /\A[^@]+@[^@]+\z/}
-  # config.invite_key = {:email => /\A[^@]+@[^@]+\z/, :username => nil}
-
-  # Flag that force a record to be valid before being actually invited
-  # Default: false
-  # config.validate_on_invite = true
-
-  # Resend invitation if user with invited status is invited again
-  # Default: true
-  # config.resend_invitation = false
-
-  # The class name of the inviting model. If this is nil,
-  # the #invited_by association is declared to be polymorphic.
-  # Default: nil
-  # config.invited_by_class_name = 'User'
-
-  # The column name used for counter_cache column. If this is nil,
-  # the #invited_by association is declared without counter_cache.
-  # Default: nil
-  # config.invited_by_counter_cache = :invitations_count
+  # config.pepper = 'bf59609358a5b7f9ae9663b71d4e9a4ee76f91d99ab9bfa59cd898fd1e4a706b20e017a82d1db78ef8dd81dd2f8c498b1523cc0ed0af463dd4d3940818ccd8a5'
 
   # ==> Configuration for :confirmable
   # A period that the user is allowed to access the website even without
@@ -295,8 +256,4 @@ Devise.setup do |config|
   # When using omniauth, Devise cannot automatically set Omniauth path,
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
-
-  #secret key
-  config.secret_key = '26afd8a5cfec93f83e336cad84014b03525031adb670184544937c5ee898d9f8a9c37ab8aa6246e3ebd36b2cff2e0bbe59c6d603576284df8d84f258c5156114'
-  
 end
