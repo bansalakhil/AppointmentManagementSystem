@@ -9,18 +9,18 @@ class Appointment < ActiveRecord::Base
   belongs_to :service
 
   #Validations................................................................
-  validates :service_id, :staff_id, :customer_id,:description, presence: :true
-  validate :staff_available, on: [:create, :update]
-  validate :time_slot_available, on: [:create, :update]
-  validate :past_time?, on: [:create, :update]
-  validate :check_service_slot_time, on: [:create, :update]
+  validates :service_id, :customer_id, presence: :true
+  validate :time_slot_available, on: [:create, :update], allow_blank: true
+  validate :staff_available, on: [:create, :update], allow_blank: true
+  validate :past_time?, on: [:create, :update], allow_blank: true
+  validate :check_service_slot_time, on: [:create, :update], allow_blank: true
 
   #Scopes.....................................................................
   default_scope { order('starttime desc')}
-  scope :future, -> { where('starttime > :current_time', current_time: Time.now) }
-  scope :for_customer, ->(customer_id) { where('customer_id = :customer', customer: customer_id) }
-  scope :for_staff, ->(staff_id) { where('staff_id = :staff', staff: staff_id) }
-  scope :past, -> { where('endtime < :current_time', current_time: Time.now) }
+  scope :future, -> { where('starttime > ?', Time.now) }
+  scope :for_customer, ->(customer_id) { where('customer_id = ?', customer_id) }
+  scope :for_staff, ->(staff_id) { where('staff_id = ?', staff_id) }
+  scope :past, -> { where('endtime < ?', Time.now) }
   scope :pending, -> { where('status = 1')}
   scope :in_process, -> { where('status = 2')}
   scope :cancelled, -> { where('status = 3')}
@@ -36,6 +36,8 @@ class Appointment < ActiveRecord::Base
 
   #Callbacks..........................................................................
   before_save :set_pending
+  before_save :get_available_staff
+  before_save :set_appointment_title
   after_save :send_booking_mail
   after_destroy :send_cancellation_mail
 
@@ -59,16 +61,17 @@ class Appointment < ActiveRecord::Base
   end
 
   def staff_available
-    availability = staff.availabilities.where(service_id: service_id)
-          .where('start_date <= :app_start and end_date >= :app_end', app_start: starttime.to_date, app_end: endtime.to_date )
-          .where('start_time <= :app_start and end_time >= :app_end', app_start: starttime.strftime('%H:%M'), app_end: endtime.strftime('%H:%M') )
-          .first
-    errors[:base] = "#{ staff.name } is not available" unless availability
-
+    if staff
+      availability = staff.availabilities.where(service_id: service_id)
+            .where('start_date <= :app_start and end_date >= :app_end', app_start: starttime.to_date, app_end: endtime.to_date )
+            .where('start_time <= :app_start and end_time >= :app_end', app_start: starttime.strftime('%H:%M'), app_end: endtime.strftime('%H:%M') )
+            .first
+      errors[:base] = "#{ staff.name } is not available" unless availability
+    end
   end
 
   def set_pending
-    status = 1
+    self.status = 1
   end
 
   def past_time?
@@ -76,7 +79,9 @@ class Appointment < ActiveRecord::Base
   end
 
   def check_service_slot_time
-    errors[:base] = "This appointment can be booked for minimum #{ service.slot_window } mins"  unless service.slot_window <= (endtime - starttime)/60 
+    if service
+      errors[:base] = "This appointment can be booked for minimum #{ service.slot_window } mins"  unless service.slot_window <= (endtime - starttime)/60
+    end
   end
 
   def send_booking_mail
@@ -85,6 +90,32 @@ class Appointment < ActiveRecord::Base
 
   def send_cancellation_mail
     AppointmentCancellationMailer.cancellation_email(self).deliver
+  end
+
+  def get_available_staff
+    if staff_id.nil?
+      app_start_time = "#{starttime.hour}:#{starttime.min}"
+      app_end_time = "#{endtime.hour}:#{endtime.min}"
+      availabilities = Availability.where('(start_date <= :app_start_date) and (end_date >= :app_end_date) and
+                        (start_time <= :app_start_time) and (end_time >= :app_end_time) and
+                        (service_id = :service)',
+                        app_start_date: starttime.to_date, app_end_date: endtime.to_date,
+                        app_start_time: app_start_time, app_end_time: app_end_time,
+                        service: service_id)
+      available_staff = []
+      availabilities.each {|avail| available_staff << avail.staff_id }
+      #choose a staff randomly
+      if available_staff.first
+        self.staff_id = available_staff.sample
+      else
+        errors[:base] = 'No staff for this service in this time period'
+        return false
+      end
+    end
+  end
+
+  def set_appointment_title
+    self.title = staff.name + '--' + service.name
   end
 
 end

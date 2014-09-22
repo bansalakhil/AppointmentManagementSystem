@@ -1,7 +1,7 @@
 class Admin::ServicesController < Admin::BaseController
 
   PERMITTED_ATTRS = [:name, :slot_window]
-  before_action :get_service, only: [ :update, :destroy, :enable ]
+  before_action :get_service, only: [:destroy, :enable]
   before_action :get_all_services, only: [:index]
 
   def index
@@ -26,26 +26,27 @@ class Admin::ServicesController < Admin::BaseController
 
   def destroy
 
-    if @service.destroy
-      flash[:notice] = 'Service sucessfully deleted'
-    else
-      flash[:error] = 'Service could not be deleted'
-    end
-    redirect_to admin_services_path
-  end
-
-  def update
-    respond_to do |format|
-      if @service.update(service_params)
-        format.js { render action: 'refresh' }
+    #if service has any appointment then just disable otherwise really_destroy!
+    if @service.appointments.first
+      if @service.destroy
+        flash[:notice] = 'Service sucessfully disabled. You can now remove its corresponding appointments'
       else
-        format.js { render action: 'edit' }
+        flash[:error] = 'Service could not be disabled. you have appointments for this service'
+      end
+    else
+      if @service.really_destroy!
+        flash[:notice] = 'Service sucessfully permanently deleted'
+      else
+        flash[:error] = 'Service could not be deleted'
       end
     end
+
+    redirect_to admin_services_path
   end
 
   def enable
     @service.restore
+    flash[:notice] = 'Service is successfully enabled. New appointments for this service can now be created'
     redirect_to admin_services_path
   end
 
@@ -66,7 +67,7 @@ class Admin::ServicesController < Admin::BaseController
   end
 
   def get_all_services
-    @services = Service.with_deleted.order(deleted_at: :desc).paginate page: params[:page], per_page: 10
+    @services = Service.with_deleted.paginate page: params[:page], per_page: 10
   end
 
 end

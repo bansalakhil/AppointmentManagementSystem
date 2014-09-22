@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Welcome to Appointment Management System, <%= @staff.name %></h1>
+    <h4>...............We welcome you to our team................</h4>
+    <pre>
+      Hello  <%= @staff.name %> ,
+      You are now added to our team at Vinsol AMS.
+      Your credentials to login to our system are as under:
+      Email:  <%= @staff.email %>
+      Password: <%= @staff.password %>
+      Please click the link below to login to your account at AMS
+      <%= link_to 'Login to AMS', new_user_session_url %>
+    </pre>
+    <p>Thanks for joining and have a great day!</p>
+  </body>
+</html>

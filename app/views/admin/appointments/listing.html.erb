@@ -25,10 +25,10 @@
         <%= appointment.customer.name %>
       </td>
       <td class="list_description">
-        <%= appointment.staff.name %>
+        <%= appointment.staff.try(:name) %>
       </td>
       <td class="list_description">
-        <%= appointment.service.name %>
+        <%= appointment.service.try(:name) %>
       </td>
       <td class="list_description">
         <%= appointment.description %>
@@ -55,4 +55,9 @@
     </tr>
   <% end %>
 </table>
+
+
+<br/>
+<%= will_paginate @availabilities %>
+<br />
       

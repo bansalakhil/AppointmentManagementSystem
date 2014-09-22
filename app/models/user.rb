@@ -26,7 +26,7 @@ class User < ActiveRecord::Base
   protected
 
   def send_confirmation_notification?
-    if Invitation.where(email: email).first
+    if Invitation.where(email: email).first || User.where(email: email).first.type == 'Staff'
       self.skip_confirmation!
       return false
     end

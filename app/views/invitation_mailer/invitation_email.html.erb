@@ -5,12 +5,12 @@
   </head>
   <body>
     <h1>Welcome to Appointment Management System, <%= @invitation.name %></h1>
-    <p>
+    <pre>
       Hello  <%= @invitation.name %>
       You have been invited to Vinsol AMS.
       Please click the link below to accept the invitation 
       <%= link_to 'Accept Invitation', accept_admin_invitations_url(token: URI.escape(@invitation.invitation_token)) %>
-    </p>
+    </pre>
     <p>
       To login to the site, just follow this link: <%= @url %>.
     </p>

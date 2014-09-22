@@ -3,6 +3,7 @@ class Availability < ActiveRecord::Base
   
   # Associations.................................................
   belongs_to :service
+  # has_and_belongs_to_many :services
   belongs_to :staff
 
   # Validations..................................................
@@ -30,7 +31,9 @@ class Availability < ActiveRecord::Base
   end
 
   def for_future
-    errors[:base] = 'Availability cannot be booked for past dates' unless (start_date >= Time.now.to_date)
+    start_time_in_sec = (start_time.hour * 3600) + (start_time.min * 60)
+    time_now_in_sec = (Time.now.hour * 3600) + (Time.now.min * 60)
+    errors[:base] = 'Availability cannot be booked for past dates' if ((start_date < Date.today) || (start_date == Date.today && start_time_in_sec < time_now_in_sec))
   end
 
   def busy

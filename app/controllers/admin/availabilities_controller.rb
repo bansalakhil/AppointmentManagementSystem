@@ -1,5 +1,6 @@
 class Admin::AvailabilitiesController < Admin::BaseController
 
+  # PERMITTED_ATTRS = [{ service_ids: [] }, :staff_id, :start_time, :end_time, :start_date, :end_date]
   PERMITTED_ATTRS = [:service_id, :staff_id, :start_time, :end_time, :start_date, :end_date]
   before_action :get_availability, only: [:update, :destroy, :enable]
   before_action :get_staffs, only: [:new]
@@ -77,6 +78,6 @@ class Admin::AvailabilitiesController < Admin::BaseController
   end
 
   def get_all_availabilities
-    @availabilities = Availability.with_deleted.paginate page: params[:page], per_page: 10
+    @availabilities = Availability.with_deleted.where('end_date >= ?', Date.today).paginate page: params[:page], per_page: 10
   end
 end

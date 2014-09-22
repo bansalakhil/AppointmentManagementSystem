@@ -19,6 +19,11 @@ $(document).ready(function(){
     disableResizing: false,
     allDay      : false,
     eventBackgroundColor : '#ff0000',
+    dayRender   : function(date, cell){
+                    if (date > $.now()){
+                      $(cell).addClass('disabled');
+                    }
+                  },
     select      : function(startDate, endDate, jsEvent, view){
                     if (controller == 'customer') {
                       FullcalendarEngine.Form.display({ 

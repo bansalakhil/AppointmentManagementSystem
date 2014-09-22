@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140918152632) do
+ActiveRecord::Schema.define(version: 20140921195137) do
 
   create_table "appointments", force: true do |t|
     t.integer  "staff_id"
@@ -38,6 +38,12 @@ ActiveRecord::Schema.define(version: 20140918152632) do
     t.datetime "deleted_at"
   end
 
+  create_table "availabilities_services", id: false, force: true do |t|
+    t.integer "availability_id"
+    t.integer "service_id"
+    t.boolean "active",          default: true
+  end
+
   create_table "invitations", force: true do |t|
     t.string   "name"
     t.string   "email"
@@ -61,6 +67,7 @@ ActiveRecord::Schema.define(version: 20140918152632) do
   create_table "services_staffs", id: false, force: true do |t|
     t.integer "staff_id"
     t.integer "service_id"
+    t.boolean "active",     default: true
   end
 
   create_table "site_layouts", force: true do |t|
@@ -89,6 +96,7 @@ ActiveRecord::Schema.define(version: 20140918152632) do
     t.datetime "confirmation_sent_at"
     t.datetime "deleted_at"
     t.string   "phone_number"
+    t.string   "color"
   end
 
   add_index "users", ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree

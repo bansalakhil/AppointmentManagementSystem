@@ -8,7 +8,8 @@ class Service < ActiveRecord::Base
   has_many :appointments
 
   #Callbacks.....................................................
-  before_destroy :check_associated_availabilities_appointments
+  # before_destroy :check_associated_availabilities_appointments
+  after_destroy :delete_service_from_availability
   
   #Query Interface...............................................
   default_scope { order(:name) }
@@ -17,7 +18,10 @@ class Service < ActiveRecord::Base
   validates :name, uniqueness: { case_sensitive: false }, presence: true
 
   #Private Methods.................................................
-  def check_associated_availabilities_appointments
-    return false if (appointments || availabilities)
+  private
+
+  def delete_service_from_services_staffs
+    
   end
+
 end

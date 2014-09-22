@@ -16,8 +16,6 @@ class Customer::AppointmentsController < Customer::BaseController
   def create
     @event = Appointment.new(event_params)
     @event.customer_id = current_user.id
-    @event.staff_id = Service.where(id: @event.service_id).first.try(:staffs).sample.id
-    @event.title = @event.staff.name + '--' + @event.service.name
     if @event.save
       render nothing: true, status: :created
     else
@@ -40,13 +38,16 @@ class Customer::AppointmentsController < Customer::BaseController
 
     events = []
     appointments.each do |event|
-      events << { id: event.id,
+      events << {
+                  id: event.id,
                   description: event.description || '',
                   customer: event.customer.name, 
                   start: event.starttime.iso8601,
                   end: event.endtime.iso8601,
                   allDay: false,
-                  title: event.title
+                  title: event.title,
+                  backgroundColor: event.staff.try(:color),
+                  textColor: '#000'
                 }
     end
     render json: events.to_json
@@ -62,7 +63,7 @@ class Customer::AppointmentsController < Customer::BaseController
   end
 
   def edit
-    render json: { form: render_to_string(partial: 'edit_form') } 
+    render json: { form: render_to_string(partial: 'edit_form') }
   end
 
   def update
@@ -95,15 +96,21 @@ class Customer::AppointmentsController < Customer::BaseController
   def move
     @event.starttime = make_time_from_minute_and_day_delta(@event.starttime)
     @event.endtime   = make_time_from_minute_and_day_delta(@event.endtime)
-    flash[:error] = 'This service could not be moved' unless @event.save
-    render nothing: true
+    if @event.save
+      render nothing: true
+    else
+      render json: { message: 'This service could not be moved' }
+    end
   end
 
   #Customer can move events
   def resize
     @event.endtime = make_time_from_minute_and_day_delta(@event.endtime)
-    flash[:error] = 'This service could not be resized' unless@event.save
-    render nothing: true
+    if @event.save
+      render nothing: true
+    else
+      render json: { message: 'This service could not be resized' }
+    end
   end
 
   def cancel_list
@@ -120,7 +127,7 @@ class Customer::AppointmentsController < Customer::BaseController
 
   def event_params
     params.require(:appointment)
-      .permit(:staff_id, :service_id, :title, :starttime, :endtime, :status_id, :description, :remark )
+      .permit(:staff_id, :service_id, :title, :starttime, :endtime, :status_id, :description, :remark)
   end
 
   # FIX- Move to helpers
@@ -129,7 +136,6 @@ class Customer::AppointmentsController < Customer::BaseController
   end
 
   def get_services
-    # @services = Service.all
     @services = [['Select', '']]
     Availability.all.uniq(:service_id).each {|av| @services << [av.service.name, av.service_id]}
     @services
@@ -138,4 +144,5 @@ class Customer::AppointmentsController < Customer::BaseController
   def make_time_from_minute_and_day_delta(event_time)
     params[:minute_delta].to_i.minutes.from_now((params[:day_delta].to_i).days.from_now(event_time))
   end
+
 end

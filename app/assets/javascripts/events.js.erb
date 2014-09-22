@@ -20,7 +20,7 @@ FullcalendarEngine = {
         title: 'New Event',
         modal: true,
         width: 500,
-        close: function(event, ui) {
+        success: function(event, ui) {
           $('#create_event_dialog').dialog('destroy')
         }
       });
@@ -69,10 +69,10 @@ FullcalendarEngine = {
     move: function(event, dayDelta, minuteDelta, allDay){
       $.ajax({
         data: 'title=' + event.title + '&day_delta=' + dayDelta + '&minute_delta=' + minuteDelta + '&all_day=' + allDay + '&authenticity_token=' + FullcalendarEngine.Form.authenticity_token(),
-        dataType: 'script',
+        dataType: 'json',
         type: 'post',
         url: '/' + app_path + '/' + event.id + '/move',
-        error: function(xhr){
+        error: function(xhr, error){
           alert(JSON.parse(xhr.responseText)["message"])
         }
       });
@@ -84,7 +84,6 @@ FullcalendarEngine = {
         type: 'post',
         url: '/' + app_path + '/'+ event.id + '/resize',
         error: function(xhr){
-          // alert(xhr.responseText);
           alert(JSON.parse(xhr.responseText)["message"])
         }
       });
